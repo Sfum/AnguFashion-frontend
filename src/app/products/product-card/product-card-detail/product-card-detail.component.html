@@ -1,0 +1,120 @@
+<mat-card class="product-card mat-elevation-z4">
+  <!-- Display a discount banner if the product is on sale -->
+  <div *ngIf="product.onSale" class="discount-banner">
+    {{ product.discountPercentage }}% Off
+  </div>
+
+  <!-- Product image section -->
+  <div class="product__card--image margin__bottom--sm">
+    <img class="product-image" [src]="currentImage" alt="Product Image" [routerLink]="['/products', product.id]" />
+    <div class="thumbnail-container margin__left--sm margin__right--sm">
+      <img
+        *ngFor="let image of productImages | slice: 0:6"
+        [src]="image"
+        class="thumbnail"
+        [class.selected]="image === currentImage"
+        (click)="setMainImage(image)"
+        alt="Thumbnail Image"
+      />
+    </div>
+  </div>
+
+  <!-- Spinner while VAT is loading -->
+  <ng-container *ngIf="vatReady; else loadingSpinner">
+    <div class="product-card__bottom">
+      <div class="product-details">
+        <div class="product__paragraph">
+          <!-- Product name -->
+          <div class="subtitle__card font-primary" [routerLink]="['/products', product.id]">
+            {{ product.product_name | slice: 0:30 }}...
+          </div>
+
+          <!-- Stock status -->
+          <div class="product-card__bottom">
+            <div class="font-primary opacity--lg">
+              <div class="product__stock margin__bottom--xsm margin__top--xxsm">
+                <div class="font-small margin__top--md" [style.color]="product.quantityStock > 0 ? 'green' : 'red'">
+                  {{ product.quantityStock > 0 ? 'In Stock' : 'Out of Stock' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VAT-inclusive price display -->
+          <div class="price-range margin__bottom--xsm font-primary--large" [ngStyle]="{ color: product.onSale ? 'red' : 'inherit' }">
+            {{ getPriceRangeWithVat(product) }}
+          </div>
+
+
+          <!-- Size dropdown -->
+          <mat-form-field appearance="outline" class="rounded-input">
+            <mat-label>Select Size</mat-label>
+            <mat-select [(ngModel)]="selectedSize" required>
+              <mat-option
+                *ngFor="let size of product.sizes"
+                [value]="size"
+                [disabled]="size.quantity === 0"
+              >
+                <p>
+                  {{ getUnit(size.unitType, size.size, size.sizeLabel) }}:
+                  <ng-container *ngIf="product.onSale; else normalPrice">
+                    On Sale! {{ getPriceWithVat(size.salePrice) | currency }}
+                    <span *ngIf="size.salePrice < size.price" class="discounted"></span>
+                  </ng-container>
+                  <ng-template #normalPrice>
+                    {{ getPriceWithVat(size.price) | currency }}
+                  </ng-template>
+                </p>
+                <span *ngIf="size.quantity === 0" class="out-of-stock">(Out of Stock!)</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Buttons -->
+          <div class="button__field">
+            <!-- Add to Cart -->
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="!selectedSize || product.quantityStock <= 0"
+              (click)="addToCart(selectedSize, selectedColor || 'defaultColor')"
+              matTooltip="Add To Cart"
+            >
+              <span class="pi product-card__bottom--left pi-shopping-cart"></span>
+            </button>
+
+            <!-- Wishlist -->
+            <button
+              mat-raised-button
+              class="product-card__favorites margin__left--xxsm"
+              [disabled]="product.quantityStock <= 0"
+              (click)="addToWishlist(product)"
+              matTooltip="Add To Wishlist"
+            >
+              <span class="pi product-card__bottom--left pi-heart"></span>
+            </button>
+
+            <!-- Compare -->
+            <button
+              mat-raised-button
+              color="warn"
+              class="product-card__favorites margin__left--xxsm"
+              (click)="addToCompare(product)"
+              matTooltip="Add To Compare"
+            >
+              <span class="pi product-card__bottom--left pi-arrows-h"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Spinner shown until VAT is loaded -->
+  <ng-template #loadingSpinner>
+    <div class="text-center padding--md">
+      <mat-spinner diameter="30"></mat-spinner>
+      <p class="font-secondary__small margin__top--sm">Loading VAT-adjusted prices...</p>
+    </div>
+  </ng-template>
+</mat-card>

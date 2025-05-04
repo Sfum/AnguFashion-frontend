@@ -1,0 +1,23 @@
+<mat-card class="container__brand-detail mat-elevation-z2">
+  <div class="brand-details margin__top--md margin__bottom--xsm margin__left--md margin__right--md">
+    <div class="font-primary margin__bottom--xxsm">{{ brand?.brand_name }}</div>
+
+    <!-- Display a truncated brand description with a 'read more' link -->
+    <div class="font-secondary">
+      {{ brand?.brand_description | slice: 0:180 }}...read more
+    </div>
+  </div>
+  <div class="brand-card margin__left--lg">
+    <!-- Loop through products associated with the brand, showing up to 4 products -->
+    <a *ngFor="let product of getBrandProducts() | slice: 0: 4" [href]="'/products/' + product.id">
+      <!-- Display product images as links to their detail pages -->
+      <img
+        class="image margin__right--xxsm"
+        [src]="product.product_image"
+        alt="Product Image"
+        width="80px"
+        height="80px"
+        [matTooltip]="'View ' + product.product_name + '!'"> <!-- Tooltip displaying product name -->
+    </a>
+  </div>
+</mat-card>

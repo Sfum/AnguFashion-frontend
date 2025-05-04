@@ -1,0 +1,115 @@
+<div class="container margin__bottom--sm logo_bar mat-elevation-z4">
+  <div class="navigation__left">
+    <app-logo-bar></app-logo-bar>
+    <div class="logo">
+      <mat-icon class="icon margin__left--md">styler</mat-icon>
+      <div class="font-primary__name store__logo-one margin__left--xxsm">
+        ANGU
+      </div>
+      <div class="font-primary__name store__logo-two">FASHION</div>
+    </div>
+  </div>
+
+  <div class="navigation__center margin__auto">
+    <div class="container__navbar--white container__medium">
+      <div class="search-container margin--sm">
+        <input
+          matInput
+          type="text"
+          placeholder="Search Products..."
+          (input)="onSearch($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="navigation__right margin__auto">
+    <div class="right-icons margin--md icon-row">
+      <div *ngIf="user$ | async as user; else loggedOut">
+        <mat-icon
+          class="nav-item margin__horizontal--xsm opacity--md"
+          [matMenuTriggerFor]="menu"
+        >account_circle
+        </mat-icon
+        >
+        <span
+          class="welcome__message nav-welcome margin--md font-secondary__small"
+        >Hello, {{ user.displayName }}</span
+        >
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/profile']">
+            <mat-icon class="opacity--md">person</mat-icon>
+            <label>Profile</label>
+          </button>
+          <button mat-menu-item [routerLink]="['/orders']">
+            <mat-icon class="opacity--md">cloud_download</mat-icon>
+            <label>Orders</label>
+          </button>
+          <button mat-menu-item>
+            <mat-icon class="opacity--md">logout</mat-icon>
+            <app-logout></app-logout>
+          </button>
+        </mat-menu>
+      </div>
+
+      <ng-template #loggedOut>
+        <!-- Placeholder for logged-out users -->
+      </ng-template>
+
+      <span
+        class="icon opacity--md"
+        routerLink="/wishlist"
+      ><i class="material-icons">favorite</i></span
+      >
+      <span
+        class="icon opacity--md"
+        routerLink="/compare"
+      ><i class="material-icons">home</i></span
+      >
+
+      <!-- Icon that triggers the dropdown -->
+      <span
+        class="icon opacity--md"
+        [matMenuTriggerFor]="menu"
+        routerLink="/shopping-cart"
+      >
+      <i class="material-icons">shopping_cart</i>
+      </span>
+
+      <!-- Mat-menu for the dropdown -->
+      <mat-menu #menu="matMenu">
+        <!-- Profile menu item -->
+       <div class="custom-menu">
+         <app-shopping-cart class="custom-menu"></app-shopping-cart>
+       </div>
+      </mat-menu>
+
+
+
+      <span
+        class="icon opacity--md"
+        routerLink="/orders"
+      ><i class="material-icons">cloud_download</i></span
+      >
+      <span
+        class="icon opacity--md"
+        *ngIf="isAdmin$ | async"
+        routerLink="/admin-report"
+      ><i class="material-icons">equalizer</i></span
+      >
+      <span
+        class="icon opacity--md"
+        *ngIf="isModerator$ | async"
+        routerLink="/moderator-report"
+      ><i class="material-icons">monetization_on</i></span
+      >
+      <button *ngIf="!(user$ | async)" mat-raised-button routerLink="/login">
+        <mat-icon>login</mat-icon>
+        <span>Login</span>
+      </button>
+      <button *ngIf="!(user$ | async)" mat-raised-button routerLink="/signup">
+        <mat-icon>person_add</mat-icon>
+        <span>Signup</span>
+      </button>
+    </div>
+  </div>
+</div>

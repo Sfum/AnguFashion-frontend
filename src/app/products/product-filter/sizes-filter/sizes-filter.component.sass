@@ -1,0 +1,31 @@
+@import url('../../../../../src/styles.sass')
+
+.size-buttons
+  display: grid
+  grid-template-columns: repeat(4, 1fr)
+  gap: 5px
+
+.size-buttons button
+  background-color: transparent
+  color: black
+  border-radius: 2px
+  padding: 3px
+  cursor: pointer
+  width: 100%
+
+.size-buttons button:hover
+  background-color: gray
+  border-color: whitesmoke
+  color: white
+
+
+.size-buttons button.selected
+  background-color: grey
+  border-color: whitesmoke
+  color: white
+
+
+.size-buttons button:hover,
+.size-buttons button.selected:hover
+  color: black
+

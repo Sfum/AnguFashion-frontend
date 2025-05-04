@@ -1,0 +1,46 @@
+.container__carousel
+  position: relative
+  width: 100%
+  overflow: hidden
+  margin: auto
+  border-radius: 30px
+
+
+.carousel
+  display: flex
+  transition: transform 2.5s ease-in-out
+
+
+.carousel-item
+  min-width: 100%
+  box-sizing: border-box
+
+
+.carousel-item img
+  width: 100%
+  display: block
+
+.carousel-image
+  max-height: 700px
+
+button.prev,
+button.next
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  background-color: rgba(0, 0, 0, 0.5)
+  color: white
+  border: none
+  padding: 20px
+  cursor: pointer
+
+button.prev
+  left: 0
+
+button.next
+  right: 0
+
+button.prev:hover,
+button.next:hover
+  background-color: #b0b0b0
+

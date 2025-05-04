@@ -1,0 +1,85 @@
+<mat-card class="margin--md">
+  <!-- Container to display products if there are any, otherwise show 'No products' message -->
+  <ng-container *ngIf="products.length > 0; else noProducts">
+    <table class="margin--sm">
+      <tr>
+        <th class="font-primary margin-lg-center">Name</th>
+        <!-- Loop through the first 5 products and display their information -->
+        <td *ngFor="let product of products | slice : 0 : 5; let i = index">
+          <div [routerLink]="['/products', product.id]">
+            <!-- Product image with fixed height for consistency -->
+            <img
+              class="compare__product--image"
+              [src]="product.product_image"
+              height="120"
+              alt="Product Image"
+            />
+          </div>
+          <div class="font-primary center-items">
+            <!-- Truncated product name to keep the layout clean -->
+            {{ product.product_name | slice: 0:13 }}...
+          </div>
+          <div class="compare__icon center-items">
+            <!-- Link to the product detail page -->
+            <mat-icon [routerLink]="['/products/', product.id]">open_in_new</mat-icon>
+            <!-- Icon color indicates stock status: red for out of stock, green for available -->
+            <mat-icon
+              [style.color]="product.quantity == 0 ? 'red' : 'green'"
+            >fiber_manual_record</mat-icon>
+            <!-- Button to remove product from comparison -->
+            <mat-icon (click)="removeFromCompare(product)">delete_forever</mat-icon>
+          </div>
+        </td>
+        <!-- Placeholder cells to maintain table layout if there are fewer than 5 products -->
+        <td *ngFor="let empty of createPlaceholders(products.length, 5)"></td>
+      </tr>
+      <hr/>
+
+      <tr class="compare__table-tr">
+        <th class="compare__table--th font-primary margin-lg-center">Description</th>
+        <!-- Display truncated product descriptions -->
+        <td
+          *ngFor="let product of products | slice : 0 : 5; let i = index"
+          class="compare__text-label font-secondary margin-lg-center"
+        >
+          {{ product.product_description | slice: 0:160 }}...
+        </td>
+        <!-- Placeholder cells for description row -->
+        <td *ngFor="let empty of createPlaceholders(products.length, 5)"></td>
+      </tr>
+      <hr/>
+
+      <tr>
+        <th class="compare__table--th font-primary margin-lg-center">Price</th>
+        <!-- Display product price -->
+        <td
+          *ngFor="let product of products | slice : 0 : 5; let i = index"
+          class="compare__text-label font-secondary margin-lg-center"
+        >
+          {{ product.price }}
+        </td>
+        <!-- Placeholder cells for price row -->
+        <td *ngFor="let empty of createPlaceholders(products.length, 5)"></td>
+      </tr>
+      <hr/>
+
+      <tr>
+        <th class="compare__table--th font-primary margin--md">Number Of Items</th>
+        <!-- Display the stock quantity of the product -->
+        <td
+          *ngFor="let product of products | slice : 0 : 5; let i = index"
+          class="compare__text-label font-secondary margin-lg-center"
+        >
+          {{ product.quantityStock }} left in stock
+        </td>
+        <!-- Placeholder cells for stock quantity row -->
+        <td *ngFor="let empty of createPlaceholders(products.length, 5)"></td>
+      </tr>
+    </table>
+  </ng-container>
+
+  <!-- Fallback message for when no products are available -->
+  <ng-template #noProducts>
+    <div class="font-secondary margin--md">No products added yet!</div>
+  </ng-template>
+</mat-card>

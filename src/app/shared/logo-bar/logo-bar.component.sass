@@ -1,0 +1,26 @@
+.sticky-menu
+  position: fixed // Fix the menu in the viewport
+  top: 0
+  left: 0
+  z-index: 1000 // Ensure it's above other elements
+  padding: 0.5rem
+  background-color: #fff
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) // Subtle shadow for better visibility
+  border-right: 1px solid #ddd
+
+  button[mat-icon-button]
+    color: #333 // Button color
+
+  .mat-menu-panel
+    border-radius: 8px
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) // Menu shadow
+
+  .mat-menu-item
+    display: flex
+    align-items: center
+
+    mat-icon
+      margin-right: 8px
+
+    span
+      font-size: 16px

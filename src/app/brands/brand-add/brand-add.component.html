@@ -1,0 +1,41 @@
+<mat-card class="container__medium container__brand-add">
+  <div class="font-primary margin__left--md margin__top--md">Create Brand</div>
+  <form [formGroup]="brandForm" (ngSubmit)="onSubmit()" class="margin__left--md margin__bottom--md margin__right--md">
+
+    <!-- Hidden input fields for IDs -->
+    <div class="form-group margin__bottom--sm">
+      <input matInput type="text" id="_id" formControlName="_id" hidden>
+    </div>
+    <div class="form-group margin__bottom--sm">
+      <input matInput type="text" id="id" formControlName="id" hidden>
+    </div>
+
+    <!-- Input field for brand name -->
+    <div class="form-group margin__bottom--sm">
+      <mat-label class="font-secondary__small" for="brand_name">Name:</mat-label>
+      <input matInput type="text" id="brand_name" formControlName="brand_name" required>
+      <mat-error
+        *ngIf="brandForm.get('brand_name')?.invalid && (brandForm.get('product_name')?.dirty || brandForm.get('brand_name')?.touched)">
+        <!-- Error message for required product name -->
+        <mat-error *ngIf="brandForm.get('brand_name')?.errors?.['required']">Brand Name is required.</mat-error>
+      </mat-error>
+    </div>
+
+    <!-- Textarea for brand description -->
+    <div class="form-group margin__bottom--sm">
+      <mat-label class="font-secondary__small" for="brand_description">Description:</mat-label>
+      <input matInput id="brand_description" formControlName="brand_description" required>
+      <mat-error
+        *ngIf="brandForm.get('brand_description')?.invalid && (brandForm.get('brand_description')?.dirty || brandForm.get('brand_description')?.touched)">
+        <!-- Error message for required product name -->
+        <mat-error *ngIf="brandForm.get('brand_description')?.errors?.['required']">Brand Description is required.</mat-error>
+      </mat-error>
+    </div>
+
+    <!-- Submit button for adding the brand -->
+    <button mat-raised-button type="submit"><label>Add Brand</label></button>
+
+    <!-- Back button to navigate to the manage products page -->
+    <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'><label>Back</label></button>
+  </form>
+</mat-card>

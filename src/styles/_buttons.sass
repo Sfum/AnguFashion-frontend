@@ -1,0 +1,30 @@
+@import "_colours.sass"
+
+button[mat-button-toggle],
+button[mat-raised-button]
+  color: white
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
+  transition: background-color 0.5s ease, color 0.5s ease
+  background-color: $color__secondary--500
+  border-radius: 5px
+  max-width: 160px
+
+  &:hover
+    color: black
+
+  &:disabled
+    background-color: gray
+    color: white
+    cursor: not-allowed
+
+mat-icon
+  color: white
+  font-size: 24px
+
+.icon
+  color: white
+  font-size: 26px
+  transform: translateY(-14px)
+  transform: translateX(-2px)
+
+

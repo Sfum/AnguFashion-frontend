@@ -1,0 +1,24 @@
+<div class="top-charts-container">
+  <div class="brand-details">
+    <div class="font-primary">Top Selling Products</div>
+  </div>
+
+  <div class="products-grid" *ngIf="topProducts.length">
+    <a *ngFor="let item of topProducts | slice:0:10; let idx = index"
+       [routerLink]="['/products', item.productId]"
+       class="product-card">
+
+      <div class="rank-number">{{ idx + 1 }}</div>
+
+      <img [src]="item.product.product_image[0]"
+           [alt]="item.product.product_name"
+           class="product-image">
+
+      <div class="product-name font-primary__label-small">{{ item.product.product_name | slice: 0:20 }}...</div>
+    </a>
+  </div>
+
+  <p class="no-products font-secondary__small" *ngIf="!topProducts.length">
+    No top selling products found.
+  </p>
+</div>

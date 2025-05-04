@@ -1,0 +1,233 @@
+<!-- Main container for the form using a Material card with elevation for shadow effect -->
+<mat-card class="container__medium mat-elevation-z2">
+  <div class="font-primary margin__left--md margin__top--md">Add New Product</div>
+  <hr>
+  <!-- Form element that uses Angular Reactive Forms with formGroup bound to 'productForm' -->
+  <form class="form-container margin--md" [formGroup]="productForm" (ngSubmit)="onSubmitWithDebounce()">
+
+    <!-- Container for the form content -->
+    <div class="container__main">
+
+      <!-- Left section of the form with a title label -->
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Basics</mat-label>
+      </div>
+
+      <!-- Right section where the product information fields are -->
+      <div class="container__main-right">
+        <!-- Label for the Product Name input field -->
+        <mat-label class="font-secondary__small">Product Name:</mat-label>
+        <!-- Input field for product name, bound to the form control 'product_name' -->
+        <input matInput type="text" id="productName" formControlName="product_name" class="margin__bottom--xsm" required>
+        <!-- Validation error message for required product name -->
+        <mat-error *ngIf="productForm.get('product_name')?.invalid && (productForm.get('product_name')?.dirty || productForm.get('product_name')?.touched)">
+          <mat-error *ngIf="productForm.get('product_name')?.errors?.['required']">Product Name is required.</mat-error>
+        </mat-error>
+        <br>
+
+        <!-- Input for short product description with validation -->
+        <mat-label class="font-secondary__small">Short Description:</mat-label>
+        <input matInput type="text" id="productTitle" formControlName="product_title" class="margin__bottom--xsm" required>
+        <mat-error *ngIf="productForm.get('product_title')?.invalid && (productForm.get('product_title')?.dirty || productForm.get('product_title')?.touched)">
+          <mat-error *ngIf="productForm.get('product_title')?.errors?.['required']">Short Product Description is required.</mat-error>
+        </mat-error>
+        <br>
+
+        <!-- Input for detailed product description with validation -->
+        <mat-label class="font-secondary__small">Detailed Description:</mat-label>
+        <input matInput id="productDescription" formControlName="product_description" class="margin__bottom--xsm" required>
+        <mat-error *ngIf="productForm.get('product_description')?.invalid && (productForm.get('product_description')?.dirty || productForm.get('product_description')?.touched)">
+          <mat-error *ngIf="productForm.get('product_description')?.errors?.['required']">Detailed Product Description is required.</mat-error>
+        </mat-error>
+      </div>
+    </div>
+
+    <!-- Section for uploading images with preview functionality -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Images</mat-label>
+      </div>
+      <br>
+      <div class="container__main-right">
+        <mat-label class="font-secondary__small margin__right--xxsm">Choose an image:</mat-label>
+        <!-- Input field to select images for upload, bound to 'product_image' -->
+        <input type="file" id="productImages" (change)="uploadImages($event)" formControlName="product_image" class="margin__bottom--xsm" multiple>
+
+        <!-- Preview container showing uploaded images with delete functionality -->
+        <div *ngIf="uploadedImages.length > 0; else noImages" class="image-preview-container">
+          <div class="image-preview" *ngFor="let image of uploadedImages; let i = index">
+            <img [src]="image" alt="Product Image" class="uploaded-image" [class.selected]="selectedImageIndex === i" (click)="selectImage(i)">
+            <button class="product-add__image--delete" mat-icon-button (click)="deleteImage(i)" aria-label="Delete image">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Message shown if no images have been uploaded -->
+        <ng-template #noImages>
+          <p>No images uploaded yet.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Section for selecting a product category -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Category</mat-label>
+      </div>
+      <br>
+      <div class="container__main-right">
+        <!-- Dropdown for selecting a category, bound to the 'categoryId' form control -->
+        <mat-form-field class="form-control">
+          <mat-label class="font-secondary__small">Select Category</mat-label>
+          <mat-select formControlName="categoryId" (selectionChange)="optionCategorySelected($event.value)">
+            <!-- Options rendered from an async stream of categories -->
+            <mat-option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.category_name }}</mat-option>
+          </mat-select>
+          <!-- Validation error for category selection -->
+          <mat-error *ngIf="productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.dirty || productForm.get('categoryId')?.touched)">
+            <mat-error *ngIf="productForm.get('categoryId')?.errors?.['required']">Category is required.</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <!-- Section for selecting product colors -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Colors:</mat-label>
+      </div>
+      <div class="container__main-right">
+        <!-- Multi-select dropdown for colors, bound to the 'colors' form control -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-select formControlName="colors" placeholder="Select colors" multiple>
+            <!-- Options rendered from an async stream of available colors -->
+            <mat-option *ngFor="let color of availableColors$ | async" [value]="color">{{ color }}</mat-option>
+          </mat-select>
+          <!-- Validation error for color selection -->
+          <mat-error *ngIf="productForm.get('colors')?.invalid && (productForm.get('colors')?.dirty || productForm.get('colors')?.touched)">
+            <mat-error *ngIf="productForm.get('colors')?.errors?.['required']">At least one color is required.</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Section for selecting product sizes and quantities -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Sizes:</mat-label>
+      </div>
+      <div class="container__main-right">
+
+        <div class="container__main-right">
+          <div formArrayName="sizes" class="sizes-container">
+            <div
+              *ngFor="let sizeControl of sizes.controls; let i = index"
+              [formGroupName]="i"
+              class="size-card"
+            >
+              <!-- Size Input -->
+              <mat-label class="input-label">Weight/Volume:</mat-label>
+              <input matInput type="number" formControlName="size"/>
+
+              <!-- Dropdown for Selecting Unit Type -->
+              <mat-label class="input-label">Unit Type:</mat-label>
+              <mat-form-field>
+                <mat-select formControlName="unitType" required>
+                  <mat-option value="size">Clothing Size (S, M, L, XL, 34, etc.)</mat-option>
+                  <mat-option value="waist">Waist Size (28", 30", 32")</mat-option>
+                  <mat-option value="length">Length (Short, Midi, Long)</mat-option>
+                  <mat-option value="fit">Fit Type (Slim, Regular, Oversized)</mat-option>
+                  <mat-option value="kidsSize">Kids' Size (2T, 4T, 6T)</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Quantity Input -->
+              <mat-label class="input-label">Quantity:</mat-label>
+              <input matInput type="number" formControlName="quantity"/>
+
+              <!-- Price Input -->
+              <mat-label class="input-label">Price:</mat-label>
+              <input matInput type="number" formControlName="price"/>
+
+              <!-- Size Label Input -->
+              <mat-label class="input-label">Size Label:</mat-label>
+              <input matInput type="text" formControlName="sizeLabel"/>
+
+
+              <!-- Sale Price Input -->
+              <mat-label class="input-label">Sale Price:</mat-label>
+              <input matInput type="number" formControlName="salePrice" readonly/>
+
+              <!-- Remove Size Button -->
+              <button
+                mat-icon-button
+                color="warn"
+                class="remove-size-button"
+                (click)="removeSize(i)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <!-- Add Size Button -->
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              class="add-size-button"
+              (click)="addSize()"
+            >
+              Add Size
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section for entering product material -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Material:</mat-label>
+      </div>
+      <div class="container__main-right">
+        <!-- Input field for product material, with validation -->
+        <input matInput id="material" formControlName="material" class="margin__bottom--xsm" required>
+        <mat-error *ngIf="productForm.get('material')?.invalid && (productForm.get('material')?.dirty || productForm.get('material')?.touched)">
+          <mat-error *ngIf="productForm.get('material')?.errors?.['required']">Material is required.</mat-error>
+        </mat-error>
+      </div>
+    </div>
+
+    <!-- Section for selecting product unitType -->
+    <div class="container__main margin__top--lg">
+      <div class="container__main-left">
+        <mat-label class="font-primary__label-small">Unit Type:</mat-label>
+      </div>
+      <div class="container__main-right">
+        <!-- Dropdown for unitType selection, bound to 'unitType' form control -->
+        <mat-form-field>
+          <mat-select id="unitType" formControlName="unitType" class="margin__bottom--xsm" required>
+            <mat-option value="weight">Weight</mat-option>
+            <mat-option value="volume">Volume</mat-option>
+          </mat-select>
+          <mat-error *ngIf="productForm.get('unitType')?.invalid && (productForm.get('unitType')?.dirty || productForm.get('unitType')?.touched)">
+            <mat-error *ngIf="productForm.get('unitType')?.errors?.['required']">Unit Type is required.</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Submit and Back buttons -->
+    <div class="margin__top--xsm">
+      <button mat-raised-button type="submit" [disabled]="productForm.invalid">Add Product</button>
+      <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'>Back</button>
+    </div>
+  </form>
+</mat-card>
+
+<!-- Loading spinner shown while the form is processing -->
+<div *ngIf="isLoading" class="spinner-overlay">
+  <mat-spinner></mat-spinner>
+</div>

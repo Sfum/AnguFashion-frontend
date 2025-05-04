@@ -1,0 +1,67 @@
+@import url('../../../../src/styles.sass')
+
+.container
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  height: 100px
+  white-space: nowrap
+
+  .navigation__left
+    display: flex
+    justify-content: center
+    align-items: center
+    grid-column: 1/2
+
+  .navigation__center
+    grid-column: 2/3
+    white-space: nowrap
+
+  .navigation__right
+    grid-column: 3/4
+
+.logo
+  display: flex
+  flex-direction: row
+
+.icon-row
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.store__logo-one
+  color: white
+  font-size: 34px
+
+.store__logo-two
+  color: whitesmoke
+  font-size: 34px
+
+.logo_bar
+  z-index: 1
+  background-color: hsl(355, 70%, 55%)
+
+.welcome__message
+  color: white
+
+.custom-menu
+  width: 600px !important
+  height: 100%
+  padding: 40px
+
+
+
+@media only screen and (max-width: 650px)
+
+  .right-icons
+    white-space: nowrap
+
+  .nav-button
+    display: none
+
+  .nav-welcome
+    display: none
+  .search-container
+    width: 100%
+  .logo
+    display: none
+

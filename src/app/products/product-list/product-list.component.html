@@ -1,0 +1,105 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+  <ng-container matColumnDef="product_image" class="column column-lg">
+    <!-- Table header cell for the Product Image column -->
+    <mat-header-cell *matHeaderCellDef class="font-small"> Image </mat-header-cell>
+    <!-- Table cell displaying product image, with max size restrictions -->
+    <mat-cell *matCellDef="let product" matTooltip="Click for details"
+              [routerLink]="['/edit', product.id]">
+      <img [src]="product.product_image" alt="Product Image" style="max-width: 60px; max-height: 60px;">
+    </mat-cell>
+  </ng-container>
+
+  <!-- Product Name Column -->
+  <ng-container matColumnDef="product_name" class="column-sm" >
+    <!-- Table header cell for Product Name -->
+    <mat-header-cell *matHeaderCellDef class="font-small"> Product Name </mat-header-cell>
+    <!-- Table cell displaying product name and brand -->
+    <mat-cell *matCellDef="let product" matTooltip="Click for details"
+              [routerLink]="['/edit', product.id]">
+      <div class="cell--main">
+        <!-- Display first 60 characters of product name -->
+        <div class="font-primary box-width margin__bottom--xxsm opacity--lg">{{ product.product_name | slice: 0: 60 }}...</div>
+        <!-- Display brand ID -->
+        <div class="font-small font-secondary__small">{{ product.brandId }}</div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Product Sizes and Prices Column -->
+  <ng-container matColumnDef="sizesPrices" class="sizes-prices-column">
+    <mat-header-cell *matHeaderCellDef class="font-small">
+      Sizes
+    </mat-header-cell>
+    <mat-cell *matCellDef="let product">
+      <div class="sizes-container">
+        <!-- Loop through sizes -->
+        <div *ngFor="let size of product.sizes" class="size-info">
+          <p>{{ getUnit(size.unitType, size.size, size.sizeLabel) }}</div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Quantity Column -->
+  <ng-container matColumnDef="quantityStock" class="column-sm">
+    <!-- Table header cell for Stock quantity -->
+    <mat-header-cell *matHeaderCellDef class="font-small"> Stock </mat-header-cell>
+    <!-- Table cell displaying stock quantity with dynamic background color -->
+    <mat-cell *matCellDef="let product" matTooltip="Click for details"
+              [routerLink]="['/edit', product.id]">
+      <div class="cell--main stock-cell">
+        <!-- Stock quantity background changes color based on quantityStock -->
+        <div
+          class="font-secondary__small box-width stock-cell"
+          [ngStyle]="{
+            'background-color': getStockBackgroundColor(product.quantityStock),
+            'color': product.quantityStock === 0 ? 'white' : 'black'
+          }">
+          {{ product.quantityStock }}
+          <!-- Display 'Out Of Stock' message if quantity is 0 -->
+          <span *ngIf="product.quantityStock === 0" class="warning-message">
+            Out Of Stock
+          </span>
+        </div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Discount Percentage Column -->
+  <ng-container matColumnDef="discountPercentage" class="column-lg">
+    <!-- Table header cell for Discount Percentage -->
+    <mat-header-cell *matHeaderCellDef class="font-small"> Discount % </mat-header-cell>
+    <!-- Table cell displaying discount percentage if product is on sale -->
+    <mat-cell *matCellDef="let product" matTooltip="Click for details"
+              [routerLink]="['/edit', product.id]">
+      <div *ngIf="product.onSale" class="font-secondary__small">
+        {{ product.discountPercentage }}%
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Delete Column -->
+  <ng-container matColumnDef="delete" class="column-md">
+    <!-- Table header cell for Delete action -->
+    <mat-header-cell *matHeaderCellDef class="font-small"> Delete </mat-header-cell>
+    <!-- Table cell with delete button that triggers deleteProduct method -->
+    <mat-cell *matCellDef="let product" (click)="deleteProduct(product.id)">
+      <button mat-raised-button>
+        <mat-icon matTooltip="Delete">delete</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Define header row -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <!-- Define row with columns and click functionality to navigate to product details -->
+  <mat-row *matRowDef="let row; columns: displayedColumns;" class="cell_hover">
+  </mat-row>
+</mat-table>
+
+<!-- Paginator for the table, allowing users to change page size and navigate pages -->
+<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons="" class="font-small"></mat-paginator>
+
+<div *ngIf="isLoading$ | async" class="loading-spinner container__center">
+  Please, wait...
+  <mat-spinner></mat-spinner>
+</div>

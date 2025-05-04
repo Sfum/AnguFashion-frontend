@@ -1,0 +1,36 @@
+<div class="container__medium container__sale-category margin__side">
+  <mat-card class="margin--md padding--lg">
+    <div class="font-primary margin__bottom--sm">Set Category On Sale</div>
+
+    <!-- Form for setting a category on sale, bound to `categoryOnSaleForm` form group -->
+    <form [formGroup]="categoryOnSaleForm" (ngSubmit)="setCategoryOnSale()">
+
+      <!-- Form field for selecting a category -->
+      <mat-form-field>
+        <mat-label class="font-secondary__small">Select Category</mat-label>
+        <!-- Dropdown select for choosing a category -->
+        <mat-select formControlName="categoryId">
+          <!-- Option elements for each category in the categories$ observable -->
+          <mat-option *ngFor="let category of categories$ | async" [value]="category.id">
+            {{ category.category_name }} <!-- Display the category name -->
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Form field for entering a discount percentage -->
+      <mat-form-field>
+        <mat-label class="font-secondary__small">Discount Percentage</mat-label>
+        <!-- Input field for discount percentage, allowing only numbers from 0 to 100 -->
+        <input matInput type="number" formControlName="discountPercentage" min="0" max="100">
+      </mat-form-field>
+      <div class="button__group">
+        <!-- Submit button to apply the discount and set the brand on sale -->
+        <button mat-raised-button type="submit"><label>Set On Sale</label></button>
+
+        <!-- Button to navigate back to the manage products page -->
+        <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'><label>Back</label>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

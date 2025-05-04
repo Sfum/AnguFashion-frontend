@@ -1,0 +1,43 @@
+<!-- Container for blog details, only displayed if 'post' exists -->
+<div *ngIf="post" class="container__blog-detail" [routerLink]="['/', 'post-page', post?.id]">
+  <div class="margin--sm">
+
+    <!-- Display post image. Use a placeholder image if 'imageUrl' is not available -->
+    <img [src]="post?.imageUrl ? post.imageUrl : 'https://via.placeholder.com/' + (isMain ? '800x400' : '400x200')"
+         class="margin__bottom--xsm"  alt=""/>
+
+    <!-- Content section with a small top margin -->
+    <div class="margin__top--xxsm">
+
+      <!-- Display post name and date with a different layout when 'isMain' is true -->
+      <div class="font-primary margin__bottom--xxsm" *ngIf="isMain; else sideTitle">
+
+        <!-- Display the post name, truncated to 30 characters -->
+        {{ post?.post_name | slice: 0: 30 }}...
+
+        <!-- Display the post date, formatted to 'MMMM d, y, h:mm' format -->
+        <div class="font-secondary__small margin__bottom--xsm">
+          {{ post?.post_date | date: 'MMMM d, y, h:mm' }}
+        </div>
+      </div>
+
+      <!-- Alternative title layout for posts that are not marked as 'isMain' -->
+      <ng-template #sideTitle>
+        <div class="font-primary margin__bottom--xxsm">
+          <!-- Truncate the post name to the first 30 characters -->
+          {{ post?.post_name | slice: 0: 30 }}...
+        </div>
+
+        <!-- Format and display the post date -->
+        <div class="font-secondary__small margin__bottom--xsm">
+          {{ post?.post_date | date: 'MMMM d, y, h:mm' }}
+        </div>
+      </ng-template>
+
+      <!-- Display a preview of the post content, truncated to 200 characters -->
+      <div class="font-secondary margin__bottom--md">
+        {{ post?.post_content | slice: 0: 200 }}...
+      </div>
+    </div>
+  </div>
+</div>

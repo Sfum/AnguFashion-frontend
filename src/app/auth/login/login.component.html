@@ -1,0 +1,50 @@
+<div class="container__login">
+  <mat-card class="form-container">
+    <div class="font-primary margin__top--md margin__left--md margin__bottom--xsm">LOGIN</div>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)"
+          class="margin__left--md margin__top--sm margin__bottom--md margin__right--md">
+
+      <!-- Email Input -->
+      <div>
+        <mat-label class="font-secondary__small">Email:</mat-label>
+        <input matInput
+               type="email"
+               id="email"
+               name="email"
+               [(ngModel)]="email"
+               required
+               email
+               #emailField="ngModel">
+        <mat-error *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+          <mat-error *ngIf="emailField.errors?.['required']">Email is required.</mat-error>
+          <mat-error *ngIf="emailField.errors?.['email']">Please enter a valid email.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Password Input -->
+      <div>
+        <mat-label class="font-secondary__small margin__top--sm">Password:</mat-label>
+        <input matInput
+               type="password"
+               id="password"
+               name="password"
+               [(ngModel)]="password"
+               required
+               minlength="6"
+               #passwordField="ngModel">
+        <mat-error *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)">
+          <mat-error *ngIf="passwordField.errors?.['required']">Password is required.</mat-error>
+          <mat-error *ngIf="passwordField.errors?.['minlength']">Password must be at least 6 characters long.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Submit Button -->
+      <button mat-raised-button
+              class="margin__top--xsm"
+              type="submit"
+              [disabled]="loginForm.invalid">
+        <label>Login</label>
+      </button>
+    </form>
+  </mat-card>
+</div>

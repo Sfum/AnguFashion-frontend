@@ -1,0 +1,58 @@
+$product-container-gap: 10px
+$mobile-breakpoint: 768px // Adjust breakpoint if needed
+
+.product-container
+  display: grid
+  grid-template-columns: 0.2fr 0.8fr 0.2fr
+  gap: $product-container-gap
+  padding: 0 10px
+
+/* Left Sidebar (Filters) */
+.sidebar
+  grid-column: 1 / 2
+
+.sticky-filter
+  position: sticky
+  top: 10px
+  align-self: start
+
+/* Center Content (Product Cards) */
+.main-content
+  grid-column: 2 / 3
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+  gap: $product-container-gap
+
+/* Right Sidebar (Charts) */
+.sidebar-right
+  grid-column: 3 / 4
+
+/* Additional Sections */
+.additional-section
+  margin-top: 20px
+
+.bottom-section
+  margin-bottom: 20px
+
+/* ✅ Force Single-Column Layout on Small Screens */
+@media only screen and (max-width: $mobile-breakpoint)
+  .product-container
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: $product-container-gap
+    padding: 0 10px
+
+  .sidebar, .main-content, .sidebar-right
+    width: 100%
+    grid-column: auto
+    grid-row: auto
+
+  .main-content
+    order: 2 // Ensure it appears below the filters
+
+  .sidebar
+    order: 1 // Filters appear first
+
+  .sidebar-right
+    order: 3 // Charts appear last

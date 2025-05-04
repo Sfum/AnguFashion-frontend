@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "angufashion",
+    "angufashion": "angufashion-376a2"
+  },
+  "targets": {},
+  "etags": {}
+}

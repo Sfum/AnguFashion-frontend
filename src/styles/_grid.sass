@@ -1,0 +1,416 @@
+// Define breakpoints
+
+$breakpoint-sm: 476px
+$breakpoint-md: 668px
+$breakpoint-lg: 792px
+$breakpoint-xl: 2000px
+
+// Default margin values
+
+.margin
+  &--xxsm
+    margin: 5px
+  &--xsm
+    margin: 10px
+  &--sm
+    margin: 20px
+  &--md
+    margin: 30px
+  &--lg
+    margin: 40px
+  &--xlg
+    margin: 50px
+
+  &__left
+    &--xxsm
+      margin-left: 5px
+    &--xsm
+      margin-left: 10px
+    &--sm
+      margin-left: 20px
+    &--md
+      margin-left: 30px
+    &--lg
+      margin-left: 40px
+
+  &__right
+    &--xxsm
+      margin-right: 5px
+    &--xsm
+      margin-right: 10px
+    &--sm
+      margin-right: 20px
+    &--md
+      margin-right: 30px
+    &--lg
+      margin-right: 40px
+
+  &__top
+    &--xxsm
+      margin-top: 5px
+    &--xsm
+      margin-top: 10px
+    &--sm
+      margin-top: 20px
+    &--md
+      margin-top: 30px
+    &--lg
+      margin-top: 40px
+
+  &__bottom
+    &--xxsm
+      margin-bottom: 5px
+    &--xsm
+      margin-bottom: 10px
+    &--sm
+      margin-bottom: 20px
+    &--md
+      margin-bottom: 30px
+    &--lg
+      margin-bottom: 40px
+
+  &__auto
+    margin: auto 10px auto 0
+
+// Media queries for responsive margins
+@media (max-width: $breakpoint-sm)
+  .font-primary
+    font-size: 14px
+  .font-secondary
+    font-size: 11px
+  .font-secondary__small
+    font-size: 11px
+  .font-primary__label
+    font-size: 14px
+  .font-small
+    font-size: 11px
+  .font-primary__title
+    font-size: 14px
+  .font-primary--large
+    font-size: 16px
+  .font-primary__name
+    font-size: 12px
+  .font-primary__label-small
+    font-size: 12px
+
+  .margin
+    &--xxsm
+      margin: 10px
+    &--xsm
+      margin: 12px
+    &--sm
+      margin: 13px
+    &--md
+      margin: 15px
+    &--lg
+      margin: 20px
+    &--xlg
+      margin: 25px
+
+    &__left
+      &--xxsm
+        margin-left: 10px
+      &--xsm
+        margin-left: 12px
+      &--sm
+        margin-left: 13px
+      &--md
+        margin-left: 15px
+      &--lg
+        margin-left: 20px
+
+    &__right
+      &--xxsm
+        margin-right: 10px
+      &--xsm
+        margin-right: 12px
+      &--sm
+        margin-right: 13px
+      &--md
+        margin-right: 15px
+      &--lg
+        margin-right: 20px
+
+    &__top
+      &--xxsm
+        margin-top: 10px
+      &--xsm
+        margin-top: 12px
+      &--sm
+        margin-top: 13px
+      &--md
+        margin-top: 15px
+      &--lg
+        margin-top: 20px
+
+    &__bottom
+      &--xxsm
+        margin-bottom: 10px
+      &--xsm
+        margin-bottom: 12px
+      &--sm
+        margin-bottom: 13px
+      &--md
+        margin-bottom: 15px
+      &--lg
+        margin-bottom: 20px
+
+
+
+@media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md)
+  .font-primary
+    font-size: 14px
+  .font-secondary
+    font-size: 13px
+  .font-secondary__small
+    font-size: 11px
+  .font-primary__label
+    font-size: 14px
+  .font-small
+    font-size: 12px
+  .font-primary__title
+    font-size: 14px
+  .font-primary--large
+    font-size: 17px
+  .font-primary__name
+    font-size: 14px
+  .font-primary__label-small
+    font-size: 13px
+    .margin
+      &--xxsm
+        margin: 10px
+      &--xsm
+        margin: 12px
+      &--sm
+        margin: 13px
+      &--md
+        margin: 15px
+      &--lg
+        margin: 20px
+      &--xlg
+        margin: 25px
+
+      &__left
+        &--xxsm
+          margin-left: 10px
+        &--xsm
+          margin-left: 12px
+        &--sm
+          margin-left: 13px
+        &--md
+          margin-left: 15px
+        &--lg
+          margin-left: 20px
+
+      &__right
+        &--xxsm
+          margin-right: 10px
+        &--xsm
+          margin-right: 12px
+        &--sm
+          margin-right: 13px
+        &--md
+          margin-right: 15px
+        &--lg
+          margin-right: 20px
+
+      &__top
+        &--xxsm
+          margin-top: 10px
+        &--xsm
+          margin-top: 12px
+        &--sm
+          margin-top: 13px
+        &--md
+          margin-top: 15px
+        &--lg
+          margin-top: 20px
+
+      &__bottom
+        &--xxsm
+          margin-bottom: 10px
+        &--xsm
+          margin-bottom: 12px
+        &--sm
+          margin-bottom: 13px
+        &--md
+          margin-bottom: 15px
+        &--lg
+          margin-bottom: 20px
+
+
+@media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg)
+  .font-primary
+    font-size: 14px
+  .font-secondary
+    font-size: 14px
+  .font-secondary__small
+    font-size: 12px
+  .font-primary__label
+    font-size: 14px
+  .font-small
+    font-size: 13px
+  .font-primary__title
+    font-size: 15px
+  .font-primary--large
+    font-size: 16px
+  .font-primary__name
+    font-size: 20px
+  .font-primary__label-small
+    font-size: 14px
+  .margin
+    &--xxsm
+      margin: 4px
+    &--xsm
+      margin: 5px
+    &--sm
+      margin: 10px
+    &--md
+      margin: 20px
+    &--lg
+      margin: 30px
+    &--xlg
+      margin: 40px
+
+    &__left
+      &--xxsm
+        margin-left: 4px
+      &--xsm
+        margin-left: 5px
+      &--sm
+        margin-left: 10px
+      &--md
+        margin-left: 20px
+      &--lg
+        margin-left: 30px
+
+    &__right
+      &--xxsm
+        margin-right: 4px
+      &--xsm
+        margin-right: 5px
+      &--sm
+        margin-right: 10px
+      &--md
+        margin-right: 20px
+      &--lg
+        margin-right: 30px
+
+    &__top
+      &--xxsm
+        margin-top: 4px
+      &--xsm
+        margin-top: 5px
+      &--sm
+        margin-top: 10px
+      &--md
+        margin-top: 20px
+      &--lg
+        margin-top: 30px
+
+    &__bottom
+      &--xxsm
+        margin-bottom: 4px
+      &--xsm
+        margin-bottom: 5px
+      &--sm
+        margin-bottom: 10px
+      &--md
+        margin-bottom: 20px
+      &--lg
+        margin-bottom: 30px
+
+@media (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl)
+  .font-primary
+    font-size: 15px
+  .font-secondary
+    font-size: 15px
+  .font-secondary__small
+    font-size: 13px
+  .font-primary__label
+    font-size: 15px
+  .font-small
+    font-size: 14px
+  .font-primary__title
+    font-size: 16px
+  .font-primary--large
+    font-size: 18px
+  .font-primary__name
+    font-size: 24px
+  .font-primary__label-small
+    font-size: 14px
+  .margin
+    &--xxsm
+      margin: 10px
+    &--xsm
+      margin: 10px
+    &--sm
+      margin: 20px
+    &--md
+      margin: 30px
+    &--lg
+      margin: 40px
+    &--xlg
+      margin: 50px
+
+    &__left
+      &--xxsm
+        margin-left: 5px
+      &--xsm
+        margin-left: 10px
+      &--sm
+        margin-left: 20px
+      &--md
+        margin-left: 30px
+      &--lg
+        margin-left: 40px
+
+    &__right
+      &--xxsm
+        margin-right: 5px
+      &--xsm
+        margin-right: 10px
+      &--sm
+        margin-right: 20px
+      &--md
+        margin-right: 30px
+      &--lg
+        margin-right: 40px
+
+    &__top
+      &--xxsm
+        margin-top: 5px
+      &--xsm
+        margin-top: 10px
+      &--sm
+        margin-top: 20px
+      &--md
+        margin-top: 30px
+      &--lg
+        margin-top: 40px
+
+    &__bottom
+      &--xxsm
+        margin-bottom: 5px
+      &--xsm
+        margin-bottom: 10px
+      &--sm
+        margin-bottom: 20px
+      &--md
+        margin-bottom: 30px
+      &--lg
+        margin-bottom: 40px
+
+
+// Padding
+
+.padding-sm
+  padding: 5px
+
+.padding--md
+  padding: 10px
+
+.padding--lg
+  padding: 20px
+
+

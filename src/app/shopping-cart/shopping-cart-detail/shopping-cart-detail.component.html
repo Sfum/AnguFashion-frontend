@@ -1,0 +1,101 @@
+<!-- Display product cards if products exist -->
+<div *ngIf="products && products.length > 0">
+
+  <div *ngFor="let product of products; let i = index" class="cart__items-container mat-elevation-z2 margin--xsm">
+    <div class="cart__product-image">
+      <a [routerLink]="['/products', product.id]">
+        <img class="margin__top--md margin__left--md"
+             [src]="product.product_image"
+             height="150"
+             width="150"
+             alt="Product Image"/>
+      </a>
+    </div>
+    <div class="cart__info margin__top--md margin__bottom--md margin__right--md">
+      <div class="margin__left--md margin__bottom--md">
+        <div class="font-primary margin__bottom--xsm">
+          <a [routerLink]="['/products', product.id]" class="product-link">
+            {{ product.product_name | slice: 0:50 }}...
+          </a>
+        </div>
+
+        <!-- Display selected unit and price -->
+        <div *ngIf="product.selectedSize" class="font-secondary margin__top--sm">
+          <div class="size-info">
+            <p>{{ getUnit(product.selectedSize.unitType, product.selectedSize.size, product.selectedSize.sizeLabel) }}</p>
+          </div>
+
+          <span class="font-primary__label">
+            ${{ product.selectedSize.price }}
+          </span>
+        </div>
+
+        <div *ngIf="product.selectedSize.salePrice && product.onSale" class="font-secondary margin__top--sm margin__bottom--xxsm">
+          <span *ngIf="product.onSale">Our Price: {{ product.selectedSize?.salePrice | currency }}</span>
+          <span *ngIf="!product.onSale">{{ product.selectedSize?.price | currency }}</span>
+          <div class="discount-banner">{{ product.discountPercentage }}% Off</div>
+        </div>
+
+<!--        &lt;!&ndash; VAT and Total Price Display &ndash;&gt;-->
+<!--        <div *ngIf="product.selectedSize?.vatAmount !== undefined">-->
+<!--          <div class="font-secondary__small margin__bottom&#45;&#45;xxsm">-->
+<!--            VAT <span *ngIf="userCountry">({{ userCountry }})</span>:-->
+<!--            {{ product.selectedSize.vatAmount | currency }}-->
+<!--          </div>-->
+<!--          <div class="font-secondary">-->
+<!--            Total price: {{-->
+<!--            ((product.onSale ? product.selectedSize.salePrice : product.selectedSize.price) + product.selectedSize.vatAmount)-->
+<!--            * product.quantity | currency-->
+<!--            }}-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+
+
+
+
+
+      <!-- Quantity selection dropdown -->
+      <div class="cart__quantity-label margin__left--md margin__top--xxsm margin__bottom--xsm">
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <mat-select [(ngModel)]="product.quantity" (selectionChange)="onQuantityChange(product, $event.value)">
+            <mat-option *ngFor="let qty of getAvailableQuantities(product)" [value]="qty">
+              {{ qty }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        Only <span>{{ product.selectedSize?.quantity }}</span> left in stock
+
+        <div *ngIf="product.selectedSize && product.quantity > product.selectedSize.quantity" class="error-message">
+          Not enough stock available.
+        </div>
+      </div>
+
+      <div class="margin__left--md">
+        <button mat-raised-button
+                [disabled]="product.quantityStock <= 0"
+                class="product-card__bottom--left"
+                (click)="addToWishlist(product)"
+                matTooltip="Add To Wishlist">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+
+        <button
+          class="color__primary--600 margin__left--xxsm"
+          mat-raised-button
+          aria-label="icon"
+          (click)="removeFromCart(product)"
+          matTooltip="Remove From Cart">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Display message if no products are in the cart -->
+<div *ngIf="!products || products.length === 0" class="font-secondary empty-cart-message margin__left--sm">
+  No products added to cart yet!
+</div>

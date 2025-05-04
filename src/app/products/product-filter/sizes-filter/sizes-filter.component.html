@@ -1,0 +1,22 @@
+<div class="size-filter">
+  <div class="font-primary margin__top--md margin__bottom--sm">
+    Filter by Size
+  </div>
+
+  <div *ngIf="availableSizes.length > 0; else noSizes" class="size-buttons">
+    <button mat-fab
+            *ngFor="let size of availableSizes"
+            [ngClass]="{ selected: isSelected(size) }"
+            (click)="onSizeClick(size)"
+    >
+      <p>
+        {{ size || 0 }}
+      </p>
+
+    </button>
+  </div>
+
+  <ng-template #noSizes>
+    <p>No sizes available for filtering.</p>
+  </ng-template>
+</div>

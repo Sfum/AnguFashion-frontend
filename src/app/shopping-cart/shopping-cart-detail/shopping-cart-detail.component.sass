@@ -1,0 +1,44 @@
+@import url('../../../../src/styles.sass')
+
+.cart__items-container
+  display: grid
+  grid-template-columns: 30% 70%
+
+.cart__product-image
+  grid-column: 1/2
+
+.cart__info
+  grid-column: 2/3
+
+.cart__card_price-amount-sale
+  top: 50px
+
+.discount-banner
+  background-color: red
+  color: white
+  font-weight: bold
+  padding: 8px 8px
+  position: absolute
+  top: 50%
+  right: 300px
+  transform-origin: top left
+  z-index: 1
+
+.price-tag
+  color: red
+
+
+@media only screen and (max-width: 650px)
+
+ .cart__items-container
+  display: grid
+  grid-template-rows: 0.3fr 0.7fr
+
+ .cart__product-image
+  grid-row: 1/2
+
+ .cart__info
+  grid-row: 2/3
+  overflow: unset
+
+

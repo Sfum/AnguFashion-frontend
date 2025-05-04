@@ -1,0 +1,254 @@
+<div *ngIf="product" class="margin--md container__medium">
+  <div class="margin__right--md margin__left--md">
+    <div class="product-card-bottom">
+
+      <!-- Left side: Product image -->
+      <div class="product-card__left margin__top--lg">
+
+        <!-- Main product image -->
+        <img
+          class="margin__top--md product-image"
+          [src]="currentImage || placeholderImage"
+          alt="Product Image"
+          *ngIf="currentImage">
+        <!-- Thumbnail container -->
+        <div class="thumbnail-container" *ngIf="productImages && productImages.length">
+          <img
+            *ngFor="let image of productImages | slice: 0:5 let i = index"
+            [src]="image"
+            class="thumbnail"
+            [class.selected]="image === currentImage"
+            (click)="setMainImage(image)"
+            alt="Thumbnail Image">
+        </div>
+      </div>
+
+
+      <!-- Right side: Product details and actions -->
+      <div class="product-card__right margin__left--md">
+        <!-- Tab group for switching between Description, Reviews, and Ask a Question -->
+        <mat-tab-group class="margin__top--md custom-tabs">
+          <!-- Description Tab -->
+          <mat-tab label="Description">
+            <div class="margin--md">
+              <!-- Product name -->
+              <span class="font-primary margin__top--lg">{{ product.product_name }}</span>
+              <!-- Star rating display -->
+              <div class="container__stars margin__top--xxsm margin__bottom--xxsm" *ngIf="comments.length > 0">
+                <div>
+                  <!-- Display stars based on average rating -->
+                  <mat-icon class="star" [ngClass]="{'filled': averageRating >= 1}">star</mat-icon>
+                  <mat-icon class="star" [ngClass]="{'filled': averageRating >= 2}">star</mat-icon>
+                  <mat-icon class="star" [ngClass]="{'filled': averageRating >= 3}">star</mat-icon>
+                  <mat-icon class="star" [ngClass]="{'filled': averageRating >= 4}">star</mat-icon>
+                  <mat-icon class="star" [ngClass]="{'filled': averageRating >= 5}">star</mat-icon>
+                </div>
+                <!-- Average rating display -->
+                <p class="stars__average margin__left--sm">{{ averageRating.toFixed(1) }}</p>
+              </div>
+              <!-- Product title and description -->
+              <div class="font-secondary opacity--lg poppins-semibold">{{ product.product_title }}...</div>
+              <br>
+              <div
+                class="font-secondary__small margin__bottom--sm poppins-extralight">{{ product.product_description }}</div>
+              <hr class="margin__bottom--sm">
+              <!-- Dropdown for selecting product unit -->
+              <mat-form-field appearance="outline">
+                <mat-label>Select Size</mat-label>
+                <mat-select [(ngModel)]="selectedSize" required>
+                  <mat-option *ngFor="let size of product.sizes" [value]="size" [disabled]="size.quantity === 0">
+                    <p>{{ getUnit(size.unitType, size.size, size.sizeLabel) }}:
+                      <ng-container class="font-primary__label" *ngIf="product.onSale; else originalPrice">
+                        {{ size.salePrice | currency: 'USD':'symbol':'1.2-2' }} Sale!
+                        <span *ngIf="size.salePrice < size.price" class="discounted"></span>
+                      </ng-container>
+
+                      <ng-template #originalPrice class="font-primary">
+                        {{ size.price | currency: 'USD':'symbol':'1.2-2' }}
+                      </ng-template>
+                    </p>
+
+
+                    <span *ngIf="size.quantity === 0" class="out-of-stock"> (Out of Stock!)</span>
+                  </mat-option>
+
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Buttons for adding the product to wishlist or cart -->
+              <div class="button-group">
+                <!-- Add to Cart button -->
+                <button mat-raised-button class="margin__bottom--xxsm"
+                        [disabled]="!selectedSize || product.quantityStock <= 0"
+                        (click)="addToCart(selectedSize, selectedColor || 'defaultColor')"
+                        matTooltip="Add To Cart">
+                  <label>
+                    ADD to <span class="pi product-card__bottom--left pi-shopping-cart"></span>
+                  </label>
+                </button>
+
+                <button mat-raised-button (click)="addToWishlist(product)"
+                        class="button-primary font-secondary">
+                  <mat-icon (click)="addToWishlist(product)">favorite</mat-icon>
+                  <label (click)="addToWishlist(product)">Wishlist</label>
+                </button>
+
+              </div>
+
+              <div class="font-small margin__top--md">
+                <label>Quantity:</label>
+                <div class="margin__top--xxsm">{{product.quantityStock}} left in stock!</div>
+              </div>
+              <div class="font-small margin__top--sm">
+                <label>Colors:</label>
+                <div class="margin__top--xxsm">{{product.colors}}</div>
+              </div>
+              <div class="font-small margin__top--sm">
+                <label>Material:</label>
+                <div>{{product.material}}</div>
+              </div>
+              <div class="font-small margin__top--sm">
+                <label>Unit Type:</label>
+                <div>{{product.unitType}}</div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Reviews Tab -->
+          <mat-tab label="Reviews">
+            <div *ngIf="product">
+              <div class="margin__left--md opacity--sm margin__top--md">
+                <!-- Reviews heading -->
+                <div class="ticket-form font-primary__label">Reviews</div>
+                <div class="margin__right--lg">
+                  <!-- Comment form -->
+                  <div *ngIf="product" class="margin__bottom--xxsm">
+                    <form [formGroup]="commentForm" class="margin__top--xxsm"
+                          (ngSubmit)="addComment(product.id.toString())">
+                      <!-- Rating selection -->
+                      <div class="rating margin__bottom--sm">
+                        <mat-label class="margin__right--sm margin__bottom--xxsm">Your Rating</mat-label>
+                        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                          <mat-icon class="star rating_star"
+                                    [ngClass]="{'filled': i < commentForm.get('rating')?.value}"
+                                    (click)="setRating(i + 1)">star
+                          </mat-icon>
+                        </ng-container>
+                      </div>
+
+                      <!-- Comment input and submit button -->
+                      <div>
+                        <mat-label for="comment" class="margin__right--md">Add Comment</mat-label>
+                        <input matInput id="comment" formControlName="comment">
+                        <button mat-raised-button
+                                class="button-primary margin__top--xsm margin__bottom--md"
+                                type="submit"><label>Submit</label>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- Displaying comments with pagination -->
+                  <div *ngIf="paginatedComments.length > 0; else noComments">
+                    <div *ngFor="let comment of paginatedComments" class="comment">
+                      <hr class="opacity--md">
+                      <div class="page__row">
+                        <div class="page__row--body">
+                          <!-- Commenter's name and rating -->
+                          <strong class="font-secondary margin__bottom--xsm">{{ comment.userName }}:</strong>
+                          <div class="page__stars margin__left--xxsm">
+                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                              <mat-icon class="star" [ngClass]="{'filled': i < comment.rating}">star</mat-icon>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Comment date and text -->
+                      <div class="page__date font-secondary__small">Reviewed on {{formatDate(comment.date_created) }}</div>
+                      <p class="font-secondary__small margin__top--xxsm">{{ comment.comment }}</p>
+                    </div>
+                    <!-- Paginator for comments -->
+                    <mat-paginator [length]="comments.length" [pageSize]="pageSize"
+                                   (page)="onPageChange($event)"></mat-paginator>
+                  </div>
+                  <!-- Message for no comments -->
+                  <ng-template #noComments>
+                    <p>No comments yet. Be the first to comment!</p>
+                  </ng-template>
+                </div>
+                <ng-template #noComments><p>No comments yet. Be the first to comment!</p></ng-template>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Ask a Question Tab -->
+          <mat-tab label="Ask a question">
+            <mat-card class="mat-elevation-z20">
+              <div *ngIf="product">
+                <!-- Heading for the ask a question section -->
+                <div class="font-primary margin__left--lg margin__right--lg margin__top--lg">Ask a question</div>
+                <!-- Component for submitting a question -->
+                <app-product-ticket [productId]="product.product_name"></app-product-ticket>
+              </div>
+            </mat-card>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+    <mat-card *ngIf="product" class="mat-elevation-z12 margin__top--xxsm border-radius--sm">
+      <div class="margin__left--md margin__right--md">
+        <div *ngIf="relatedProductsByCategory.length > 0">
+          <h3 class="font-primary margin__top--md">More from this category:</h3>
+          <div class="related-products-container">
+            <!-- Loop through related products -->
+            <a
+              *ngFor="let relatedProduct of relatedProductsByCategory"
+              [routerLink]="['/products', relatedProduct.id]"
+              class="related-product-link"
+            >
+              <img
+                [src]="relatedProduct.product_image"
+                alt="Product Image"
+                width="150"
+                class="related-product-image margin__bottom--xsm margin__right--xsm"
+              />
+            </a>
+          </div>
+        </div>
+        <div *ngIf="relatedProductsByCategory.length === 0">
+          <p>No related categories found.</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card *ngIf="product" class="mat-elevation-z12 margin__top--xxsm border-radius--sm">
+      <div class="margin__left--md margin__right--md">
+        <div *ngIf="relatedProductsByCategory.length > 0">
+          <h3 class="font-primary margin__top--md">More from this brand:</h3>
+          <div>
+            <!-- Loop through related products -->
+            <a
+              *ngFor="let relatedProduct of relatedProductsByBrand"
+              [routerLink]="['/products', relatedProduct.id]"
+              class="related-product-link"
+            >
+              <img
+                [src]="relatedProduct.product_image"
+                alt="Product Image"
+                width="150"
+                class="related-product-image margin__right--xsm"
+              />
+            </a>
+          </div>
+        </div>
+        <div *ngIf="relatedProductsByBrand.length === 0">
+          <p>No related brands found.</p>
+        </div>
+      </div>
+    </mat-card>
+
+  </div>
+</div>
+
+
+

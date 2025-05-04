@@ -1,0 +1,11 @@
+<div class="container-grid">
+  <app-category-detail
+    *ngFor="let category of categories$ | async" [category]="category"
+    [products]="products$ | async"
+  ></app-category-detail>
+  <app-product-page-detail
+    [selectedSize]="selectedSize"
+    [selectedColor]="selectedColor"
+  ></app-product-page-detail>
+</div>
+

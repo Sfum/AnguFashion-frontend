@@ -1,0 +1,41 @@
+<div class="container__medium container__blog-post-page" *ngIf="post">
+  <div class="blog-post-page__left-column">
+    <div class="margin--md">
+      <!-- Display the post image, with a default width and spacing -->
+      <img [src]="post?.imageUrl" width="400px" alt="Post Image"
+           class="margin__bottom--xsm"/>
+    </div>
+  </div>
+
+  <!-- Right column for displaying the post's name and content -->
+  <div class="blog-post-page__right-column">
+    <div class="margin__top--md margin__right--md margin__bottom--md">
+      <!-- Display the post name with primary font style and spacing -->
+      <div class="font-primary margin__bottom--xsm">{{ post?.post_name }}</div>
+      <!-- Display the post content with secondary font style and spacing -->
+      <div class="font-secondary__small margin__bottom--sm">{{ post?.post_content }}</div>
+    </div>
+    <div class="post-icons">
+      <div class="icon-container">
+        <span class="material-icons icon">thumb_up</span>
+        <div class="icon-label">Like</div>
+      </div>
+      <div class="icon-container">
+        <span class="material-icons icon">comment</span>
+        <div class="icon-label">Comment</div>
+      </div>
+      <div class="icon-container">
+        <span class="material-icons icon">share</span>
+        <div class="icon-label">Share</div>
+      </div>
+      <div class="icon-container">
+        <span class="material-icons icon">bookmark</span>
+        <div class="icon-label">Save</div>
+      </div>
+      <div class="icon-container">
+        <span class="material-icons icon">visibility</span>
+        <div class="icon-label">Views</div>
+      </div>
+    </div>
+  </div>
+</div>

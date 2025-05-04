@@ -1,0 +1,16 @@
+<div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+  Bundles
+</div>
+
+<div class="product-card">
+  <div class="product-card-left">
+    <app-product-filter></app-product-filter>
+  </div>
+  <div class="product-card-middle">
+      <app-bundle-detail [products]="filteredProducts"
+                         (addToWishlistEvent)="onAddToWishlist($event)"
+                         (addToCartEvent)="onAddToCart($event)">
+      </app-bundle-detail>
+  </div>
+</div>
+

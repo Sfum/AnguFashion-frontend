@@ -1,0 +1,13 @@
+<div class="container__medium">
+  <div>
+    <div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">Wishlist</div>
+    <hr/>
+  </div>
+  <div class="shopping__cart--grid">
+      <app-wishlist-detail
+        [products]="products"
+        (addToCartEvent)="onAddToCart($event)"
+        (removeWishlistEvent)="removeFromWishlist($event.id.toString())">
+      </app-wishlist-detail>
+  </div>
+</div>

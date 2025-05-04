@@ -1,0 +1,35 @@
+.container__blog
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-gap: 20px
+  max-width: 1200px
+  margin: auto
+
+.first-column
+  grid-column: 1 / 2
+  img
+    width: 100%
+    height: auto
+  .post-content
+    h2
+      font-size: 28px
+    p
+      font-size: 18px
+      line-height: 1.8
+
+.second-column
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-gap: 20px
+  grid-column: 2 / 3
+
+.smaller-post
+  img
+    width: 100%
+    height: auto
+  .post-content
+    h3
+      font-size: 20px
+    p
+      font-size: 14px
+      line-height: 1.5

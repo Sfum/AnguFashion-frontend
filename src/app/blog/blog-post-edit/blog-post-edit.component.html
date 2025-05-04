@@ -1,0 +1,44 @@
+<mat-card class="container__medium">
+  <div class="font-primary margin__left--md margin__top--md">Edit Post</div>
+  <div class="margin--md">
+
+    <!-- Form for editing the post, bound to postForm and triggers onSubmit() on submission -->
+    <form class="form-container container" [formGroup]="postForm" (ngSubmit)="onSubmit()"
+          *ngIf="(postEdit$ | async) as asyncFilterPipe">
+
+      <!-- Input field for the post name with required validation -->
+      <mat-label for="post_name" class="font-secondary__small">
+        Post Name:
+      </mat-label>
+      <input class="text-field padding--md margin__right--lg margin__bottom--xsm"
+             type="text" id="post_name"
+             formControlName="post_name"
+             required>
+
+      <!-- Textarea for the post content with required validation and fixed dimensions -->
+      <mat-label for="post_content" class="margin__top--md font-secondary__small">
+        Content:
+      </mat-label>
+      <input class="text-field padding--md"
+                id="post_content"
+                formControlName="post_content"
+                required style="width: 100%; height: 200px;">
+
+      <!-- File input for selecting a new post image -->
+      <mat-label for="post_image" class="margin__top--md font-secondary">
+        Post Image:
+      </mat-label>
+      <input class="text-field padding--md"
+             type="file"
+             id="post_image"
+             (change)="onImageSelected($event)">
+
+      <!-- Button to submit the form and update the post -->
+      <div>
+        <button mat-raised-button class="margin__top--sm margin__right--xlg">
+          <label>Update Post</label>
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-card>

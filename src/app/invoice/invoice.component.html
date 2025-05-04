@@ -1,0 +1,85 @@
+<!-- Wrapper shown only when there are sales and a buyer -->
+<div *ngIf="sales.length && buyer" class="margin--md padding--sm">
+
+  <!-- Invoice Title -->
+  <div class="invoice__title margin__top--md font-primary margin__bottom--lg margin__left--xxsm">
+    INVOICE
+  </div>
+
+  <!-- Main Invoice Container -->
+  <div class="invoice-container padding--sm">
+    <!-- Header Section: Seller & Buyer Info -->
+    <div class="invoice-header">
+      <div class="left-column">
+        <!-- Seller Info -->
+        <div class="invoice-section margin__bottom--sm">
+          <div class="font-secondary__small">Seller Information</div>
+          <div *ngIf="admin">
+            <strong class="font-primary">{{ admin.displayName }}</strong>
+            <div class="font-primary">{{ admin.address }}</div>
+            <div class="font-primary">{{ admin.postcode }}</div>
+            <div class="font-primary">{{ admin.country }}</div>
+          </div>
+        </div>
+
+        <!-- Buyer Info -->
+        <div class="invoice-section margin__top--lg">
+          <div class="font-secondary__small">Buyer Information</div>
+          <p><strong class="font-primary">{{ buyer.displayName }}</strong></p>
+          <div class="font-secondary__small">{{ buyer.address }}</div>
+          <div class="font-secondary__small">{{ buyer.postcode }}</div>
+          <div class="font-secondary__small">{{ buyer.country }}</div>
+        </div>
+      </div>
+
+      <!-- Right Column: Invoice Date -->
+      <div class="right-column">
+        <div class="invoice-section">
+          <div class="font-secondary__small margin__bottom--xsm margin__top">Invoice Date</div>
+          <div>{{ formatDate(invoiceDate) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Table -->
+    <div class="invoice-details">
+      <div class="invoice-section margin__top--sm">
+        <div class="font-secondary__small margin__bottom--xsm">Product Information</div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price (incl VAT {{ vatRate }}%)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let s of sales">
+            <td>{{ s.product_name }}</td>
+            <td>{{ s.quantitySold }}</td>
+            <td>{{ s.totalPrice | currency }}</td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="2"><strong>Total</strong></td>
+            <td><strong>{{ getSubtotal() | currency }}</strong></td>
+          </tr>
+
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Print Button -->
+    <button mat-raised-button (click)="printInvoice()" class="margin__top--sm">
+      Print
+    </button>
+  </div>
+</div>
+
+<!-- Fallback if no data -->
+<div *ngIf="!sales.length" class="text-muted padding--sm">
+  No sales available for this invoice.
+</div>

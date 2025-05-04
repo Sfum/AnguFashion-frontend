@@ -1,0 +1,40 @@
+<div class="sticky-menu">
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu" class="navigation-menu">
+    <button mat-menu-item routerLink="/">
+      <mat-icon>home</mat-icon>
+      <span>Home</span>
+    </button>
+    <button mat-menu-item routerLink="/on-sale" matTooltip="Limited time offers!!!">
+      <mat-icon>local_offer</mat-icon>
+      <span>Sale!</span>
+    </button>
+    <button mat-menu-item routerLink="/brands">
+      <mat-icon>store</mat-icon>
+      <span>Brands</span>
+    </button>
+    <button mat-menu-item routerLink="/categories">
+      <mat-icon>category</mat-icon>
+      <span>Categories</span>
+    </button>
+    <button mat-menu-item routerLink="/blog">
+      <mat-icon>article</mat-icon>
+      <span>Blog</span>
+    </button>
+    <button *ngIf="isAdmin || (isModerator | async)" mat-menu-item routerLink="/manage-products">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <span>Provider</span>
+    </button>
+    <button *ngIf="!(user$ | async)" mat-menu-item routerLink="/login">
+      <mat-icon>login</mat-icon>
+      <span>Login</span>
+    </button>
+    <button *ngIf="!(user$ | async)" mat-menu-item routerLink="/signup">
+      <mat-icon>person_add</mat-icon>
+      <span>Signup</span>
+    </button>
+  </mat-menu>
+</div>

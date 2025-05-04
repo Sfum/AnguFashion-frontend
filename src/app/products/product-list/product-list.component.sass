@@ -1,0 +1,95 @@
+.sizes-container
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 10px
+  align-items: center
+
+
+.size-info
+  background-color: #4caf50
+  padding: 10px
+  border-radius: 10px
+  color: whitesmoke
+  text-align: center
+  font-size: 14px
+
+
+.cell--main
+  display: flex
+  flex-direction: column
+
+.cell_hover:hover
+  background-color: whitesmoke
+  color: grey
+
+.mat-row
+  cursor: pointer
+  height: 80px
+
+.sale-price
+  color: red
+
+mat-cell
+  height: 120px
+
+.stock-cell
+  padding: 20px
+  display: flex
+  align-items: center
+  justify-content: center
+
+.warning-message
+  display: block
+  color: white
+  font-weight: bold
+  margin-left: 8px
+
+.size-info
+  background-color: hsl(55, 80%, 25%)
+  padding: 10px
+  border-radius: 10px
+  color: whitesmoke
+  white-space: nowrap
+  opacity: 80%
+
+
+.sizes-prices-column
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(40px, max-content))
+
+
+.mat-row
+  height: auto
+
+
+mat-cell
+  height: auto
+  padding: 16px
+
+
+@media only screen and (max-width: 1200px)
+  .column-lg
+    display: none
+
+@media only screen and (max-width: 900px)
+  .column-md
+    display: none
+
+@media only screen and (max-width: 768px)
+  .column-sm
+    display: none
+
+@media (max-width: 768px)
+  .sizes-container
+    grid-template-columns: repeat(2, 1fr)
+
+@media (max-width: 480px)
+
+  .sizes-container
+    grid-template-columns: 1fr
+
+  .column-sm
+    display: none
+  .product-table
+    width: 100%
+

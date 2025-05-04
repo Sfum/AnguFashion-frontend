@@ -1,0 +1,116 @@
+@import url('../../../../src/styles.sass')
+
+.admin__toolbar
+  display: grid
+  grid-template-columns: 1fr 1fr
+  padding: 20px
+  background-color: hsl(355, 60%, 45%)
+  border-radius: 5px
+
+  &--cell_one,
+  &--cell_two
+    display: flex
+    justify-content: center
+    position: relative
+    color: whitesmoke
+    padding: 10px
+    overflow: hidden
+    border-radius: 5px
+    white-space: nowrap
+    box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.15), inset -3px -3px 2px rgba(255, 255, 255, 0.1)
+    background-color: hsl(355, 50%, 55%)
+    margin-left: 2px
+    height: 200px
+    &-main
+      font-size: 42px
+      font-weight: 650
+      opacity: 90%
+      transform: translateY(6px)
+
+    &-secondary
+      position: absolute
+      top: 25px
+      text-transform: uppercase
+      opacity: 70%
+      transform: translateY(1px)
+
+  .admin__toolbar__content
+    display: flex
+    align-items: center
+    justify-content: center
+
+  &--cell_one .admin__toolbar__content
+    grid-column: 1/2
+
+  &--cell_two .admin__toolbar__content
+    grid-column: 2/3
+
+  &--cell_three .admin__toolbar__content
+    grid-column: 3/4
+
+.toggle-select
+  width: 120px
+
+.admin-report__status
+  display: flex
+  flex-direction: row
+
+.admin-report__status-button
+  min-width: 160px
+
+.cell_wide
+  width: 300px
+  max-width: 300px
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.admin-reports__table-line
+  white-space: nowrap
+
+
+.admin-reports__label
+  font-weight: 700
+
+
+
+table
+  width: 100%
+  border-collapse: collapse
+
+  // Styles for small screens
+  @media screen and (max-width: 768px)
+    display: flex
+    flex-direction: column
+
+    // Each row becomes a block
+    tr
+      display: flex
+      flex-direction: column
+      width: 100%
+      height: 100%
+      padding: 0 20px
+
+    // Hide table headers for mobile view
+    th
+      display: none
+
+
+    // Make table cells stackable and formatted
+    td
+      display: flex
+      flex-direction: column
+      justify-content: flex-start
+      padding: 20px 0
+
+    // Reorder columns: Order Status and Complete Order to the bottom
+    td:nth-child(5), // Order Status
+    td:nth-child(6)  // Complete Order
+      order: 1
+
+    // Keep other columns at the top
+    td:nth-child(1), // Product Sold
+    td:nth-child(2), // Seller
+    td:nth-child(3), // Buyer
+    td:nth-child(4)  // Price
+      order: 0

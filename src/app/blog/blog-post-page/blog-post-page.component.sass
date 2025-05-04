@@ -1,0 +1,63 @@
+.container__blog-post-page
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: 1fr
+  grid-gap: 20px
+
+  &__left-column
+    grid-column: 1 / 2
+    grid-row: 1 / 2
+
+
+  &__right-column
+    grid-column: 2 / 3
+    grid-row: 1 / 2
+
+.post-icons
+    display: flex
+    justify-content: space-around
+    padding: 20px 0
+    max-width: 400px
+    margin: auto
+
+.icon
+    font-size: 30px
+    color: #555
+    cursor: pointer
+    transition: color 0.3s
+
+    &:hover
+      color: #000
+
+.icon-label
+    font-size: 14px
+    color: #555
+    text-align: center
+
+.icon-container
+    display: flex
+    flex-direction: column
+    align-items: center
+
+@media only screen and (max-width: 600px)
+.container__blog-post-page
+  display: flex
+  flex-direction: column
+  gap: 10px
+
+  &__left-column
+    order: 1
+    width: 100%
+
+  &__right-column
+    order: 2
+
+  &__left-column img
+    width: 100%
+
+  @media (max-width: 480px)
+  &__right-column .font-secondary__small
+    font-size: 14px
+
+
+

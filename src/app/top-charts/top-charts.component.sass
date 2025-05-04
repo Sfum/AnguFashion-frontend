@@ -1,0 +1,49 @@
+.top-charts-container
+  transform: translateY(5px)
+
+.brand-details
+  margin-bottom: 1.5rem
+
+.products-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))
+  gap: 0.5rem
+
+.product-card
+  display: flex
+  align-items: center
+  background-color: #fff
+  border-radius: 2px
+  padding: 20px
+  text-decoration: none
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+  transition: box-shadow 0.3s ease, transform 0.3s ease
+
+  &:hover
+    transform: translateY(-5px)
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15)
+
+.rank-number
+  font-size: 3rem
+  font-weight: bold
+  color: hsl(355, 50%, 55%)
+  width: 50px
+  text-align: center
+  margin-right: 1rem
+
+.product-image
+  width: 80px
+  height: 80px
+  object-fit: cover
+  border-radius: 2px
+  margin-right: 1rem
+
+.product-name
+  flex-grow: 1
+  font-size: 1rem
+  color: #555
+
+.no-products
+  text-align: center
+  font-size: 1.2rem
+  color: #999

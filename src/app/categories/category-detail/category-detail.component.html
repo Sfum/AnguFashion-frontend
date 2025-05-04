@@ -1,0 +1,20 @@
+<mat-card class="container__category-detail mat-elevation-z2">
+  <div class="info-text margin--md">
+    <h2 class="font-primary">{{ category?.category_name }}</h2>
+
+    <!-- Display the category description, slicing it to show the first 340 characters -->
+    <h4 class="font-secondary">{{ category?.category_description | slice: 0:140 }}...read more</h4>
+  </div>
+
+  <!-- Product List (show the first 4 products related to the category) -->
+  <div class="product-card margin__left--md">
+
+    <!-- Loop through the products related to the category and display their image -->
+    <img class="image margin__top--xxsm"
+         [routerLink]="'/products/' + product.id"
+         [src]="product.product_image"
+         *ngFor="let product of getCategoryProducts() | slice: 0:4"
+         alt="Product Image" width="80px" height="80px">
+  </div>
+
+</mat-card>

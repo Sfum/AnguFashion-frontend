@@ -1,0 +1,15 @@
+  <div class="font-primary margin__top--sm margin__bottom--sm">Filter by Color</div>
+  <div *ngIf="availableColors.length > 0; else noColors" class="color-filter mat-elevation-z4">
+    <mat-button-toggle-group #group="matButtonToggleGroup" multiple  class="color-buttons">
+      <mat-button-toggle *ngFor="let color of availableColors"
+                         [value]="color"
+                         (click)="onColorClick(color)"
+                         [checked]="isSelected(color)">
+        <div class="font-secondary__small"><label>{{ color }}</label></div>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <ng-template #noColors>
+    <p>No subcategories available for filtering.</p>
+  </ng-template>

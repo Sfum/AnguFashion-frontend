@@ -1,0 +1,104 @@
+<!-- Main container for aligning the items -->
+<div class="align__items">
+  <!-- Card container for registration form -->
+  <mat-card>
+    <!-- Title for the form -->
+    <a class="font-primary margin__left--md margin__top--md">Register</a>
+
+    <!-- Form container with Angular formGroup directive binding to the 'signupForm' and form submission handled by onSubmit method -->
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form-container margin--md">
+
+      <!-- Email input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Email:</mat-label>
+        <input matInput type="email" formControlName="email">
+        <!-- Error messages for email validation -->
+        <mat-error *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)">
+          <mat-error *ngIf="signupForm.get('email')?.errors?.['required']">Email is required.</mat-error>
+          <mat-error *ngIf="signupForm.get('email')?.errors?.['email']">Please enter a valid email.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Password input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Password:</mat-label>
+        <input matInput type="password" formControlName="password">
+        <!-- Error messages for password validation -->
+        <mat-error *ngIf="signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)">
+          <mat-error *ngIf="signupForm.get('password')?.errors?.['required']">Password is required.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Display Name input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Display Name:</mat-label>
+        <input matInput type="text" formControlName="displayName">
+        <!-- Error messages for display name validation -->
+        <mat-error *ngIf="signupForm.get('displayName')?.invalid && (signupForm.get('displayName')?.dirty || signupForm.get('displayName')?.touched)">
+          <mat-error *ngIf="signupForm.get('displayName')?.errors?.['required']">Display Name is required.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Photo URL input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Photo URL:</mat-label>
+        <input matInput type="text" formControlName="photoURL">
+      </div>
+
+      <!-- Address input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Address:</mat-label>
+        <input matInput type="text" formControlName="address">
+        <!-- Error messages for address validation -->
+        <mat-error *ngIf="signupForm.get('address')?.invalid && (signupForm.get('address')?.dirty || signupForm.get('address')?.touched)">
+          <mat-error *ngIf="signupForm.get('address')?.errors?.['required']">Address is required.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Postcode input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Postcode:</mat-label>
+        <input matInput type="text" formControlName="postcode">
+        <!-- Error messages for postcode validation -->
+        <mat-error *ngIf="signupForm.get('postcode')?.invalid && (signupForm.get('postcode')?.dirty || signupForm.get('postcode')?.touched)">
+          <mat-error *ngIf="signupForm.get('postcode')?.errors?.['required']">Postcode is required.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Country input field -->
+      <div class="margin__bottom--xsm">
+        <mat-label class="font-secondary__small">Country:</mat-label>
+        <input matInput type="text" formControlName="country">
+        <!-- Error messages for country validation -->
+        <mat-error *ngIf="signupForm.get('country')?.invalid && (signupForm.get('country')?.dirty || signupForm.get('country')?.touched)">
+          <mat-error *ngIf="signupForm.get('country')?.errors?.['required']">Country is required.</mat-error>
+        </mat-error>
+      </div>
+
+      <!-- Checkbox for determining if the user is a content provider -->
+      <div class="margin__top--md margin__bottom--md">
+        <mat-label class="font-secondary__small">Are you a content provider?</mat-label>
+        <mat-checkbox formControlName="isContentProvider"></mat-checkbox>
+      </div>
+
+      <!-- Conditional fields displayed if the user selects the 'isContentProvider' checkbox -->
+      <div *ngIf="signupForm.get('isContentProvider')?.value">
+        <!-- Brand Name input field -->
+        <div>
+          <mat-label class="font-secondary__small">Brand Name:</mat-label>
+          <input matInput type="text" formControlName="brand_name">
+        </div>
+        <!-- Brand Description input field -->
+        <div>
+          <mat-label class="font-secondary__small">Brand Description:</mat-label>
+          <input matInput type="text" formControlName="brand_description">
+        </div>
+      </div>
+
+      <!-- Submit button for the form. Disabled if the form is invalid -->
+      <button mat-raised-button type="submit" class="margin__top--sm" [disabled]="signupForm.invalid">
+        <label>Sign Up</label>
+      </button>
+    </form>
+  </mat-card>
+</div>

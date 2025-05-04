@@ -1,0 +1,47 @@
+<!-- Card container for the category creation form -->
+<mat-card class="container__medium">
+  <div class="font-primary margin__left--md margin__top--md">Create Category</div>
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="margin__left--md margin__bottom--md margin__right--md">
+
+    <!-- Hidden input field for the internal _id (not visible to the user) -->
+    <div class="form-group margin__bottom--sm">
+      <input matInput type="text" id="_id" formControlName="_id" hidden>
+    </div>
+
+    <!-- Hidden input field for the external id (not visible to the user) -->
+    <div class="form-group margin__bottom--sm">
+      <input matInput type="text" id="id" formControlName="id" hidden>
+    </div>
+
+    <!-- Input field for the category name, required for form validation -->
+    <div class="form-group margin__bottom--sm">
+      <mat-label class="font-secondary__small" for="category_name">Name:</mat-label>
+      <input matInput type="text" id="category_name" formControlName="category_name" required>
+      <mat-error
+        *ngIf="categoryForm.get('category_name')?.invalid && (categoryForm.get('category_name')?.dirty || categoryForm.get('category_name')?.touched)">
+        <!-- Error message for required product name -->
+        <mat-error *ngIf="categoryForm.get('category_name')?.errors?.['required']">Category Name is required.</mat-error>
+      </mat-error>
+    </div>
+
+    <!-- Textarea for the category description, required for form validation -->
+    <div class="form-group margin__bottom--sm">
+      <mat-label class="font-secondary__small" for="category_description">Description:</mat-label>
+      <input matInput id="category_description" formControlName="category_description" required>
+      <mat-error
+        *ngIf="categoryForm.get('category_description')?.invalid && (categoryForm.get('category_description')?.dirty || categoryForm.get('category_description')?.touched)">
+        <!-- Error message for required product name -->
+        <mat-error *ngIf="categoryForm.get('category_description')?.errors?.['required']">Category Description is required.</mat-error>
+      </mat-error>
+    </div>
+
+    <!-- Submit button to trigger the form submission -->
+    <button mat-raised-button type="submit"><label>Add Category</label></button>
+
+    <!-- Back button to navigate to the manage products page -->
+    <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'>
+      <label>Back</label>
+    </button>
+
+  </form>
+</mat-card>

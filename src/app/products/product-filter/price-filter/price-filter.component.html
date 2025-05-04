@@ -1,0 +1,40 @@
+<form [formGroup]="priceForm" (ngSubmit)="onSubmit()">
+  <div class="price screen__sm--hidden">
+    <label class="font-secondary" for="minPrice">Min Price</label>
+
+    <!-- Input field for Min Price, bound to 'minPrice' form control. 'matInput' is from Angular Material -->
+    <input matInput id="minPrice" formControlName="minPrice" type="number" min="0"/>
+
+    <!-- Validation message container, shown if 'minPrice' is invalid and has been touched -->
+    <div *ngIf="priceForm.get('minPrice')?.invalid && priceForm.get('minPrice')?.touched">
+
+      <!-- Validation message for the required field -->
+      <small *ngIf="priceForm.get('minPrice')?.errors?.['required']">Min Price is required</small>
+
+      <!-- Validation message for the minimum value (in this case, ensuring price is not negative) -->
+      <small *ngIf="priceForm.get('minPrice')?.errors?.['min']">Min Price cannot be negative</small>
+    </div>
+  </div>
+
+  <div class="screen__sm--hidden price">
+    <label class="font-secondary" for="maxPrice">Max Price</label>
+
+    <!-- Input field for Max Price, bound to 'maxPrice' form control. 'matInput' is from Angular Material -->
+    <input matInput id="maxPrice" formControlName="maxPrice" type="number" min="0"/>
+
+    <!-- Validation message container, shown if 'maxPrice' is invalid and has been touched -->
+    <div *ngIf="priceForm.get('maxPrice')?.invalid && priceForm.get('maxPrice')?.touched">
+
+      <!-- Validation message for the required field -->
+      <small *ngIf="priceForm.get('maxPrice')?.errors?.['required']">Max Price is required</small>
+
+      <!-- Validation message for the minimum value (in this case, ensuring price is not negative) -->
+      <small *ngIf="priceForm.get('maxPrice')?.errors?.['min']">Max Price cannot be negative</small>
+    </div>
+
+  </div>
+
+  <!-- Submit button, disabled if the form is invalid -->
+  <button mat-raised-button class="screen__sm--hidden margin__bottom--sm" type="submit" [disabled]="priceForm.invalid">Filter</button>
+
+</form>

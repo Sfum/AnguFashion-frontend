@@ -1,0 +1,26 @@
+@import url('../../../../../src/styles.sass')
+
+.container__filter
+  white-space: nowrap
+  transform: translateY(10px)
+
+.form-field
+  width: 100%
+
+@media only screen and (max-width: 900px)
+  .container__filter
+    display: flex
+    flex-direction: column
+
+@media only screen and (max-width: 600px)
+  .container__filter
+    display: flex
+    flex-direction: column
+    z-index: 10000
+
+    .screen__sm--hidden
+      display: none
+
+@media only screen and (min-width: 600px)
+    .screen__lg--show
+      display: none

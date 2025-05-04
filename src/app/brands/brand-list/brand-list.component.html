@@ -1,0 +1,43 @@
+<section class="container__medium mat-elevation-z2">
+  <button mat-raised-button class="margin__top--lg margin__left--sm" [routerLink]="['/add-brand']">
+    <label>Create Brand</label>
+  </button>
+
+  <!-- Table displaying the list of brands -->
+  <table mat-table [dataSource]="dataSource" class="mat-table">
+
+    <!-- Column for Brand Name -->
+    <ng-container matColumnDef="brand_name">
+      <th mat-header-cell *matHeaderCellDef class="font-small"> Brand Name</th> <!-- Table header -->
+      <td mat-cell class="cell_hover" *matCellDef="let brand" [routerLink]="['/', 'brand-edit', brand._id]">
+        {{ brand.brand_name }} <!-- Display brand name -->
+      </td>
+    </ng-container>
+
+    <!-- Column for Brand Description -->
+    <ng-container matColumnDef="brand_description">
+      <th mat-header-cell *matHeaderCellDef class="font-small"> Brand Description</th> <!-- Table header -->
+      <td mat-cell class="cell_hover" *matCellDef="let brand" [routerLink]="['/', 'brand-edit', brand._id]">
+        {{ brand.brand_description | slice: 0:70 }}...read more
+        <!-- Display a truncated brand description with a "read more" link -->
+      </td>
+    </ng-container>
+
+    <!-- Column for Delete action -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef class="font-small">Delete</mat-header-cell> <!-- Table header -->
+      <mat-cell *matCellDef="let brand">
+        <!-- Delete icon that triggers the delete action for the brand -->
+        <mat-icon (click)="deleteBrand(brand._id)">delete</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Table header row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <!-- Table data row -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Paginator for the table -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons="" class="font-small"></mat-paginator>
+</section>

@@ -1,0 +1,66 @@
+<div class="margin__top--lg">
+  <div class="font-primary__name container__center-auto margin__bottom--md margin__left--xsm margin__top--lg">
+    Vat Summary
+  </div>
+
+  <!-- Filter Inputs -->
+  <div class="container__center-auto margin__bottom--md">
+    <mat-form-field appearance="outline" class="margin__right--sm">
+      <mat-label>Search Country</mat-label>
+      <input matInput [formControl]="countryFilterControl" placeholder="Type country name..." />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="margin__right--sm">
+      <mat-label>From Date</mat-label>
+      <input matInput [matDatepicker]="fromPicker" [formControl]="fromDateControl" placeholder="Start date" />
+      <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>To Date</mat-label>
+      <input matInput [matDatepicker]="toPicker" [formControl]="toDateControl" placeholder="End date" />
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <mat-card-content>
+    <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30"></mat-progress-spinner>
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+
+    <table mat-table [dataSource]="filteredVatSummaries" class="mat-elevation-z2" *ngIf="filteredVatSummaries.length > 0">
+      <!-- Country Column -->
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef> Country </th>
+        <td mat-cell *matCellDef="let summary"> {{ summary.country }} </td>
+      </ng-container>
+
+      <!-- VAT Collected Column -->
+      <ng-container matColumnDef="totalVatAmount">
+        <th mat-header-cell *matHeaderCellDef> VAT Collected </th>
+        <td mat-cell *matCellDef="let summary"> {{ summary.totalVatAmount | currency }} </td>
+      </ng-container>
+
+      <!-- Total Gross Sales Column -->
+      <ng-container matColumnDef="totalGrossSales">
+        <th mat-header-cell *matHeaderCellDef> Gross Sales </th>
+        <td mat-cell *matCellDef="let summary"> {{ summary.totalGrossSales | currency }} </td>
+      </ng-container>
+
+      <!-- Number of Sales Column -->
+      <ng-container matColumnDef="numberOfSales">
+        <th mat-header-cell *matHeaderCellDef> Sales Count </th>
+        <td mat-cell *matCellDef="let summary"> {{ summary.numberOfSales }} </td>
+      </ng-container>
+
+      <!-- Table Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <div *ngIf="filteredVatSummaries.length === 0 && !loading" class="margin__top--md">
+      <mat-icon>info</mat-icon> No VAT data found.
+    </div>
+  </mat-card-content>
+</div>

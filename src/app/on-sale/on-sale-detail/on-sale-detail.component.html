@@ -1,0 +1,8 @@
+<ng-container *ngIf="(onSaleProducts$ | async) as onSaleProducts">
+  <app-product-carousel></app-product-carousel>
+  <app-product-grid class="container margin__top--sm" [products]="onSaleProducts"
+                    (addToWishlistEvent)="addToWishlist($event)"
+                    (addToCartEvent)="addToCart($event)">
+  </app-product-grid>
+</ng-container>
+

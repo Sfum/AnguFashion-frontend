@@ -1,0 +1,113 @@
+<div class="section">
+  <!-- Tickets Section -->
+  <div class="font-primary__name container__center-auto margin__bottom--md margin__top--lg">Support Tickets</div>
+
+  <!-- Search input for tickets -->
+  <mat-form-field appearance="outline">
+    <mat-label>Search Tickets</mat-label>
+    <input matInput (keyup)="applyTicketFilter()" [(ngModel)]="searchTicketValue" placeholder="Search tickets">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="ticketDataSource" class="mat-elevation-z8" multiTemplateDataRows>
+    <!-- Product ID Column -->
+    <ng-container matColumnDef="productId">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Product ID</th>
+      <td mat-cell *matCellDef="let ticket" [routerLink]="['/', 'products', ticket.productId]" class="font-secondary__small">
+        {{ ticket.productId }}
+      </td>
+    </ng-container>
+
+    <!-- Subject Column -->
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Subject</th>
+      <td mat-cell *matCellDef="let ticket" class="font-secondary__small">
+        {{ ticket.subject }}
+      </td>
+    </ng-container>
+
+    <!-- Message Column -->
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Message</th>
+      <td mat-cell *matCellDef="let ticket" class="font-secondary__small">
+        {{ ticket.message }}
+      </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Status</th>
+      <td mat-cell *matCellDef="let ticket">
+        <span class="status-label font-secondary__small {{ ticket.status }}">
+          {{ ticket.status }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Actions</th>
+      <td mat-cell *matCellDef="let ticket">
+        <button mat-raised-button class="color__primary--600" (click)="updateTicketStatus(ticket.id, 'open')" [disabled]="ticket.status === 'open'">Open</button>
+        <button mat-raised-button (click)="updateTicketStatus(ticket.id, 'pending', ticket)">
+          Pending
+        </button>
+        <button mat-raised-button class="color__primary--200" (click)="updateTicketStatus(ticket.id, 'completed')">Completed</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="ticketColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: ticketColumns;"></tr>
+  </table>
+
+  <mat-paginator #ticketPaginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div class="section">
+  <!-- Users Section -->
+  <div class="font-primary__name container__center-auto margin__bottom--md margin__top--lg">Users List</div>
+
+  <!-- Search input for users -->
+  <mat-form-field appearance="outline">
+    <mat-label>Search Users</mat-label>
+    <input matInput (keyup)="applyUserFilter()" [(ngModel)]="searchUserValue" placeholder="Search users">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="userDataSource" class="mat-elevation-z8">
+    <!-- UID Column -->
+    <ng-container matColumnDef="uid">
+      <th mat-header-cell *matHeaderCellDef class="font-small">UID</th>
+      <td mat-cell *matCellDef="let user" class="font-secondary__small">
+        {{ user.uid }}
+      </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Email</th>
+      <td mat-cell *matCellDef="let user" class="font-secondary__small">
+        {{ user.user_email }}
+      </td>
+    </ng-container>
+
+    <!-- Display Name Column -->
+    <ng-container matColumnDef="displayName">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Display Name</th>
+      <td mat-cell *matCellDef="let user" class="font-secondary__small">
+        {{ user.displayName }}
+      </td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Role</th>
+      <td mat-cell *matCellDef="let user" class="font-secondary__small">
+        {{ user.role }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
+  </table>
+
+  <mat-paginator #userPaginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

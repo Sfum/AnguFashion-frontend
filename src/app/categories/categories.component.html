@@ -1,0 +1,9 @@
+<div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+  Categories
+</div>
+
+<div class="container-grid margin__bottom--md">
+  <app-category-detail
+    *ngFor="let category of categories$ | async" [category]="category"
+    [products]="products$ | async"></app-category-detail>
+</div>

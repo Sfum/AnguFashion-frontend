@@ -1,0 +1,35 @@
+.product-card
+  display: grid
+  grid-template-columns: 20% 80%
+  gap: 10px
+  padding: 0 10px
+
+.product-card-left
+  grid-column: 1/2
+
+.product-card-middle
+  grid-column: 2/3
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+  gap: 10px
+
+@media only screen and (max-width: 900px)
+  .product-card
+    display: grid
+    grid-template-columns: 1fr
+    gap: 10px
+    padding: 0 10px
+
+  .product-card-left
+    grid-column: 1/2
+    grid-row: 1/2
+    margin-bottom: 10px
+    margin-left: 0
+
+  .product-card-middle
+    grid-column: 1/2
+    grid-row: 2/3
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+    gap: 10px
+    margin-left: 0

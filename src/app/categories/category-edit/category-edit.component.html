@@ -1,0 +1,43 @@
+<mat-card class="container__medium container__category-edit">
+  <div class="font-primary margin__left--md margin__top--md">Edit Category</div>
+  <div class="margin--md">
+
+    <!-- Reactive Form: Binds to the 'categoryForm' FormGroup and submits via onSubmit() -->
+    <form class="form-container container"
+          [formGroup]="categoryForm"
+          (ngSubmit)="onSubmit()"
+          *ngIf="(categoryEdit$ | async) as asyncFilterPipe">
+
+      <!-- Category Name Input Field Label -->
+      <mat-label for="category_name" class="font-secondary__small">
+        Category Name:
+      </mat-label>
+
+      <!-- Input Field for Category Name -->
+      <input class="padding--md margin__right--lg"
+             type="text" id="category_name"
+             formControlName="category_name"
+             required>
+
+      <!-- Category Description Input Field Label -->
+      <mat-label for="category_description" class="margin__top--md font-secondary__small">
+        Category Description:
+      </mat-label>
+
+      <!-- Textarea Field for Category Description -->
+      <textarea class="text-field padding--md"
+                type="text" id="category_description"
+                formControlName="category_description"
+                required style="width: 100%; height: 200px;">
+      </textarea>
+
+      <!-- Form Action Buttons -->
+      <div class="form-actions">
+        <!-- Submit Button -->
+        <button mat-raised-button class="button margin__top--sm margin__right--xlg">
+          <label>Update Category</label>
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-card>

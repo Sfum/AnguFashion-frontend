@@ -1,0 +1,20 @@
+<mat-card class="container__brand-detail mat-elevation-z2">
+  <div class="brand-details margin__top--md margin__bottom--xsm margin__left--lg margin__right--md">
+    <div class="font-primary margin__bottom--xxsm">Frequently Bought Together</div>
+  </div>
+
+  <div class="brand-card margin__left--lg" *ngIf="productsToShow$ | async as products">
+    <a class="margin__right--xxxsm" *ngFor="let product of products | slice:0:8" [routerLink]="['/products', product.id]">
+      <img
+        class="image margin__bottom--md"
+        [src]="product.product_image[0]"
+        alt="{{ product.product_name }}"
+
+        [matTooltip]="'View ' + product.product_name + '!'">
+    </a>
+  </div>
+
+  <p class="margin__left--md margin__top--md" *ngIf="!(productsToShow$ | async)?.length">
+    No related products found.
+  </p>
+</mat-card>

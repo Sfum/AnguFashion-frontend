@@ -1,0 +1,53 @@
+
+<div class="container__filter color__primary--50 margin__right--sm">
+  <div class="font-primary margin__top--md margin__bottom--sm">Filter by Category</div>
+
+  <!-- Material Design form field for Category selection, hidden on small screens -->
+  <mat-form-field class="form-field font-secondary" appearance="fill">
+    <!-- Mat-select dropdown for selecting a category, calls optionCategorySelected when a selection is made -->
+    <mat-select class="screen__sm--hidden" placeholder="Select category" (selectionChange)="optionCategorySelected($event.value)">
+      <!-- Default option for selecting all categories -->
+      <mat-option value="0" class="font-secondary__small">- All categories -</mat-option>
+
+      <!-- Category options populated dynamically from an async observable (filterCategoryField$) -->
+      <mat-option *ngFor="let categoryItem of (filterCategoryField$ | async)" [value]="categoryItem.id">
+        {{ categoryItem.category_name }} <!-- Display the category name -->
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <app-color-filter></app-color-filter>
+
+  <div class="font-primary margin__top--md margin__bottom--sm">Filter by Brand</div>
+  <!-- Material Design form field for Brand selection, visible on large screens -->
+  <mat-form-field class="screen__lg--show margin__top--xsm" appearance="fill">
+    <!-- Mat-select dropdown for selecting a brand, calls optionBrandSelected when a selection is made -->
+    <mat-select (selectionChange)="optionBrandSelected($event.value)">
+      <mat-option value="0" class="font-secondary__small">- All brands -</mat-option>
+      <mat-option *ngFor="let brandItem of (filterBrandField$ | async)" [value]="brandItem.id">
+        {{ brandItem.brand_name }}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+
+  <!-- Checkbox list for brand selection, displayed only on medium and large screens -->
+  <div *ngFor="let brandItem of (filterBrandField$ | async)">
+    <!-- Checkbox for each brand, checked state bound to selectedBrandIds -->
+    <mat-checkbox
+      class="screen__sm--hidden"
+      [checked]="selectedBrandIds.has(brandItem.id)"
+      (change)="onBrandCheckboxChange($event, brandItem.id)">
+      <!-- Display the brand name inside the checkbox -->
+      <mat-label>{{ brandItem.brand_name }}</mat-label>
+    </mat-checkbox>
+  </div>
+</div>
+<div class="margin__bottom--sm">
+  <app-sizes-filter ></app-sizes-filter>
+</div>
+<div class="margin__bottom--sm">
+  <app-size-label-filter ></app-size-label-filter>
+</div>
+<app-price-filter></app-price-filter>

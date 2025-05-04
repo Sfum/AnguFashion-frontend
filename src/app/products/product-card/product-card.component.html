@@ -1,0 +1,63 @@
+<div class="no-background filtering__bar color__primary--50">
+
+  <!-- Button to trigger the sorting options menu -->
+  <button mat-button [matMenuTriggerFor]="sortMenu" class="margin--sm margin__bottom--sm">
+    <mat-icon>sort</mat-icon>
+    <label>Sort Options</label>
+  </button>
+
+  <!-- Menu containing sorting options -->
+  <mat-menu #sortMenu="matMenu">
+    <!-- Button to sort products by price in ascending order -->
+    <div mat-menu-item (click)="sortByPrice('asc')">
+      <mat-icon>arrow_upward</mat-icon>
+      <label>Price (Low to High)</label>
+    </div>
+
+    <!-- Button to sort products by price in descending order -->
+    <div mat-menu-item (click)="sortByPrice('desc')">
+      <mat-icon>arrow_downward</mat-icon>
+      <label>Price (High to Low)</label>
+    </div>
+
+    <!-- Button to sort products by popularity -->
+    <div mat-menu-item (click)="sortByPopularity()">
+      <mat-icon>trending_up</mat-icon>
+      <label>Popularity</label>
+    </div>
+
+    <!-- Button to sort products by discount in ascending order -->
+    <div mat-menu-item (click)="sortByDiscount('desc')">
+      <mat-icon>local_offer</mat-icon>
+      <label>Discount (High to Low)</label>
+    </div>
+
+    <!-- Button to sort products by new arrivals -->
+    <div mat-menu-item (click)="sortByNewArrival('desc')">
+      <mat-icon>new_releases</mat-icon>
+      <label>New Arrivals</label>
+    </div>
+  </mat-menu>
+</div>
+<div *ngIf="isLoading$ | async" class="loading-spinner container__center">
+  Please, wait...
+  <mat-spinner></mat-spinner>
+</div>
+
+<!-- Container to display product cards -->
+<div class="product-card__container">
+  <app-product-card-detail
+    *ngFor="let product of paginatedProducts"
+    [product]="product"
+    (addToCartEvent)="addToCart($event)"
+    (addToWishlistEvent)="addToWishlist($event)"
+    (addToCompareEvent)="onAddToCompare($event)">>
+  </app-product-card-detail>
+</div>
+
+<!-- Pagination component for navigating through pages of products -->
+<mat-paginator class="margin__top--md"
+               [length]="(products$ | async)?.length || 0"
+               [pageSize]="itemsPerPage"
+               (page)="onPageChange($event)"
+></mat-paginator>

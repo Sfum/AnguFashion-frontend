@@ -1,0 +1,36 @@
+<mat-card class="container__medium container__brand-edit">
+  <div class="font-primary margin__left--md margin__top--md">Edit Brand</div>
+  <div class="margin--md">
+    <!-- Angular form with reactive form handling -->
+    <form class="form-container container" [formGroup]="brandForm" (ngSubmit)="onSubmit()"
+          *ngIf="(brandEdit$ | async) as asyncFilterPipe">
+
+      <!-- Brand Name field -->
+      <mat-label for="brand_name" class="font-secondary__small">
+        Brand Name:
+      </mat-label>
+      <input class="padding--md margin__right--lg margin__bottom--xsm"
+             type="text" id="brand_name"
+             formControlName="brand_name"
+             required>
+
+      <!-- Brand Description field -->
+      <mat-label for="brand_description" class="margin__top--md font-secondary__small">
+        Brand Description:
+      </mat-label>
+      <input matInput class="text-field padding--md"
+             type="text"
+             id="brand_description"
+             formControlName="brand_description"
+             required style="width: 100%; height: 200px;">
+
+      <!-- Container for the form action buttons -->
+      <div class="form-actions">
+        <!-- Button to submit the form -->
+        <button mat-raised-button
+                class="button margin__top--sm margin__right--xlg"><label>Update Brand</label>
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-card>

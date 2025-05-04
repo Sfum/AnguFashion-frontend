@@ -1,0 +1,53 @@
+<div class="container__medium">
+  <div class="button">
+    <button mat-raised-button class="margin__top--md"
+            [routerLink]="['/add-post']">
+      <label>Create Post</label>
+    </button>
+  </div>
+
+  <!-- Table to display posts using Angular Material table component -->
+  <table mat-table [dataSource]="dataSource" class="mat-table">
+
+    <!-- Column definition for Post Name -->
+    <ng-container matColumnDef="post_name">
+      <th mat-header-cell *matHeaderCellDef class="font-secondary__small"> Post Name</th>
+      <td mat-cell class="cell_hover" *matCellDef="let post" [routerLink]="['/', 'post-edit', post.id]">
+        {{ post.post_name }}
+      </td>
+    </ng-container>
+
+    <!-- Column definition for Post Date -->
+    <ng-container matColumnDef="post_date">
+      <th mat-header-cell *matHeaderCellDef class="font-secondary__small"> Post Date</th>
+      <td mat-cell class="cell_hover" *matCellDef="let post" [routerLink]="['/', 'post-edit', post.id]">
+        {{ post.post_date | date: 'short' }}
+      </td>
+    </ng-container>
+
+    <!-- Column definition for Post Content -->
+    <ng-container matColumnDef="post_content">
+      <th mat-header-cell *matHeaderCellDef class="font-secondary__small"> Post Content</th>
+      <td mat-cell class="cell_hover" *matCellDef="let post" [routerLink]="['/', 'post-edit', post.id]">
+        {{ post.post_content | slice: 0:70 }}...read more
+      </td>
+    </ng-container>
+
+    <!-- Column definition for Delete action -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef class="font-secondary__small"> Delete</th>
+      <td mat-cell class="cell_hover" *matCellDef="let post" [routerLink]="['/', 'posts-list']">
+        <button mat-raised-button (click)="deletePost(post.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Define table header and rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Paginator to handle pagination of table data -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons=""></mat-paginator>
+</div>

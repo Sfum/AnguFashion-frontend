@@ -1,0 +1,22 @@
+@import url('../../../../src/styles.sass')
+
+.container__category-detail
+  display: grid
+  grid-template-rows: 60% 1fr
+  gap: 5px
+  height: 300px
+  text-align: left
+
+.info-text
+  grid-row: 1/2
+  height: 380px
+
+.product-card
+  display: flex
+  flex-direction: row
+  grid-row: 2/3
+
+.image
+  transition: all 0.3s ease
+  &:hover
+    transform: translateY(-5px)

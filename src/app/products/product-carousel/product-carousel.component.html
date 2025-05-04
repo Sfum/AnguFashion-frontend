@@ -1,0 +1,14 @@
+<div class="container__carousel" *ngIf="slides.length > 0; else loadingTemplate">
+  <div class="carousel" [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+    <div class="carousel-item" *ngFor="let slide of slides">
+      <img [src]="slide" alt="Carousel image" class="carousel-image" [style.maxHeight.px]="carouselImageHeight">
+    </div>
+  </div>
+  <button class="prev" (click)="prevSlide()">&#10094;</button>
+  <button class="next" (click)="nextSlide()">&#10095;</button>
+</div>
+
+<!-- Template to display while loading slides -->
+<ng-template #loadingTemplate>
+  <p>Loading carousel images...</p>
+</ng-template>

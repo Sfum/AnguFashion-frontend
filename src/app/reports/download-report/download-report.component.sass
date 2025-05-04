@@ -1,0 +1,52 @@
+@import url('../../../../src/styles.sass')
+
+$color__primary--200: hsl(0, 0%, 85%)
+$color__primary--600: hsl(0, 0%, 35%)
+
+.admin__toolbar
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  border-radius: 20px
+  background-color: $color__primary--600
+  padding: 30px
+
+  &--cell_one,
+  &--cell_two,
+  &--cell_three
+    display: flex
+    justify-content: center
+    position: relative
+    color: white
+    border-radius: 10px
+    padding: 10px
+    overflow: hidden
+    width: 90%
+    height: 120px
+    box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.15), inset -2px -2px 2px rgba(255, 255, 255, 0.1)
+
+    &-main
+      font-weight: 650
+      opacity: 80%
+      transform: translateY(6px)
+
+    &-secondary
+      position: absolute
+      top: 25px
+      text-transform: uppercase
+      opacity: 50%
+      transform: translateY(1px)
+
+  .admin__toolbar__content
+    display: flex
+    align-items: center
+    justify-content: center
+
+  &--cell_one .admin__toolbar__content
+    grid-column: 1/2
+
+  &--cell_two .admin__toolbar__content
+    grid-column: 2/3
+
+  &--cell_three .admin__toolbar__content
+    grid-column: 3/4
+

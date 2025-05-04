@@ -1,0 +1,9 @@
+<div class="container__filter margin__top--sm">
+  <app-product-filter-detail
+    (brandSelectedEvent)="optionBrandSelected($event)"
+    (categorySelectedEvent)="optionCategorySelected($event)"
+    [filterBrandField$]="filterBrandField$"
+    [filterCategoryField$]="filterCategoryField$"
+  ></app-product-filter-detail>
+  <app-price-filter></app-price-filter>
+</div>

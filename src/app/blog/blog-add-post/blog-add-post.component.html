@@ -1,0 +1,37 @@
+<mat-card class="container__medium">
+  <div class="font-primary margin__left--md margin__top--md">Create Post</div>
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="margin--md">
+
+    <!-- Input field for post name with validation -->
+    <div class="form-group margin__bottom--xsm">
+      <label class="font-secondary__small" for="post_name">Name:</label>
+      <input matInput type="text" id="post_name" formControlName="post_name" required>
+    </div>
+
+    <!-- Textarea for post content with validation -->
+    <div class="form-group margin__bottom--sm">
+      <label class="font-secondary__small" for="post_content">Content:</label>
+      <input matInput id="post_content" formControlName="post_content" required>
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="form-group margin__bottom--sm margin__right--md">
+      <label class="font-secondary margin__right--xsm">Image:</label>
+      <!-- Input for selecting an image file -->
+      <input type="file" (change)="onFileSelected($event)">
+      <!-- Image preview, displayed if an image is selected -->
+      <img *ngIf="imagePreview" [src]="imagePreview" alt="Image Preview" width="200px" class="image-preview"/>
+    </div>
+
+    <!-- Submit button to add the post -->
+    <button mat-raised-button type="submit">
+      <label>Add Post</label>
+    </button>
+
+    <!-- Button to navigate back to the posts list -->
+    <button mat-raised-button class="margin__left--xxsm" [routerLink]="['/posts-list']">
+      <label>Back</label>
+    </button>
+
+  </form>
+</mat-card>

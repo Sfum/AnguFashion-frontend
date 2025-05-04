@@ -1,0 +1,89 @@
+<div class="container">
+  <!-- Title for the Order History page -->
+  <div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">Order history</div>
+
+  <!-- Search and Filter Section -->
+  <div>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" class="margin__bottom--sm">
+    <mat-button-toggle-group #group="matButtonToggleGroup" (change)="filterByDate($event.value)" class="margin__top--xsm margin__bottom--sm">
+      <mat-button-toggle value="day" class="font-secondary margin__left--xsm mat-elevation-z10">
+        <label>Day</label>
+      </mat-button-toggle>
+      <mat-button-toggle value="week" class="font-secondary margin__left--xsm mat-elevation-z10">
+        <label>Week</label>
+      </mat-button-toggle>
+      <mat-button-toggle value="month" class="font-secondary margin__left--xsm mat-elevation-z10">
+        <label>Month</label>
+      </mat-button-toggle>
+      <mat-button-toggle value="0" class="font-secondary margin__left--xsm mat-elevation-z10">
+        <label>All</label>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Table to display the order history -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+
+    <!-- Column for Product Name -->
+    <ng-container matColumnDef="product_name">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Products Ordered</th>
+      <td mat-cell *matCellDef="let sale" class="font-primary__label">
+        <div [routerLink]="['/products', sale.productId]" class="product-link" matTooltip="View Product Details">
+          {{ sale.product_name | slice: 0: 30 }}...
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Column for Quantity Sold -->
+    <ng-container matColumnDef="quantitySold">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Quantity Purchased</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small">{{ sale.quantitySold }}</td>
+    </ng-container>
+
+    <!-- Column for Total Price -->
+    <ng-container matColumnDef="totalPrice">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Price (incl.Vat)</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small">{{ sale.totalPrice | currency }}</td>
+    </ng-container>
+
+    <!-- Column for Sale Date -->
+    <ng-container matColumnDef="saleDate">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Purchase Date</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small">{{ sale.saleDate | date: 'short' }}</td>
+    </ng-container>
+
+    <!-- Column for Order Status -->
+    <ng-container matColumnDef="orderStatus">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Order Status</th>
+      <td mat-cell *matCellDef="let sale">
+        <span [ngClass]="{
+          'status-paid': sale.status === SaleStatus.OPEN,
+          'status-pending': sale.status === SaleStatus.PENDING,
+          'status-shipped': sale.status === SaleStatus.COMPLETED
+        }" class="font-secondary__small">
+          {{ sale.status }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Column for Viewing the Invoice -->
+    <ng-container matColumnDef="view">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let sale; let i = index">
+        <!-- Show the "Invoice" button only for the first occurrence of each saleDate -->
+        <button *ngIf="isFirstTimestamp(sale.saleDate, i)" mat-raised-button (click)="viewInvoice(sale)">Invoice</button>
+      </td>
+    </ng-container>
+
+
+    <!-- Header and Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <ng-container *matRowDef="let row; let i = index; columns: displayedColumns;">
+      <tr mat-row [ngClass]="{'grey-row': isTimestampGreyed(row, i)}"></tr>
+    </ng-container>
+
+  </table>
+
+  <!-- Pagination Controls -->
+  <mat-paginator [length]="sales.length" [pageSize]="20" [pageSizeOptions]="[20, 40, 80, 160]" showFirstLastButtons></mat-paginator>
+</div>

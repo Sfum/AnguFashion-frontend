@@ -1,0 +1,11 @@
+<mat-card class="container__profile margin__top--md align__items" *ngIf="user">
+  <div class="font-primary margin__bottom--md">Welcome, {{ user.displayName }}</div>
+  <div class="font-secondary margin__bottom--sm">Email: {{ user.email }} </div>
+  <div class="font-secondary__small">Username: {{user.displayName}}</div>
+  <button mat-raised-button  [routerLink]="['/orders']" class="margin__top--sm"><label>Orders</label></button>
+  <button mat-raised-button (click)="logout()" class="margin__top--sm margin__bottom--md"><label>Logout</label></button>
+</mat-card>
+<div *ngIf="!user">
+  <p>Please log in to view your orders!</p>
+</div>
+

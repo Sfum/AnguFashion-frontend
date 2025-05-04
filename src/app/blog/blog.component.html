@@ -1,0 +1,18 @@
+<div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+  Blog
+</div>
+<div class="container__blog margin--lg">
+  <!-- First Column: Large post -->
+  <div class="first-column" *ngIf="posts.length > 0">
+    <app-blog-detail [post]="posts[0]" [isMain]="true"></app-blog-detail>
+<!--    <app-blog-detail [post]="posts[1]" [isMain]="true"></app-blog-detail>-->
+<!--    <app-blog-detail [blog]="posts[2]" [isMain]="true"></app-blog-detail>-->
+<!--    <app-blog-detail [blog]="posts[3]" [isMain]="true"></app-blog-detail>-->
+  </div>
+  <!-- Second Column: Smaller posts (two columns layout) -->
+  <div class="second-column">
+    <div class="smaller-post" *ngFor="let post of posts.slice(1, 10)">
+      <app-blog-detail [post]="post" [isMain]="false"></app-blog-detail>
+    </div>
+  </div>
+</div>

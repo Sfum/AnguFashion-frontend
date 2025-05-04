@@ -1,0 +1,30 @@
+@import url('../../../src/styles.sass')
+
+.container__provider
+  display: grid
+  grid-template-columns: 30% 70%
+
+.button_wrapper
+   display: flex
+   flex-direction: column
+   grid-column: 1/2
+   margin-right: 10px
+
+.button__double
+  height: 100px
+
+button
+  width: 100%
+@media only screen and (max-width: 600px)
+
+ .container__provider
+  display: flex
+  flex-direction: column
+
+ .button_wrapper
+     display: flex
+     flex-direction: column
+
+
+
+

@@ -1,0 +1,130 @@
+
+<div>
+  <div class="font-primary__name container__center-auto margin__bottom--md margin__left--xsm margin__top--lg">Admin Sales Reports</div>
+
+  <!-- Toolbar displaying sales stats -->
+  <div class="admin__toolbar margin__bottom--md mat-elevation-z2">
+    <!-- Items sold -->
+    <div class="admin__toolbar--cell_one font-secondary margin__bottom--xsm">
+      <div class="admin__toolbar__content">
+        <div class="admin__toolbar--cell_one-main">{{ totalQuantitySold }}</div>
+        <div class="admin__toolbar--cell_one-secondary">Items Sold</div>
+      </div>
+    </div>
+    <!-- Total price of items sold -->
+    <div class="admin__toolbar--cell_two font-secondary margin__bottom--xsm">
+      <div class="admin__toolbar__content">
+        <div class="admin__toolbar--cell_one-main">{{ totalPrice | currency }}</div>
+        <div class="admin__toolbar--cell_one-secondary">Total Sold</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search input and date filter buttons -->
+  <div>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" class="margin__bottom--sm">
+    <mat-button-toggle-group #group="matButtonToggleGroup" (change)="filterByDate($event.value)">
+      <mat-button-toggle class="font-secondary margin__left--xsm margin__bottom--lg mat-elevation-z10" value="day">
+        <label>Day</label>
+      </mat-button-toggle>
+      <mat-button-toggle class="font-secondary margin__left--xsm margin__bottom--lg mat-elevation-z10" value="week">
+        <label>Week</label>
+      </mat-button-toggle>
+      <mat-button-toggle class="font-secondary margin__left--xsm margin__bottom--lg mat-elevation-z10" value="month">
+        <label>Month</label>
+      </mat-button-toggle>
+      <mat-button-toggle class="font-secondary margin__left--xsm margin__bottom--lg  mat-elevation-z10" value="0">
+        <label>All</label>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Brand Selection Dropdown -->
+  <mat-form-field class="form-control margin__top--sm">
+    <mat-label class="font-secondary__small">Sales By Brand</mat-label>
+    <mat-select (selectionChange)="filterByBrand($event.value)">
+      <mat-option [value]="0">All Brands</mat-option>
+      <mat-option *ngFor="let brand of brands$ | async" [value]="brand.brand_name">
+        {{ brand.brand_name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Sales data table with pagination -->
+  <table mat-table [dataSource]="dataSource" class="container">
+    <!-- Product Name Column -->
+    <ng-container matColumnDef="product_name">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Products Sold</th>
+      <td mat-cell *matCellDef="let sale" class="font-primary__label-small">
+        <a [routerLink]="['/products', sale.productId]" class="product-link" matTooltip="View Product Details">
+          <div class="font-primary">{{ sale.product_name | slice: 0: 30 }}...</div>
+          <div class="margin__top--xxsm">{{ sale.selectedSize.size }}
+            {{ getUnit(sale.selectedSize.unitType, sale.selectedSize.size, sale.selectedSize.sizeLabel) }}</div>
+        </a>
+      </td>
+    </ng-container>
+    <!-- Seller Name Column -->
+    <ng-container matColumnDef="sellerName">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Seller</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small cell_wide">{{ sale.sellerName }}
+      </td>
+    </ng-container>
+    <!-- Buyer Details Column -->
+    <ng-container matColumnDef="buyerName">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Buyer</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small cell_wide">
+        <div class="margin__top--xsm margin__bottom--xsm">
+          <div class="font-primary__label-small">{{ sale.buyerName }}</div>
+          <div class="font-secondary">{{ sale.buyerAddress }}</div>
+          <div class="font-secondary__small">{{ sale.buyerPostcode }}</div>
+          <div class="font-secondary__small">{{ sale.buyerCountry }}</div>
+        </div>
+      </td>
+    </ng-container>
+    <!-- Additional Information Column -->
+    <ng-container matColumnDef="moreInfo">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Price</th>
+      <td mat-cell *matCellDef="let sale" class="font-secondary__small no_wrap">
+        <div><mat-label>Price:</mat-label> {{ sale.totalPrice | currency }}</div>
+        <div><mat-label>Unit:</mat-label> {{ getUnit(sale.selectedSize.unitType, sale.selectedSize.size, sale.selectedSize.sizeLabel) }}
+        </div>
+        <div><mat-label>Quantity:</mat-label> {{ sale.quantitySold }}</div>
+        <div><mat-label>Date:</mat-label> {{ sale.saleDate | date: 'short' }}</div>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="complete" >
+      <th mat-header-cell *matHeaderCellDef class="font-small">Notify Customer</th>
+      <td mat-cell *matCellDef="let sale">
+        <button class="status" mat-raised-button (click)="handleOrderCompletion(sale)">
+          <label>Notify</label>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="font-small">Order Status</th>
+      <td mat-cell *matCellDef="let sale" class="status no_wrap font-secondary__small">
+        <button mat-raised-button (click)="updateBuyerOrderStatus(sale.userId, sale.id, SaleStatus.PENDING)">Set Pending</button>
+        <button mat-raised-button (click)="updateBuyerOrderStatus(sale.userId, sale.id, SaleStatus.COMPLETED)">Set Dispatched</button>
+        <span [ngClass]="{
+          'status-paid': sale.status === SaleStatus.OPEN,
+          'status-pending': sale.status === SaleStatus.PENDING,
+          'status-shipped': sale.status === SaleStatus.COMPLETED
+        }" class="mat-elevation-z6">{{ sale.status }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Header and Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Pagination Controls -->
+  <mat-paginator [length]="filteredSales.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+  </mat-paginator>
+</div>
+
+

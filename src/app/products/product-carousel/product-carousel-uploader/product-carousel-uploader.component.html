@@ -1,0 +1,71 @@
+<div class="font-primary__name container__center-auto margin__bottom--md margin__top--lg">Image Uploader</div>
+<div>
+  <!-- Section to Adjust Carousel Image Height -->
+  <div class="adjust-height-section">
+    <label class="margin__bottom--xxsm" for="heightInput">Set Carousel Image Height (For All Images):</label>
+    <input matInput
+           id="heightInput"
+           type="number"
+           [(ngModel)]="carouselImageHeight"
+           placeholder="Enter height in px"
+    />
+    <button mat-raised-button class="margin__top--xxsm margin__bottom--xxsm" (click)="updateCarouselImageHeight()">
+      Submit
+    </button>
+  </div>
+
+  <!-- File Input for Selecting Images -->
+  <div class="upload-section margin__top--xsm margin__bottom--sm">
+    <p class="font-small">Select one or more images to upload.</p>
+    <input type="file" multiple (change)="onFileSelected($event)"/>
+  </div>
+
+  <!-- Progress Bar -->
+  <div *ngIf="uploadProgress !== null" class="progress-bar">
+    <div class="progress" [style.width]="uploadProgress + '%'"></div>
+    <p>{{ uploadProgress | number: '1.0-0' }}%</p>
+  </div>
+
+  <!-- Material Table to Display Images -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Preview Column -->
+    <ng-container matColumnDef="preview">
+      <th mat-header-cell *matHeaderCellDef> Preview</th>
+      <td mat-cell *matCellDef="let element">
+        <img [src]="element.url" alt="{{ element.name }}" style="height: 80px; object-fit: cover;"/>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Image Name</th>
+      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button color="primary" (click)="deleteImage(element.path)">
+          Delete
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Table Header and Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Carousel Component -->
+  <div class="container__carousel" *ngIf="slides.length > 0">
+    <div class="carousel" [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+      <div class="carousel-item" *ngFor="let slide of slides">
+        <img [src]="slide" alt="Carousel image" class="carousel-image" [style.maxHeight.px]="carouselImageHeight">
+      </div>
+    </div>
+    <button class="prev" (click)="prevSlide()">&#10094;</button>
+    <button class="next" (click)="nextSlide()">&#10095;</button>
+  </div>
+</div>

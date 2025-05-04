@@ -1,0 +1,12 @@
+<div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+  Sale!
+</div>
+
+<div class="container__on-sale">
+  <div class="product-card-middle">
+      <app-on-sale-detail
+        (addToWishlistEvent)="onAddToWishlist($event)"
+        (addToCartEvent)="onAddToCart($event)"
+      ></app-on-sale-detail>
+  </div>
+</div>

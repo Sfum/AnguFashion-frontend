@@ -1,0 +1,65 @@
+<ng-container *ngIf="user$ | async as user; else notAuthenticated">
+  <!-- Admin Section -->
+  <div *ngIf="isAdmin; else notAdmin">
+    <div class="product-container">
+      <aside class="sidebar sticky-filter">
+        <app-product-filter></app-product-filter>
+      </aside>
+      <main class="main-content">
+        <app-product-card></app-product-card>
+      </main>
+      <aside class="sidebar-right margin__bottom--xsm margin__top--md">
+        <app-top-charts></app-top-charts>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Moderator Section -->
+  <ng-template #notAdmin>
+    <div *ngIf="isModerator; else notModerator">
+      <section class="moderator-section">
+        <h2 class="section-title">Product Management</h2>
+        <app-product-list-moderators></app-product-list-moderators>
+        <app-moderator-report></app-moderator-report>
+        <app-product-card></app-product-card>
+      </section>
+    </div>
+  </ng-template>
+
+  <!-- User Section -->
+  <ng-template #notModerator>
+    <div class="product-container">
+      <aside class="sidebar sticky-filter">
+        <app-product-filter></app-product-filter>
+      </aside>
+      <main class="main-content">
+        <app-product-card *ngIf="user?.uid"></app-product-card>
+      </main>
+      <aside class="sidebar-right margin__bottom--xsm">
+        <app-top-charts></app-top-charts>
+      </aside>
+    </div>
+  </ng-template>
+</ng-container>
+
+<!-- Not Authenticated Section -->
+<ng-template #notAuthenticated>
+  <div class="product-container">
+    <aside class="sidebar sticky-filter">
+      <app-product-filter></app-product-filter>
+    </aside>
+    <main class="main-content">
+      <app-product-card></app-product-card>
+    </main>
+    <aside class="sidebar-right margin__bottom--xsm">
+      <app-top-charts></app-top-charts>
+    </aside>
+  </div>
+  <section class="additional-section">
+    <app-brands></app-brands>
+  </section>
+</ng-template>
+
+<footer class="bottom-section">
+  <app-users-also-bought></app-users-also-bought>
+</footer>

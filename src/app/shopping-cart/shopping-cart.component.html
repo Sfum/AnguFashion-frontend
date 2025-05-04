@@ -1,0 +1,31 @@
+<div class="container__medium">
+  <div>
+    <div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+      Shopping Cart
+    </div>
+
+    <div class="margin__left--md margin__top--sm font-label">
+      Subtotal: {{ subtotal | currency }}
+    </div>
+
+    <div class="margin__left--md font-label" *ngIf="vatTotal > 0">
+      VAT <span *ngIf="userCountry">({{ userCountry }})</span>: {{ vatTotal | currency }}
+    </div>
+
+    <div class="margin__left--md font-label margin__top--xsm">
+      <strong>Total: {{ total | currency }}</strong>
+    </div>
+
+    <hr />
+  </div>
+
+  <div class="shopping__cart--grid margin__top--md">
+    <app-shopping-cart-detail *ngIf="products"
+                              [products]="products"
+                              (removeFromCartEvent)="removeFromCart($event)"
+                              (addToWishListEvent)="addToWishlist($event)"
+                              (quantityChangeEvent)="onQuantityChange($event)">
+    </app-shopping-cart-detail>
+    <app-payment></app-payment>
+  </div>
+</div>

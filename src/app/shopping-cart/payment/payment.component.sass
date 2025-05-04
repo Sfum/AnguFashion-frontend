@@ -1,0 +1,70 @@
+@import url('../../../../src/styles.sass')
+
+.margin--md
+  background-color: #f9f9f9
+  border-radius: 8px
+
+.margin__bottom--lg
+  margin-bottom: 20px
+
+.margin__bottom--md
+  margin-bottom: 15px
+
+form
+  display: flex
+  flex-direction: column
+  gap: 20px
+
+.form-group
+  display: flex
+  flex-direction: column
+  margin-bottom: 15px
+
+  label
+    font-weight: bold
+    margin-bottom: 5px
+    color: #333
+
+  input
+    padding: 10px
+    border: 1px solid #ccc
+    border-radius: 4px
+    font-size: 16px
+    color: #333
+    transition: border-color 0.3s ease
+
+    &:focus
+      border-color: #4caf50
+      outline: none
+
+// Styling for form rows (e.g., Expiration Date and CVV)
+.form-row
+  display: flex
+  gap: 10px
+
+.half-width
+  flex: 1
+
+// Payment button styles
+button[mat-raised-button]
+  background-color: #4caf50
+  color: white
+  padding: 10px 20px
+  border-radius: 4px
+  font-size: 16px
+  text-align: center
+  cursor: pointer
+  transition: background-color 0.3s ease
+
+  &:hover
+    background-color: #45a049
+
+  &:disabled
+    background-color: #cccccc
+    cursor: not-allowed
+
+// Error message styles
+.error-message
+  color: red
+  font-weight: bold
+  margin-top: 10px

@@ -1,0 +1,43 @@
+@import url('../../../src/styles.sass')
+
+.invoice-container
+  .invoice-header
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+
+    .invoice-section
+      background-color: #f9f9f9
+
+    // Add media query for responsiveness
+    @media screen and (max-width: 768px)
+      display: flex
+      flex-direction: column
+
+      .left-column, .right-column
+        width: 100%
+
+  .invoice-details
+    .invoice-section
+      background-color: #f9f9f9
+
+      h2
+        margin-bottom: 3px
+        font-size: 18px
+
+      table
+        width: 100%
+        border-collapse: collapse
+
+        th, td
+          text-align: left
+          border-bottom: 1px solid #ddd
+
+        th
+          background-color: #f2f2f2
+
+        td
+          font-size: 16px
+
+.invoice__title
+  width: 80%
+  font-size: 42px

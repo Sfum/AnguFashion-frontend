@@ -1,0 +1,13 @@
+<div class="container__medium">
+  <div>
+    <div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">Compare</div>
+    <hr/>
+  </div>
+  <div class="shopping__cart--grid">
+    <app-compare-detail
+      [products]="products"
+      (addToCartEvent)="onAddToCart($event)"
+      (removeCompareEvent)="removeFromCompare($event.id.toString())">
+    </app-compare-detail>
+  </div>
+</div>

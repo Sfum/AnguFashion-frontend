@@ -1,0 +1,3 @@
+<button mat-raised-button *ngIf="user$ | async as user" (click)="signOut()"
+        [routerLink]="['/login']"><label>Sign Out</label></button>
+

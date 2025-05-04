@@ -1,0 +1,9 @@
+<div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+  Brands
+</div>
+<div class="container-grid">
+  <app-brand-detail *ngFor="let brand of brands$ | async" [brand]="brand"
+                    [products]="products$ | async">
+
+  </app-brand-detail>
+</div>

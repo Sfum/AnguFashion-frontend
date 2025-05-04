@@ -1,0 +1,13 @@
+<div class="container__outer">
+<mat-drawer-container class="container__inner color__grey--100">
+  <mat-drawer #drawer mode="push">
+    <app-logo-bar (click)="drawer.toggle(false)"></app-logo-bar>
+  </mat-drawer>
+    <div>
+      <app-navigation-bar class="app-header" (click)="drawer.toggle(false)"></app-navigation-bar>
+      <div class="margin__left--sm margin__right--sm" >
+      <router-outlet (click)="drawer.toggle(false)"></router-outlet>
+      </div>
+    </div>
+</mat-drawer-container>
+</div>

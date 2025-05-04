@@ -1,0 +1,80 @@
+<!-- Display wishlist items if products exist -->
+<div *ngIf="products && products.length > 0">
+  <mat-card
+    class="cart__items-container mat-elevation-z2 margin--xsm"
+    *ngFor="let product of products; let i = index; trackBy: trackByProductId">
+
+    <!-- Product image linking to product detail -->
+    <div class="cart__product-image">
+      <a [routerLink]="['/products', product.id]">
+        <img
+          class="margin__top--md margin__left--md"
+          [src]="product?.product_image || 'placeholder.jpg'"
+          height="150"
+          width="150"
+          alt="Product Image"
+        />
+      </a>
+    </div>
+
+    <div class="cart__info margin__top--md margin__bottom--md margin__right--md">
+      <div class="margin__left--md">
+
+        <!-- Product name linking to detail page -->
+        <div class="font-primary margin__bottom--xsm">
+          <a [routerLink]="['/product', product.id]" class="product-link">
+            {{ product?.product_name || 'No Name Available' }}
+          </a>
+        </div>
+
+        <!-- Product title -->
+        <div class="font-secondary margin__bottom--xsm">
+          {{ product?.product_title | slice: 0:240 }}...
+        </div>
+
+        <!-- Dropdown for selecting product unit -->
+        <mat-form-field appearance="outline">
+          <mat-label>Select Size</mat-label>
+          <mat-select [(ngModel)]="product.selectedSize" required>
+            <mat-option *ngFor="let size of product.sizes" [value]="size" [disabled]="size.quantity === 0">
+              <p>{{ getUnit(size.unitType, size.size, size.sizeLabel) }}:
+                <ng-container class="font-primary__label" *ngIf="product.onSale; else originalPrice">
+                  {{ size.salePrice | currency: 'USD':'symbol':'1.2-2' }} Sale!
+                  <span *ngIf="size.salePrice < size.price" class="discounted"></span>
+                </ng-container>
+
+                <ng-template #originalPrice class="font-primary">
+                  {{ size.price | currency: 'USD':'symbol':'1.2-2' }}
+                </ng-template>
+              </p>
+
+
+              <span *ngIf="size.quantity === 0" class="out-of-stock"> (Out of Stock!)</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Add to Cart and Remove from Wishlist buttons -->
+        <div class="margin__top--md">
+          <button
+            mat-raised-button
+            class="margin__right--xxsm"
+            [disabled]="!product.selectedSize"
+            (click)="addProductToCart(product)">
+            <mat-icon>shopping_cart</mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            (click)="removeFromWishlist(product)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- Display message if no products are in the wishlist -->
+<div *ngIf="!products || products.length === 0" class="font-secondary margin--md">
+  No products added to wishlist yet!
+</div>

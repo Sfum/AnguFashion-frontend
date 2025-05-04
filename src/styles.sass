@@ -1,0 +1,93 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css'
+@import "primeicons/primeicons.css"
+@import './styles/_buttons.sass'
+@import './styles/_colours.sass'
+@import './styles/_mixins.sass'
+@import './styles/_typography.sass'
+@import './styles/_utilities.sass'
+@import './styles/_variables.sass'
+@import './styles/_inputs.sass'
+@import './styles/_grid.sass'
+
+
+.container__center
+    display: flex
+    justify-content: center
+    align-items: center
+    background-color: $color__grey--50
+    color: $color__grey--700
+    padding: 10px
+
+    &::placeholder
+      color: $color__grey--400
+
+    &:focus
+      border-color: $color__primary--500
+
+.no-background
+  background-color: transparent !important
+  box-shadow: none !important
+  border: none !important
+  color: inherit
+
+.form-group
+  input[type="text"]
+    width: 100%
+    padding: 10px
+
+mat-error
+  color: red
+  opacity: 80%
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"]
+  width: 100%
+  padding: 10px
+  opacity: 70%
+  box-sizing: border-box
+
+label
+  font-family: $font-primary
+  text-transform: uppercase
+  font-size: 14px
+  letter-spacing: 1.1px
+  font-weight: 630
+  text-align: center
+  opacity: 80%
+
+  &:hover
+    color: black
+
+mat-label
+  font-weight: 600
+
+a
+  color: grey
+
+  &:hover
+    color: $color__grey--500
+
+.margin__auto
+  margin: auto 10px auto 0
+
+.align__items
+  display: flex
+  justify-content: center
+  align-items: center
+
+.container__medium
+  max-width: 1200px
+  margin: auto
+
+.container__center-auto
+  background-color: hsl(0, 0%, 85%)
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 150px
+  margin: 20px 0 20px 0
+  border-radius: 30px
+
+.no_wrap
+  white-space: nowrap
