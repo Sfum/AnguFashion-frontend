@@ -37,6 +37,7 @@ export interface Product {
   selectedSize: ProductSize;
   selectedColor?: string;
   salePrice: number;
+
 }
 
 export interface ProductSize {

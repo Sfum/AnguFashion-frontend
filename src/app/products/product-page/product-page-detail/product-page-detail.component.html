@@ -44,8 +44,9 @@
                   <mat-icon class="star" [ngClass]="{'filled': averageRating >= 5}">star</mat-icon>
                 </div>
                 <!-- Average rating display -->
-                <p class="stars__average margin__left--sm">{{ averageRating.toFixed(1) }}</p>
               </div>
+              <div class="stars__average">{{ averageRating.toFixed(1) }}</div>
+
               <!-- Product title and description -->
               <div class="font-secondary opacity--lg poppins-semibold">{{ product.product_title }}...</div>
               <br>

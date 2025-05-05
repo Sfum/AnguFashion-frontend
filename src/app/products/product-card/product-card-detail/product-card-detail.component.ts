@@ -15,6 +15,7 @@ export class ProductCardDetailComponent implements OnInit {
 
   @Input() product!: Product;
   @Input() userSelectedQuantity: number = 1;
+  @Input() averageRating: number = 0;
 
   @Output() addToWishlistEvent: EventEmitter<Product> = new EventEmitter<Product>();
   @Output() addToCartEvent = new EventEmitter<{
@@ -64,6 +65,7 @@ export class ProductCardDetailComponent implements OnInit {
     } else {
       console.warn('Invalid or missing product images.');
     }
+    this.calculateAverageRating();
   }
 
   /**
@@ -167,6 +169,17 @@ export class ProductCardDetailComponent implements OnInit {
     return min === max
       ? `${min.toFixed(2)}$${label}`
       : `${min.toFixed(2)}$ - ${max.toFixed(2)}$${label}`;
+  }
+  calculateAverageRating(): void {
+    const comments = this.product?.comments || [];
+
+    if (comments.length === 0) {
+      this.averageRating = 0;
+      return;
+    }
+
+    const total = comments.reduce((sum, comment) => sum + comment.rating, 0);
+    this.averageRating = total / comments.length;
   }
 
 

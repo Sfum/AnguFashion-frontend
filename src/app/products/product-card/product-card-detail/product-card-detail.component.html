@@ -25,15 +25,32 @@
       <div class="product-details">
         <div class="product__paragraph">
           <!-- Product name -->
-          <div class="subtitle__card font-primary" [routerLink]="['/products', product.id]">
+          <div class="subtitle__card margin__bottom--md font-primary" [routerLink]="['/products', product.id]">
             {{ product.product_name | slice: 0:30 }}...
           </div>
+
+          <!-- Average star rating display -->
+          <div class="product__stars margin__top--sm">
+            <ng-container *ngIf="averageRating > 0; else noRatings">
+              <mat-icon class="star" [ngClass]="{ 'filled': averageRating >= 1 }">star</mat-icon>
+              <mat-icon class="star" [ngClass]="{ 'filled': averageRating >= 2 }">star</mat-icon>
+              <mat-icon class="star" [ngClass]="{ 'filled': averageRating >= 3 }">star</mat-icon>
+              <mat-icon class="star" [ngClass]="{ 'filled': averageRating >= 4 }">star</mat-icon>
+              <mat-icon class="star" [ngClass]="{ 'filled': averageRating >= 5 }">star</mat-icon>
+              <span class="margin__left--sm stars__average">{{ averageRating.toFixed(1) }}</span>
+            </ng-container>
+
+            <ng-template #noRatings>
+              <div class="font-secondary__small opacity--md no_rating">No ratings yet</div>
+            </ng-template>
+          </div>
+
 
           <!-- Stock status -->
           <div class="product-card__bottom">
             <div class="font-primary opacity--lg">
-              <div class="product__stock margin__bottom--xsm margin__top--xxsm">
-                <div class="font-small margin__top--md" [style.color]="product.quantityStock > 0 ? 'green' : 'red'">
+              <div class="product__stock margin__bottom--xsm">
+                <div class="font-small" [style.color]="product.quantityStock > 0 ? 'green' : 'red'">
                   {{ product.quantityStock > 0 ? 'In Stock' : 'Out of Stock' }}
                 </div>
               </div>
