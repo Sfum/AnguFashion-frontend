@@ -1,6 +1,6 @@
 <div class="container__medium">
   <div>
-    <div class="font-primary__name margin__bottom--md margin__left--xsm margin__top--lg">
+    <div class="font-primary__name margin__bottom--md margin__top--lg">
       Shopping Cart
     </div>
 
@@ -12,13 +12,15 @@
       VAT <span *ngIf="userCountry">({{ userCountry }})</span>: {{ vatTotal | currency }}
     </div>
 
-    <div class="margin__left--md font-label margin__top--xsm">
-      <strong>Total: {{ total | currency }}</strong>
+    <div class="margin__left--md font-label">
+      Delivery Fee: {{ deliveryFee | currency }}
     </div>
 
-    <hr />
+    <div class="margin__left--md font-label margin__top--xsm">
+      <strong>Total: {{ grandTotal | currency }}</strong>
+    </div>
   </div>
-
+  <hr />
   <div class="shopping__cart--grid margin__top--md">
     <app-shopping-cart-detail *ngIf="products"
                               [products]="products"

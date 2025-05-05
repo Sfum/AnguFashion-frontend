@@ -5,6 +5,7 @@ import { WishlistService } from '../services/wishlist.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { getVatRateByCountry } from '../models/vat-rates';
+import { getDeliveryRateByCountry } from '../models/delivery-rates';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -17,6 +18,7 @@ export class ShoppingCartComponent implements OnInit {
   vatTotal: number = 0;
   userCountry: string = '';
   vatRate: number = 0;
+  deliveryFee: number = 0;
 
   constructor(
     private cartService: CartService,
@@ -32,7 +34,7 @@ export class ShoppingCartComponent implements OnInit {
       this.vatRate = getVatRateByCountry(this.userCountry) ?? 0;
       this.loadCart(); // Only load cart after vatRate is ready
 
-      
+
     });
   }
 
@@ -62,7 +64,6 @@ export class ShoppingCartComponent implements OnInit {
 
     for (const product of this.products) {
       const quantity = product.quantity || 1;
-
       const basePrice = product.onSale && product.selectedSize?.salePrice != null
         ? product.selectedSize.salePrice
         : product.selectedSize?.price || 0;
@@ -72,7 +73,11 @@ export class ShoppingCartComponent implements OnInit {
       this.subtotal += basePrice * quantity;
       this.vatTotal += unitVatAmount * quantity;
     }
+
+    // Apply delivery fee only once (for entire order)
+    this.deliveryFee = getDeliveryRateByCountry(this.userCountry) ?? 0;
   }
+
 
   get total(): number {
     return this.subtotal + this.vatTotal;
@@ -121,4 +126,8 @@ export class ShoppingCartComponent implements OnInit {
       this.router.navigate(['/payment']);
     });
   }
+  get grandTotal(): number {
+    return this.subtotal + this.vatTotal + this.deliveryFee;
+  }
+
 }

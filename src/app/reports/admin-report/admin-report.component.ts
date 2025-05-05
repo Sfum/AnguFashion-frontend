@@ -124,18 +124,21 @@ export class AdminReportComponent implements OnInit {
 
   // Calculate total quantity and total price
   calculateTotals(data: Sale[]): void {
-    // Sum total quantity
     this.totalQuantitySold = data.reduce(
       (sum, sale) => sum + sale.quantitySold,
       0
     );
 
-    // Sum total price
-    this.totalPrice = data.reduce(
-      (sum, sale) => sum + Number(sale.totalPrice),
-      0
-    );
+    let deliveryDeducted = false;
+
+    this.totalPrice = data.reduce((sum, sale) => {
+      const delivery = sale.deliveryRate || 0;
+      const adjusted = deliveryDeducted ? sale.totalPrice : (sale.totalPrice - delivery);
+      deliveryDeducted = true;
+      return sum + (adjusted || 0);
+    }, 0);
   }
+
 
   // Triggered when user selects a time period (e.g., today, this week)
   filterByDate(period: string): void {
@@ -182,5 +185,12 @@ export class AdminReportComponent implements OnInit {
   getUnit(unitType: 'size' | 'waist' | 'length' | 'fit' | 'kidsSize' | 'chest' | 'sleeve', size: number | string, sizeLabel: string): string {
     return this.productService.getUnit(unitType, size, sizeLabel);
   }
+
+  getAdjustedPrice(sale: Sale): number {
+    const price = sale.totalPrice || 0;
+    const delivery = sale.deliveryRate || 0;
+    return +(price - delivery).toFixed(2);
+  }
+
 
 }

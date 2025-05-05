@@ -72,7 +72,7 @@
     <ng-container matColumnDef="moreInfo">
       <th mat-header-cell *matHeaderCellDef class="font-small">Price</th>
       <td mat-cell *matCellDef="let sale" class="font-secondary__small no_wrap">
-        <div><mat-label>Price:</mat-label> {{ sale.totalPrice | currency }}</div>
+        <div><mat-label>Price:</mat-label> {{ getAdjustedPrice(sale) | currency }}</div>
         <div><mat-label>Unit:</mat-label> {{ sale.selectedSize.size }}{{ getUnit(sale.selectedSize?.unitType, sale.selectedSize?.size, sale.selectedSize.sizeLabel) }}</div>
         <div><mat-label>Quantity:</mat-label> {{ sale.quantitySold }}</div>
         <div><mat-label>Date:</mat-label> {{ sale.saleDate | date: 'short' }}</div>

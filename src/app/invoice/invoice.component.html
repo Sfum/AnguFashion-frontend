@@ -65,7 +65,7 @@
           <tfoot>
           <tr>
             <td colspan="2"><strong>Subtotal</strong></td>
-            <td><strong>{{ getSubtotal() | currency }}</strong></td>
+            <td><strong>{{ getSubtotal() - getDeliveryFee() | currency }}</strong></td>
           </tr>
           <tr>
             <td colspan="2">Delivery</td>
@@ -73,7 +73,7 @@
           </tr>
           <tr>
             <td colspan="2"><strong>Total</strong></td>
-            <td><strong>{{ (getSubtotal() + getDeliveryFee()) | currency }}</strong></td>
+            <td><strong>{{ (getSubtotal()) | currency }}</strong></td>
           </tr>
           </tfoot>
         </table>

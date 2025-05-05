@@ -153,18 +153,21 @@ export class ModeratorReportComponent implements OnInit {
 
   // Calculate total quantity sold and total price from the filtered list
   calculateTotals(data: Sale[]): void {
-    // Sum up quantities from each sale
     this.totalQuantitySold = data.reduce(
       (sum, sale) => sum + sale.quantitySold,
       0
     );
 
-    // Sum up prices from each sale
-    this.totalPrice = data.reduce(
-      (sum, sale) => sum + Number(sale.totalPrice),
-      0
-    );
+    let deliveryDeducted = false;
+
+    this.totalPrice = data.reduce((sum, sale) => {
+      const delivery = sale.deliveryRate || 0;
+      const adjusted = deliveryDeducted ? sale.totalPrice : (sale.totalPrice - delivery);
+      deliveryDeducted = true;
+      return sum + (adjusted || 0);
+    }, 0);
   }
+
 
   // Update the order status for a sale (e.g., pending, completed)
   updateBuyerOrderStatus(userId: string, saleId: string, newStatus: SaleStatus): void {
@@ -184,6 +187,10 @@ export class ModeratorReportComponent implements OnInit {
   // Get the relevant unit
   getUnit(unitType: 'size' | 'waist' | 'length' | 'fit' | 'kidsSize' | 'chest' | 'sleeve', size: number | string, sizeLabel: string): string {
     return this.productService.getUnit(unitType, size, sizeLabel);
+  }
+  getAdjustedPrice(sale: Sale): number {
+    const delivery = sale.deliveryRate || 0;
+    return +(sale.totalPrice - delivery).toFixed(2);
   }
 
 }
