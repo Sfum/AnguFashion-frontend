@@ -199,7 +199,7 @@
       <div class="margin__left--md margin__right--md">
         <div *ngIf="relatedProductsByCategory.length > 0">
           <h3 class="font-primary margin__top--md">More from this category:</h3>
-          <div class="related-products-container">
+          <div>
             <!-- Loop through related products -->
             <a
               *ngFor="let relatedProduct of relatedProductsByCategory"
@@ -209,8 +209,8 @@
               <img
                 [src]="relatedProduct.product_image"
                 alt="Product Image"
-                width="150"
-                class="related-product-image margin__bottom--xsm margin__right--xsm"
+                width="160"
+                class="related-product-image margin__right--xsm"
               />
             </a>
           </div>

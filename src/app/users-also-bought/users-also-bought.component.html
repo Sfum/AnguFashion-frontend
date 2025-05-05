@@ -1,12 +1,12 @@
 <mat-card class="container__brand-detail mat-elevation-z2">
-  <div class="brand-details margin__top--md margin__bottom--xsm margin__left--lg margin__right--md">
-    <div class="font-primary margin__bottom--xxsm">Frequently Bought Together</div>
+  <div class="brand-details margin__top--md margin__bottom--xsm margin__left--md margin__right--md">
+    <div class="font-primary">Frequently Bought Together</div>
   </div>
 
-  <div class="brand-card margin__left--lg" *ngIf="productsToShow$ | async as products">
+  <div class="brand-card margin__left--md" *ngIf="productsToShow$ | async as products">
     <a class="margin__right--xxxsm" *ngFor="let product of products | slice:0:8" [routerLink]="['/products', product.id]">
       <img
-        class="image margin__bottom--md"
+        class="image margin__bottom--xsm"
         [src]="product.product_image[0]"
         alt="{{ product.product_name }}"
 
