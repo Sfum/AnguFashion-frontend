@@ -85,26 +85,32 @@ export class SalesService {
   }
 
   // Handles the purchase process, including user authentication and sale submission
-  handlePurchase(saleData: Sale): Observable<void> {
+  handlePurchase(salesData: Sale[]): Observable<void> {
     return this.getToken().pipe(
       switchMap((token) => {
         return this.afAuth.authState.pipe(
           map((user) => {
-            if (!user) throw new Error('User is not authenticated'); // Check if user is authenticated
-            saleData.userId = user.uid; // Attach user ID to sale data
-            return { saleData, token }; // Return sale data along with the token
+            if (!user) throw new Error('User is not authenticated');
+            // Attach userId to each sale
+            const enrichedSales = salesData.map((sale) => ({
+              ...sale,
+              userId: user.uid,
+              buyerName: user.displayName || 'Anonymous',
+              buyerEmail: user.email || '',
+            }));
+            return { enrichedSales, token };
           })
         );
       }),
-      switchMap(({ saleData, token }) => {
-        console.log(saleData); // Debugging: Log the sale data
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); // Set authorization header
-        return this.http.post<void>(`${this.apiUrl}/purchase`, saleData, { headers }); // Submit the sale data
+      switchMap(({ enrichedSales, token }) => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.post<void>(`${this.apiUrl}/purchase`, enrichedSales, { headers });
       }),
       catchError((error) => {
-        console.error('Error processing purchase:', error); // Log error details
-        return throwError('Error processing purchase'); // Return an observable with an error message
+        console.error('Error processing cart purchase:', error);
+        return throwError(() => new Error('Error processing cart purchase'));
       })
     );
   }
+
 }

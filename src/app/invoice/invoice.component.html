@@ -58,17 +58,26 @@
           <tr *ngFor="let s of sales">
             <td>{{ s.product_name }}</td>
             <td>{{ s.quantitySold }}</td>
-            <td>{{ s.totalPrice | currency }}</td>
+            <td>{{ getAdjustedTotal(s) | currency }}</td>
           </tr>
           </tbody>
+
           <tfoot>
           <tr>
-            <td colspan="2"><strong>Total</strong></td>
+            <td colspan="2"><strong>Subtotal</strong></td>
             <td><strong>{{ getSubtotal() | currency }}</strong></td>
           </tr>
-
+          <tr>
+            <td colspan="2">Delivery</td>
+            <td>{{ getDeliveryFee() | currency }}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><strong>Total</strong></td>
+            <td><strong>{{ (getSubtotal() + getDeliveryFee()) | currency }}</strong></td>
+          </tr>
           </tfoot>
         </table>
+
       </div>
     </div>
 

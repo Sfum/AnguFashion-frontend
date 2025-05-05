@@ -146,8 +146,14 @@ export class DownloadReportComponent implements OnInit {
   // Calculate total quantity and price from a given array of sales
   calculateTotals(data: MappedSale[]): void {
     this.totalQuantitySold = data.reduce((sum, sale) => sum + sale.quantitySold, 0);
-    this.totalPrice = data.reduce((sum, sale) => sum + Number(sale.totalPrice), 0);
+
+    this.totalPrice = data.reduce((sum, sale) => {
+      const total = sale.totalPrice || 0;
+      const delivery = sale.deliveryRate || 0;
+      return sum + (total - delivery);
+    }, 0);
   }
+
 
   // Check if this is the first appearance of a given saleDate (per page)
   isFirstTimestamp(date: Date, index: number): boolean {
@@ -161,4 +167,10 @@ export class DownloadReportComponent implements OnInit {
   isTimestampGreyed(row: MappedSale, index: number): boolean {
     return index % 2 !== 0;
   }
+  getAdjustedPrice(sale: Sale): number {
+    const total = sale.totalPrice || 0;
+    const delivery = sale.deliveryRate || 0;
+    return +(total - delivery).toFixed(2);
+  }
+
 }

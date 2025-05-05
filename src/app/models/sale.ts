@@ -41,4 +41,5 @@ export interface Sale {
   totalPrice: number;
   vatAmount?: number;
   vatRate?: number;
+  deliveryRate?: number;
 }

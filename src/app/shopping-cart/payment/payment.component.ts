@@ -7,6 +7,7 @@ import { Product, ProductSize } from '../../models/product';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {getVatRateByCountry} from '../../models/vat-rates';
 import {AuthService} from '../../services/auth.service';
+import {User} from '../../models/user';
 
 @Component({
   selector: 'app-payment',
@@ -26,14 +27,12 @@ export class PaymentComponent {
   ) {}
 
   // Method to simulate the payment process
-  simulatePayment(uploaderId: string): void {
-    this.loading = true; // Start the loading state
-    this.errorMessage = null; // Reset error message
+  simulatePayment(): void {
+    this.loading = true;
+    this.errorMessage = null;
 
-    // Sync the cart data with Firestore
     this.cartService.syncCartWithFirestore().subscribe({
       next: () => {
-        // Fetch products from the backend
         this.cartService.getProductsFromBackend().subscribe({
           next: (products) => {
             if (products.length === 0) {
@@ -42,56 +41,47 @@ export class PaymentComponent {
               return;
             }
 
-            // Process each product in the cart
-            products.forEach((product) => {
-              // Get the currently authenticated user
-              this.authService.getCurrentUser().subscribe((user) => {
-                if (user) {
-                  try {
-                    // Extract the selected size's id from the product
-                    const selectedSizeId = product.selectedSize?.id || product.selectedSize.id;
+            this.authService.getCurrentUser().subscribe((user) => {
+              if (!user) {
+                this.errorMessage = 'Please, login to your account to access this feature!';
+                this.loading = false;
+                return;
+              }
 
-                    // Find the corresponding ProductSize from the product's sizes array
-                    const selectedSize: ProductSize | undefined = product.sizes.find(
-                      (size) => size.id === selectedSizeId
-                    );
+              try {
+                // ✅ Build a full array of sales
+                const salesPayload: Sale[] = products.map((product) => {
+                  const selectedSizeId = product.selectedSize?.id || product.selectedSize.id;
+                  const selectedSize = product.sizes.find(
+                    (size) => size.id === selectedSizeId
+                  );
 
-                    // Check if a valid size was found
-                    if (!selectedSize || !selectedSize.id) {
-                      console.error('Product does not have a valid selected size:', product);
-                      this.errorMessage = 'Cart item must have a valid selected size';
-                      this.loading = false;
-                      return;
-                    }
-
-                    // Create the sale data for this product
-                    const saleData: Sale = this.createSaleData(product, user, product.quantity, selectedSize);
-                    console.log('Created sale data:', saleData);
-
-                    // Process the sale using the SalesService
-                    this.salesService.handlePurchase(saleData).subscribe({
-                      next: () => {
-                        console.log('Purchase processed successfully');
-                        this.loading = false;
-                        this.router.navigate(['/orders']).then(() => localStorage.clear());
-                      },
-                      error: (error) => {
-                        console.error('Error processing purchase:', error);
-                        this.errorMessage = error.message || 'Failed to process payment';
-                        this.loading = false;
-                      },
-                    });
-                  } catch (error) {
-                    console.error('Error creating sale data:', error);
-                    this.errorMessage = 'Error creating sale data';
-                    this.loading = false;
+                  if (!selectedSize || !selectedSize.id) {
+                    throw new Error('Cart item must have a valid selected size');
                   }
-                } else {
-                  console.error('Please, login to your account to access this feature!');
-                  this.errorMessage = 'Please, login to your account to access this feature!';
-                  this.loading = false;
-                }
-              });
+
+                  return this.createSaleData(product, user, product.quantity, selectedSize);
+                });
+
+                // ✅ Send all sales in one call
+                this.salesService.handlePurchase(salesPayload).subscribe({
+                  next: () => {
+                    console.log('All purchases processed successfully');
+                    this.loading = false;
+                    this.router.navigate(['/orders']).then(() => localStorage.clear());
+                  },
+                  error: (error) => {
+                    console.error('Error processing purchases:', error);
+                    this.errorMessage = error.message || 'Failed to process payment';
+                    this.loading = false;
+                  },
+                });
+
+              } catch (error) {
+                console.error('Error building sale data:', error);
+                this.errorMessage = (error as Error).message;
+                this.loading = false;
+              }
             });
           },
           error: (error) => {
@@ -109,6 +99,7 @@ export class PaymentComponent {
     });
   }
 
+
   /**
    * Method to create sale data for the transaction
    * @param product - The product being purchased
@@ -117,29 +108,34 @@ export class PaymentComponent {
    * @param selectedSize - The specific size of the product being purchased
    * @returns The constructed Sale object
    */
-  createSaleData(product: Product, user: any, quantity: number, selectedSize: ProductSize): Sale {
+  createSaleData(
+    product: Product,
+    user: User,
+    quantity: number,
+    selectedSize: ProductSize
+  ): Sale {
     if (!selectedSize || !selectedSize.id) {
       console.error('Selected size does not have a valid ID:', selectedSize);
       throw new Error('Selected size must be provided and have a valid ID');
     }
 
-    // ✅ 1. Use salePrice ONLY if it's defined and not null
+    // Determine unit price (sale price if available)
     const priceToUse =
       product.onSale && selectedSize.salePrice !== null && selectedSize.salePrice !== undefined
         ? selectedSize.salePrice
         : selectedSize.price;
 
-    // ✅ 2. Get user country and VAT rate
+    // VAT calculation
     const country = user.country || 'Unknown Country';
     const vatRate = selectedSize.vatRate ?? getVatRateByCountry(country) ?? 0;
-
-    // ✅ 3. Calculate VAT and total price based on actual unit price used
     const unitVatAmount = +(priceToUse * vatRate / 100).toFixed(2);
     const vatAmount = +(unitVatAmount * quantity).toFixed(2);
+
+    // Total price (without delivery rate — added later only to first item on backend)
     const totalPrice = +((priceToUse * quantity) + vatAmount).toFixed(2);
 
-    // ✅ 4. Return properly structured Sale object
-    const saleData: Sale = {
+    // Return fully constructed Sale object
+    return {
       id: '',
       productId: product.id,
       product_name: product.product_name,
@@ -163,15 +159,13 @@ export class PaymentComponent {
       buyerPostcode: user.postcode || 'Unknown Postcode',
       buyerCountry: country,
       buyerEmail: user.email || 'buyer@example.com',
-      sellerName: product.uploaderId ? product.uploaderId : 'Unknown Seller',
+      sellerName: product.uploaderId || 'Unknown Seller',
       uploaderId: product.uploaderId || '',
       userId: user.uid,
       vatAmount,
       vatRate,
-      totalPrice
+      totalPrice, // DeliveryRate will be added by backend to first item
     };
-
-  console.log('Constructed saleData with calculated VAT:', saleData);
-    return saleData;
   }
+
 }

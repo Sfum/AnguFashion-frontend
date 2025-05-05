@@ -96,6 +96,22 @@ export class InvoiceComponent implements OnInit {
     return 0;
   }
 
+  getAdjustedTotal(sale: Sale): number {
+    const price = sale.totalPrice || 0;
+    const delivery = sale.deliveryRate || 0;
+    return +(price - delivery).toFixed(2);
+  }
+
+  getDeliveryFee(): number {
+    const deliveryItem = this.sales.find(s => s.deliveryRate && s.deliveryRate > 0);
+    return deliveryItem ? deliveryItem.deliveryRate : 0;
+  }
+
+  getSubtotalAdjusted(): number {
+    return this.sales.reduce((acc, sale) => acc + this.getAdjustedTotal(sale), 0);
+  }
+
+
   // Triggers invoice print
   printInvoice(): void {
     window.print();
