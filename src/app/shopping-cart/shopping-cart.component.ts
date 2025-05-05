@@ -20,6 +20,10 @@ export class ShoppingCartComponent implements OnInit {
   vatRate: number = 0;
   deliveryFee: number = 0;
 
+  userAddress: string = '';
+  userPostcode: string = '';
+  userEmail: string = '';
+
   constructor(
     private cartService: CartService,
     private wishlistService: WishlistService,
@@ -28,13 +32,13 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get the current user's country and VAT rate
     this.authService.getCurrentUser().subscribe(user => {
       this.userCountry = user?.country || '';
+      this.userAddress = user?.address || '';
+      this.userPostcode = user?.postcode || '';
+      this.userEmail = user?.email || '';
       this.vatRate = getVatRateByCountry(this.userCountry) ?? 0;
-      this.loadCart(); // Only load cart after vatRate is ready
-
-
+      this.loadCart();
     });
   }
 

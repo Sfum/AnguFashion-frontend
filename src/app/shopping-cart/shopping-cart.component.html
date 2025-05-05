@@ -1,33 +1,50 @@
 <div class="container__medium">
-  <div>
-    <div class="font-primary__name margin__bottom--md margin__top--lg">
+  <div class="margin__bottom--md">
+    <div class="font-primary__name margin__bottom--md margin__left--md margin__top--lg">
       Shopping Cart
     </div>
 
+    <!-- Delivery Address Section -->
+    <div class="margin__left--md margin__bottom--md font-label">
+      <strong>Delivery Address:</strong><br />
+      {{ userAddress }}<br />
+      {{ userPostcode }}<br />
+      {{ userCountry }}
+    </div>
+
+    <!-- Subtotal -->
     <div class="margin__left--md margin__top--sm font-label">
       Subtotal: {{ subtotal | currency }}
     </div>
 
+    <!-- VAT -->
     <div class="margin__left--md font-label" *ngIf="vatTotal > 0">
       VAT <span *ngIf="userCountry">({{ userCountry }})</span>: {{ vatTotal | currency }}
     </div>
 
+    <!-- Delivery Fee -->
     <div class="margin__left--md font-label">
       Delivery Fee: {{ deliveryFee | currency }}
     </div>
 
+    <!-- Total -->
     <div class="margin__left--md font-label margin__top--xsm">
       <strong>Total: {{ grandTotal | currency }}</strong>
     </div>
   </div>
+
   <hr />
+
+  <!-- Cart Details and Payment -->
   <div class="shopping__cart--grid margin__top--md">
-    <app-shopping-cart-detail *ngIf="products"
-                              [products]="products"
-                              (removeFromCartEvent)="removeFromCart($event)"
-                              (addToWishListEvent)="addToWishlist($event)"
-                              (quantityChangeEvent)="onQuantityChange($event)">
+    <app-shopping-cart-detail
+      *ngIf="products"
+      [products]="products"
+      (removeFromCartEvent)="removeFromCart($event)"
+      (addToWishListEvent)="addToWishlist($event)"
+      (quantityChangeEvent)="onQuantityChange($event)">
     </app-shopping-cart-detail>
-    <app-payment></app-payment>
+    <div class="margin__bottom--md"><app-payment></app-payment></div>
+
   </div>
 </div>
