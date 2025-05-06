@@ -161,6 +161,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -319,7 +320,8 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserAnimationsModule,
     MatCardTitle,
     MatExpansionModule,
-    MatButtonModule
+    MatButtonModule,
+
 
   ],
   providers: [

@@ -11,3 +11,28 @@
   background-color: #fff
   box-shadow: 0 2px 5px rgba(0,0,0,0.1)
   width: 100%
+
+// app.component.sass
+
+.fade-in-container
+  opacity: 0
+  transition: opacity 6s ease-in-out
+
+  // Class will be added when loading is complete
+  &.fade-in
+    opacity: 1
+
+.loading-placeholder
+  height: 100vh
+  background-color: #f5f5f5 // Grey background for the loading state
+  display: flex
+  justify-content: center
+  align-items: center
+  font-size: 18px
+  color: #888
+  text-align: center
+  opacity: 0.5
+
+main
+  opacity: 0
+  transition: opacity 1s ease-in-out

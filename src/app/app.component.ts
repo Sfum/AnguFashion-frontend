@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import {combineLatest, Observable} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
 import firebase from 'firebase/compat';
-import {AuthService} from './services/auth.service';
-import {take} from 'rxjs/operators';
+import { AuthService } from './services/auth.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.sass',
+  styleUrls: ['./app.component.sass'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'AnguFashion';
 
   user$!: Observable<firebase.User | null>;
@@ -31,8 +31,7 @@ export class AppComponent {
       .subscribe(([admin, moderator]) => {
         this.isAdmin = admin;
         this.isModerator = moderator;
-        this.isLoading = false;
+        this.isLoading = false; // Set loading to false once data is ready
       });
   }
-
 }

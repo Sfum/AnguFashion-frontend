@@ -41,6 +41,7 @@ import {BlogAddPostLandingComponent} from './blog/blog-add-post-landing/blog-add
 import {ProductListComponent} from './products/product-list/product-list.component';
 import {VatSummaryComponent} from './vat-summary/vat-summary.component';
 import {VatRateComponent} from './vat-rate/vat-rate.component';
+import {DeliveryRateComponent} from './delivery-rate/delivery-rate.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '', pathMatch: 'full'},
@@ -114,6 +115,7 @@ const routes: Routes = [
   {path: 'post-page/:_id', component: BlogPostPageComponent},
   {path: 'vat-summary', component: VatSummaryComponent},
   {path: 'vat-rate', component: VatRateComponent},
+  {path: 'delivery', component: DeliveryRateComponent},
   {
     path: 'dashboard', // Parent route
     component: ProviderComponent, // Parent layout with menu

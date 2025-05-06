@@ -1,8 +1,8 @@
+<div class="container__medium">
 <form class="margin--md" [formGroup]="deliveryForm" (ngSubmit)="submit()" class="form-group">
   <div class="font-primary__name container__center-auto margin__bottom--md margin__left--xsm margin__top--lg">
     Delivery Settings
   </div>
-
 
   <input class="margin__bottom--xxsm" matInput placeholder="Country" formControlName="country" required />
   <input class="margin__bottom--xxsm"  matInput placeholder="Delivery Mode" formControlName="delivery_mode" required />
@@ -47,3 +47,4 @@
   <tr mat-header-row *matHeaderRowDef="['country', 'delivery_mode', 'rate', 'actions']"></tr>
   <tr mat-row *matRowDef="let row; columns: ['country', 'delivery_mode', 'rate', 'actions']"></tr>
 </table>
+</div>
