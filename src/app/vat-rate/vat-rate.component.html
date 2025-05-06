@@ -1,6 +1,7 @@
+<div class="container__medium">
 <form class="margin--md" [formGroup]="vatForm" (ngSubmit)="submit()" class="form-group">
   <div class="font-primary__name container__center-auto margin__bottom--md margin__left--xsm margin__top--lg">
-    Vat Settings
+    Vat Rates
   </div>
 
 
@@ -47,3 +48,4 @@
   <tr mat-header-row *matHeaderRowDef="['country', 'vat_mode', 'rate', 'actions']"></tr>
   <tr mat-row *matRowDef="let row; columns: ['country', 'vat_mode', 'rate', 'actions']"></tr>
 </table>
+</div>

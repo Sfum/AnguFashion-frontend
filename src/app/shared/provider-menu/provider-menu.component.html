@@ -1,0 +1,61 @@
+<nav class="admin-menu">
+  <button mat-raised-button class="font-primary" [routerLink]="[products.length ? '/manage-products' : '/add-product-landing']">
+    <mat-icon>settings</mat-icon>
+    Manage Products
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="[products.length ? '/add-product' : '/add-product-landing']">
+    <mat-icon>add_circle</mat-icon>
+    {{ products.length ? 'Add Product' : 'Start Products' }}
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/admin-report']">
+    <mat-icon>bar_chart</mat-icon>
+    Sales Reports
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/tickets']">
+    <mat-icon>support_agent</mat-icon>
+    Support Tickets
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="[posts.length ? '/add-post' : '/add-post-landing']">
+    <mat-icon>post_add</mat-icon>
+    {{ posts.length ? 'Add Post' : 'Start Posts' }}
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/posts-list']">
+    <mat-icon>article</mat-icon>
+    Blog Posts List
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/manage-brands']">
+    <mat-icon>branding_watermark</mat-icon>
+    Manage Brands
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/manage-categories']">
+    <mat-icon>category</mat-icon>
+    Manage Categories
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/on-sale-brand']">
+    <mat-icon>local_offer</mat-icon>
+    Brand Sale
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/on-sale-category']">
+    <mat-icon>discount</mat-icon>
+    Category Sale
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/vat-summary']">
+    <mat-icon>receipt_long</mat-icon>
+    VAT Summary
+  </button>
+
+  <button mat-raised-button class="font-primary" [routerLink]="['/vat-rate']">
+    <mat-icon>percent</mat-icon>
+    VAT Rate
+  </button>
+</nav>

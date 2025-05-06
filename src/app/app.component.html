@@ -6,7 +6,15 @@
     <div>
       <app-navigation-bar class="app-header" (click)="drawer.toggle(false)"></app-navigation-bar>
       <div class="margin__left--sm margin__right--sm" >
-      <router-outlet (click)="drawer.toggle(false)"></router-outlet>
+        <app-provider-menu *ngIf="isAdmin; else notAdmin"></app-provider-menu>
+        <!-- Moderator Section -->
+        <ng-template #notAdmin>
+          <div *ngIf="isModerator">
+            <section class="moderator-section">
+            </section>
+          </div>
+        </ng-template>
+        <router-outlet (click)="drawer.toggle(false)"></router-outlet>
       </div>
     </div>
 </mat-drawer-container>

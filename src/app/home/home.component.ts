@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import firebase from 'firebase/compat/app';
 
@@ -8,26 +9,27 @@ import firebase from 'firebase/compat/app';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.sass'],
 })
-export class HomeComponent {
-
-  user$ = this.authService.user$;
+export class HomeComponent implements OnInit {
+  user$!: Observable<firebase.User | null>;
   isAdmin: boolean | undefined;
   isModerator: boolean | undefined;
+  isLoading = true;
 
   constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-    // Subscribe to the user$ observable from AuthService
+  ngOnInit(): void {
     this.user$ = this.authService.user$;
 
-    // Subscribe to isAdmin observable from AuthService and set isAdmin flag
-    this.authService.isAdmin().subscribe((isAdmin) => {
-      this.isAdmin = isAdmin;
-    });
-
-    // Subscribe to isModerator observable from AuthService and set isModerator flag
-    this.authService.isModerator().subscribe((isModerator) => {
-      this.isModerator = isModerator;
-    });
+    // Use combineLatest to wait for both observables, then complete after first emit
+    combineLatest([
+      this.authService.isAdmin(),
+      this.authService.isModerator()
+    ])
+      .pipe(take(1)) // ensures completion like forkJoin
+      .subscribe(([admin, moderator]) => {
+        this.isAdmin = admin;
+        this.isModerator = moderator;
+        this.isLoading = false;
+      });
   }
 }

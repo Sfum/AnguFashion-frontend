@@ -1,86 +1,8 @@
+<div class="container__medium">
 <div class="font-primary__name margin__top--lg margin__bottom--md container__center-auto">Product Management</div>
-
-<div class="container__provider margin__top--md">
-  <div class="button_wrapper margin__left--xsm no_wrap">
-    <!-- Button to navigate to the 'Add Product' page -->
-    <button *ngIf="products.length > 0" mat-button [routerLink]="['/add-product']"
-            class="margin__bottom--xsm">
-      <label class="font-primary">Add Another Product</label>
-    </button>
-
-    <!-- If the array is empty -->
-    <button *ngIf="products.length === 0" mat-button [routerLink]="['/add-product-landing']"
-            class=" margin__bottom--xsm">
-      <label class="font-primary">Start Adding Products</label>
-    </button>
-
-    <!-- Button to navigate to the 'Sales Reports' page -->
-    <button mat-button [routerLink]="['/admin-report']" class="margin__bottom--xsm">
-      <label class="font-primary">Sales Reports</label>
-    </button>
-
-    <!-- Button to navigate to the 'Support Tickets' page -->
-    <button mat-button [routerLink]="['/tickets']" class="margin__bottom--xsm">
-      <label class="font-primary">Support Tickets</label>
-    </button>
-
-    <!-- If there are posts in the array -->
-    <button *ngIf="posts.length > 0" mat-button [routerLink]="['/add-post']" class="margin__bottom--xsm">
-      <mat-icon>map</mat-icon>
-      <label class="font-primary">Add Another Post</label>
-    </button>
-
-    <!-- If the array is empty -->
-    <button *ngIf="posts.length === 0" mat-button [routerLink]="['/add-post-landing']"
-            class="margin__bottom--xsm">
-      <mat-icon>map</mat-icon>
-      <label class="font-primary">Start Adding Posts</label>
-    </button>
-
-
-    <!-- Button to navigate to the 'Posts List' page -->
-    <button mat-button [routerLink]="['/posts-list']" class="margin__bottom--xsm">
-     <label class="font-primary">Blog Posts List</label>
-    </button>
-
-    <!-- Button to navigate to the 'Manage Brands' page -->
-    <button mat-button [routerLink]="['/manage-brands']" class="margin__bottom--xsm">
-      <label class="font-primary">Manage Brands</label>
-    </button>
-
-    <!-- Button to navigate to the 'Manage Categories' page -->
-    <button mat-button [routerLink]="['/manage-categories']" class="margin__bottom--xsm">
-      <label class="font-primary">Manage Categories</label>
-    </button>
-
-    <!-- Button to navigate to the 'Brand Sale' page -->
-    <button mat-button [routerLink]="['/on-sale-brand']" class="margin__bottom--xsm">
-      <label class="font-primary">Brand Sale</label>
-    </button>
-
-    <!-- Button to navigate to the 'Category Sale' page -->
-    <button mat-button [routerLink]="['/on-sale-category']" class="margin__bottom--xsm">
-      <label class="font-primary margin--sm">Category Sale</label>
-    </button>
-
-    <!-- Button to navigate to the 'Category Sale' page -->
-    <button mat-button [routerLink]="['/vat-summary']" class="margin__bottom--xsm">
-      <label class="font-primary margin--sm">Vat Summary</label>
-    </button>
-  </div>
-
+</div>
+  <div class="container__provider margin__top--md">
   <!-- Component to display a list of products with elevated styling -->
   <app-product-list class="mat-elevation-z2 margin__left--md"></app-product-list>
 
 </div>
-<app-admin-report></app-admin-report>
-<app-vat-summary></app-vat-summary>
-<app-delivery-rate></app-delivery-rate>
-<app-vat-rate></app-vat-rate>
-<!--<app-product-ticket-panel></app-product-ticket-panel>-->
-<!--<div class="margin__bottom&#45;&#45;md">-->
-<!--  <app-product-carousel-uploader></app-product-carousel-uploader>-->
-<!--</div>-->
-
-
-

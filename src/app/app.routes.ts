@@ -40,7 +40,7 @@ import {CompareComponent} from './compare/compare.component';
 import {BlogAddPostLandingComponent} from './blog/blog-add-post-landing/blog-add-post-landing.component';
 import {ProductListComponent} from './products/product-list/product-list.component';
 import {VatSummaryComponent} from './vat-summary/vat-summary.component';
-import {ProviderDataComponent} from './provider-data/provider-data.component';
+import {VatRateComponent} from './vat-rate/vat-rate.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '', pathMatch: 'full'},
@@ -112,7 +112,8 @@ const routes: Routes = [
   {path: 'posts-list', component: BlogPostListComponent},
   {path: 'post-edit/:_id', component: BlogPostEditComponent},
   {path: 'post-page/:_id', component: BlogPostPageComponent},
-  {path: 'vat-settings', component: VatSummaryComponent},
+  {path: 'vat-summary', component: VatSummaryComponent},
+  {path: 'vat-rate', component: VatRateComponent},
   {
     path: 'dashboard', // Parent route
     component: ProviderComponent, // Parent layout with menu
