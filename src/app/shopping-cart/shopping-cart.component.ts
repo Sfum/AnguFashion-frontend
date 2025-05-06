@@ -5,7 +5,7 @@ import { WishlistService } from '../services/wishlist.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { getVatRateByCountry } from '../models/vat-rates';
-import { getDeliveryRateByCountry } from '../models/delivery-rates';
+import { DeliveryRateService } from '../services/delivery-rate.service'; // ✅ New
 
 @Component({
   selector: 'app-shopping-cart',
@@ -28,7 +28,9 @@ export class ShoppingCartComponent implements OnInit {
     private cartService: CartService,
     private wishlistService: WishlistService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private deliveryRateService: DeliveryRateService
+
   ) {}
 
   ngOnInit(): void {
@@ -78,9 +80,19 @@ export class ShoppingCartComponent implements OnInit {
       this.vatTotal += unitVatAmount * quantity;
     }
 
-    // Apply delivery fee only once (for entire order)
-    this.deliveryFee = getDeliveryRateByCountry(this.userCountry) ?? 0;
+    // 🔄 Fetch delivery rate dynamically based on user country
+    this.deliveryRateService.getAll().subscribe({
+      next: (rates) => {
+        const matched = rates.find(r => r.country.toLowerCase() === this.userCountry.toLowerCase());
+        this.deliveryFee = matched ? matched.rate : 0;
+      },
+      error: (err) => {
+        console.error('Failed to fetch delivery rates:', err);
+        this.deliveryFee = 0;
+      }
+    });
   }
+
 
 
   get total(): number {

@@ -1,0 +1,44 @@
+<form [formGroup]="deliveryForm" (ngSubmit)="submit()" class="form-group">
+  <input matInput placeholder="Country" formControlName="country" required />
+  <input matInput placeholder="Delivery Mode" formControlName="delivery_mode" required />
+  <input matInput type="number" placeholder="Rate" formControlName="rate" required />
+
+  <button mat-raised-button color="primary" type="submit">
+    {{ editingId ? 'Update' : 'Create' }}
+  </button>
+  <button *ngIf="editingId" mat-button type="button" (click)="cancelEdit()">Cancel</button>
+</form>
+
+<hr />
+
+<table mat-table [dataSource]="deliveryRates" class="mat-elevation-z2">
+  <ng-container matColumnDef="country">
+    <th mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let rate">{{ rate.country }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="delivery_mode">
+    <th mat-header-cell *matHeaderCellDef>Mode</th>
+    <td mat-cell *matCellDef="let rate">{{ rate.delivery_mode }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="rate">
+    <th mat-header-cell *matHeaderCellDef>Rate</th>
+    <td mat-cell *matCellDef="let rate">{{ rate.rate | currency }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let rate">
+      <button mat-icon-button (click)="edit(rate)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="delete(rate.id!)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['country', 'delivery_mode', 'rate', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['country', 'delivery_mode', 'rate', 'actions']"></tr>
+</table>
