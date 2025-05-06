@@ -24,10 +24,6 @@
       <mat-icon>article</mat-icon>
       <span>Blog</span>
     </button>
-    <button *ngIf="isAdmin || (isModerator | async)" mat-menu-item routerLink="/manage-products">
-      <mat-icon>admin_panel_settings</mat-icon>
-      <span>Provider</span>
-    </button>
     <button *ngIf="!(user$ | async)" mat-menu-item routerLink="/login">
       <mat-icon>login</mat-icon>
       <span>Login</span>
