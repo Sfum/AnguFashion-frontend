@@ -151,8 +151,9 @@ import {AngularFireModule} from '@angular/fire/compat';
 import {AngularFireAuthModule} from '@angular/fire/compat/auth';
 import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
 import {AuthInterceptor} from './services/auth.interceptor.service';
-import { VatSummaryComponent } from './vat-summary/vat-summary.component';
+import {VatSummaryComponent} from './vat-summary/vat-summary.component';
 import {DeliveryRateComponent} from './delivery-rate/delivery-rate.component';
+import {VatRateComponent} from './vat-rate/vat-rate.component';
 
 @NgModule({
   declarations: [
@@ -228,7 +229,8 @@ import {DeliveryRateComponent} from './delivery-rate/delivery-rate.component';
     TopChartsComponent,
     SizeLabelFilterComponent,
     VatSummaryComponent,
-    DeliveryRateComponent
+    DeliveryRateComponent,
+    VatRateComponent
   ],
   imports: [
     CommonModule,

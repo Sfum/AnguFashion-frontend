@@ -23,14 +23,6 @@ export class DeliveryRateService {
   }
 
   /**
-   * Fetch a single delivery rate by ID
-   * @param id Firestore document ID
-   */
-  getById(id: string): Observable<DeliveryRate> {
-    return this.http.get<DeliveryRate>(`${this.baseUrl}/${id}`);
-  }
-
-  /**
    * Create a new delivery rate entry
    * @param rate DeliveryRate object to create
    */

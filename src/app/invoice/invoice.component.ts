@@ -4,8 +4,9 @@ import { Sale } from '../models/sale';
 import { User } from '../models/user';
 import { SalesService } from '../services/sales.service';
 import { DateService } from '../services/date.service';
-import { vatRatesByContinent, VatRate } from '../models/vat-rates';
-import {AuthService} from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { VatService } from '../services/vat-service.service';
+import { VatRate } from '../models/vat-rates';
 
 @Component({
   selector: 'app-invoice',
@@ -16,27 +17,26 @@ export class InvoiceComponent implements OnInit {
   sales: Sale[] = [];
   buyer: User | undefined;
   seller: User | undefined;
+  admin: User | undefined;
   invoiceDate: Date | undefined;
   vatRate: number = 0;
-  admin: User | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { sale: Sale },
     private salesService: SalesService,
-    public dateService: DateService,
     private authService: AuthService,
+    public dateService: DateService,
+    private vatService: VatService
   ) {}
 
   ngOnInit(): void {
-
     this.authService.getAllUsers().subscribe({
       next: (users) => {
         this.admin = users.find(u => u.user_email === 'admin@angufashion.com');
       },
-      error: (err) => {
-        console.error('Error loading admin user:', err);
-      }
+      error: (err) => console.error('Error loading admin user:', err)
     });
+
     const baseSale = this.data?.sale;
 
     if (baseSale && baseSale.userId && baseSale.saleDate) {
@@ -57,43 +57,52 @@ export class InvoiceComponent implements OnInit {
               this.buyer = buyer;
               this.seller = seller;
 
-              // Determine VAT rate based on buyer country
-              if (this.buyer && this.buyer.country) {
-                this.vatRate = this.getVatRateByCountry(this.buyer.country);
+              // 🔄 Dynamically fetch VAT rate via API
+              if (this.buyer?.country) {
+                this.fetchVatRate(this.buyer.country);
               }
             },
             error: (error) => {
               console.error('Error fetching buyer/seller:', error);
-            },
+            }
           });
         },
         error: (error) => {
           console.error('Error fetching sales by user:', error);
-        },
+        }
       });
     } else {
       console.error('Missing base sale, userId, or saleDate for invoice.');
     }
   }
 
-  // Returns formatted date
+  /**
+   * Fetch the VAT rate dynamically from the backend by country
+   */
+  fetchVatRate(country: string): void {
+    this.vatService.getAll().subscribe({
+      next: (rates: VatRate[]) => {
+        const match = rates.find(rate => rate.country.toLowerCase() === country.toLowerCase());
+        this.vatRate = match?.rate || 0;
+      },
+      error: (err) => {
+        console.error('Failed to fetch VAT rates:', err);
+        this.vatRate = 0;
+      }
+    });
+  }
+
   formatDate(date: any): string {
     return this.dateService.formatDate(date);
   }
 
-  // Calculates subtotal of sales
   getSubtotal(): number {
     return this.sales.reduce((acc, sale) => acc + (sale.totalPrice || 0), 0);
   }
 
-  // Finds VAT rate for the buyer's country
-  getVatRateByCountry(country: string): number {
-    for (const region in vatRatesByContinent) {
-      const vatList: VatRate[] = vatRatesByContinent[region];
-      const found = vatList.find(rate => rate.country.toLowerCase() === country.toLowerCase());
-      if (found) return found.rate;
-    }
-    return 0;
+  getDeliveryFee(): number {
+    const deliveryItem = this.sales.find(s => s.deliveryRate && s.deliveryRate > 0);
+    return deliveryItem ? deliveryItem.deliveryRate : 0;
   }
 
   getAdjustedTotal(sale: Sale): number {
@@ -102,17 +111,10 @@ export class InvoiceComponent implements OnInit {
     return +(price - delivery).toFixed(2);
   }
 
-  getDeliveryFee(): number {
-    const deliveryItem = this.sales.find(s => s.deliveryRate && s.deliveryRate > 0);
-    return deliveryItem ? deliveryItem.deliveryRate : 0;
-  }
-
   getSubtotalAdjusted(): number {
     return this.sales.reduce((acc, sale) => acc + this.getAdjustedTotal(sale), 0);
   }
 
-
-  // Triggers invoice print
   printInvoice(): void {
     window.print();
   }

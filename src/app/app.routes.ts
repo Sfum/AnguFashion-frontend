@@ -112,7 +112,7 @@ const routes: Routes = [
   {path: 'posts-list', component: BlogPostListComponent},
   {path: 'post-edit/:_id', component: BlogPostEditComponent},
   {path: 'post-page/:_id', component: BlogPostPageComponent},
-  {path: 'vat-summary', component: VatSummaryComponent},
+  {path: 'vat-settings', component: VatSummaryComponent},
   {
     path: 'dashboard', // Parent route
     component: ProviderComponent, // Parent layout with menu

@@ -1,11 +1,11 @@
-<form class="margin--md" [formGroup]="deliveryForm" (ngSubmit)="submit()" class="form-group">
+<form class="margin--md" [formGroup]="vatForm" (ngSubmit)="submit()" class="form-group">
   <div class="font-primary__name container__center-auto margin__bottom--md margin__left--xsm margin__top--lg">
-    Delivery Settings
+    Vat Settings
   </div>
 
 
   <input class="margin__bottom--xxsm" matInput placeholder="Country" formControlName="country" required />
-  <input class="margin__bottom--xxsm"  matInput placeholder="Delivery Mode" formControlName="delivery_mode" required />
+  <input class="margin__bottom--xxsm"  matInput placeholder="Vat Mode" formControlName="vat_mode" required />
   <input class="margin__bottom--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
 
   <button mat-raised-button  type="submit">
@@ -16,20 +16,20 @@
 
 <hr />
 
-<table mat-table [dataSource]="deliveryRates" class="mat-elevation-z2">
+<table mat-table [dataSource]="vatRates" class="mat-elevation-z2">
   <ng-container matColumnDef="country">
     <th mat-header-cell *matHeaderCellDef>Country</th>
     <td mat-cell *matCellDef="let rate">{{ rate.country }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="delivery_mode">
+  <ng-container matColumnDef="vat_mode">
     <th mat-header-cell *matHeaderCellDef>Mode</th>
-    <td mat-cell *matCellDef="let rate">{{ rate.delivery_mode }}</td>
+    <td mat-cell *matCellDef="let rate">{{ rate.vat_mode }}</td>
   </ng-container>
 
   <ng-container matColumnDef="rate">
     <th mat-header-cell *matHeaderCellDef>Rate</th>
-    <td mat-cell *matCellDef="let rate">{{ rate.rate | currency }}</td>
+    <td mat-cell *matCellDef="let rate">{{ rate.rate }}%</td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -44,6 +44,6 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['country', 'delivery_mode', 'rate', 'actions']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['country', 'delivery_mode', 'rate', 'actions']"></tr>
+  <tr mat-header-row *matHeaderRowDef="['country', 'vat_mode', 'rate', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['country', 'vat_mode', 'rate', 'actions']"></tr>
 </table>

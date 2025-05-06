@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+
 import { CartService } from '../../services/cart.service';
 import { SalesService } from '../../services/sales.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { VatService } from '../../services/vat-service.service';
+
 import { Sale, SaleStatus } from '../../models/sale';
 import { Product, ProductSize } from '../../models/product';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {getVatRateByCountry} from '../../models/vat-rates';
-import {AuthService} from '../../services/auth.service';
-import {User} from '../../models/user';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-payment',
@@ -15,32 +17,39 @@ import {User} from '../../models/user';
   styleUrls: ['./payment.component.sass'],
 })
 export class PaymentComponent {
-  loading = false; // Indicates if the payment process is loading
-  errorMessage: string | null = null; // Stores error messages if any
+  loading = false;
+  errorMessage: string | null = null;
+
+  vatRate: number = 0;
 
   constructor(
     private cartService: CartService,
     private salesService: SalesService,
     private router: Router,
     private afAuth: AngularFireAuth,
-    private authService: AuthService // Injecting AuthService to get user details
+    private authService: AuthService,
+    private vatService: VatService
   ) {}
 
-  // Method to simulate the payment process
+  /**
+   * Handles the simulated payment process
+   */
   simulatePayment(): void {
     this.loading = true;
     this.errorMessage = null;
 
+    // Ensure cart is synced first
     this.cartService.syncCartWithFirestore().subscribe({
       next: () => {
         this.cartService.getProductsFromBackend().subscribe({
           next: (products) => {
-            if (products.length === 0) {
+            if (!products.length) {
               this.errorMessage = 'No products found in the cart';
               this.loading = false;
               return;
             }
 
+            // Get user
             this.authService.getCurrentUser().subscribe((user) => {
               if (!user) {
                 this.errorMessage = 'Please, login to your account to access this feature!';
@@ -48,65 +57,60 @@ export class PaymentComponent {
                 return;
               }
 
-              try {
-                // ✅ Build a full array of sales
-                const salesPayload: Sale[] = products.map((product) => {
-                  const selectedSizeId = product.selectedSize?.id || product.selectedSize.id;
-                  const selectedSize = product.sizes.find(
-                    (size) => size.id === selectedSizeId
-                  );
+              // Fetch VAT rate (or use fallback if not ready)
+              this.vatService.isVatReady().subscribe((ready) => {
+                this.vatRate = ready ? this.vatService.getVatRate() : 0;
 
-                  if (!selectedSize || !selectedSize.id) {
-                    throw new Error('Cart item must have a valid selected size');
-                  }
+                try {
+                  const salesPayload: Sale[] = products.map((product) => {
+                    const selectedSizeId = product.selectedSize?.id;
+                    const selectedSize = product.sizes.find(size => size.id === selectedSizeId);
 
-                  return this.createSaleData(product, user, product.quantity, selectedSize);
-                });
+                    if (!selectedSize) {
+                      throw new Error('Cart item must have a valid selected size');
+                    }
 
-                // ✅ Send all sales in one call
-                this.salesService.handlePurchase(salesPayload).subscribe({
-                  next: () => {
-                    console.log('All purchases processed successfully');
-                    this.loading = false;
-                    this.router.navigate(['/orders']).then(() => localStorage.clear());
-                  },
-                  error: (error) => {
-                    console.error('Error processing purchases:', error);
-                    this.errorMessage = error.message || 'Failed to process payment';
-                    this.loading = false;
-                  },
-                });
+                    return this.createSaleData(product, user, product.quantity, selectedSize);
+                  });
 
-              } catch (error) {
-                console.error('Error building sale data:', error);
-                this.errorMessage = (error as Error).message;
-                this.loading = false;
-              }
+                  // Send purchase request
+                  this.salesService.handlePurchase(salesPayload).subscribe({
+                    next: () => {
+                      console.log('All purchases processed successfully');
+                      this.loading = false;
+                      this.router.navigate(['/orders']).then(() => localStorage.clear());
+                    },
+                    error: (error) => {
+                      console.error('Error processing purchases:', error);
+                      this.errorMessage = error.message || 'Failed to process payment';
+                      this.loading = false;
+                    }
+                  });
+                } catch (error) {
+                  console.error('Error building sale data:', error);
+                  this.errorMessage = (error as Error).message;
+                  this.loading = false;
+                }
+              });
             });
           },
-          error: (error) => {
-            console.error('Error fetching cart products:', error);
-            this.errorMessage = error.message || 'Failed to fetch cart products';
+          error: (err) => {
+            console.error('Error fetching cart products:', err);
+            this.errorMessage = err.message || 'Failed to fetch cart products';
             this.loading = false;
-          },
+          }
         });
       },
-      error: (error) => {
-        console.error('Error syncing cart:', error);
-        this.errorMessage = error.message || 'Failed to sync cart';
+      error: (err) => {
+        console.error('Error syncing cart:', err);
+        this.errorMessage = err.message || 'Failed to sync cart';
         this.loading = false;
-      },
+      }
     });
   }
 
-
   /**
-   * Method to create sale data for the transaction
-   * @param product - The product being purchased
-   * @param user - The authenticated user making the purchase
-   * @param quantity - The quantity of the product being purchased
-   * @param selectedSize - The specific size of the product being purchased
-   * @returns The constructed Sale object
+   * Constructs the Sale object for a given product
    */
   createSaleData(
     product: Product,
@@ -114,27 +118,15 @@ export class PaymentComponent {
     quantity: number,
     selectedSize: ProductSize
   ): Sale {
-    if (!selectedSize || !selectedSize.id) {
-      console.error('Selected size does not have a valid ID:', selectedSize);
-      throw new Error('Selected size must be provided and have a valid ID');
-    }
+    const price = product.onSale && selectedSize.salePrice != null
+      ? selectedSize.salePrice
+      : selectedSize.price;
 
-    // Determine unit price (sale price if available)
-    const priceToUse =
-      product.onSale && selectedSize.salePrice !== null && selectedSize.salePrice !== undefined
-        ? selectedSize.salePrice
-        : selectedSize.price;
-
-    // VAT calculation
-    const country = user.country || 'Unknown Country';
-    const vatRate = selectedSize.vatRate ?? getVatRateByCountry(country) ?? 0;
-    const unitVatAmount = +(priceToUse * vatRate / 100).toFixed(2);
+    const vatRate = selectedSize.vatRate ?? this.vatRate;
+    const unitVatAmount = +(price * vatRate / 100).toFixed(2);
     const vatAmount = +(unitVatAmount * quantity).toFixed(2);
+    const totalPrice = +((price * quantity) + vatAmount).toFixed(2);
 
-    // Total price (without delivery rate — added later only to first item on backend)
-    const totalPrice = +((priceToUse * quantity) + vatAmount).toFixed(2);
-
-    // Return fully constructed Sale object
     return {
       id: '',
       productId: product.id,
@@ -147,8 +139,8 @@ export class PaymentComponent {
         quantity: selectedSize.quantity,
         price: selectedSize.price,
         salePrice: selectedSize.salePrice,
-        vatAmount: selectedSize.vatAmount,
-        vatRate: selectedSize.vatRate,
+        vatAmount: unitVatAmount,
+        vatRate,
         unitType: selectedSize.unitType,
         sizeLabel: selectedSize.sizeLabel,
       },
@@ -157,15 +149,14 @@ export class PaymentComponent {
       buyerName: user.displayName || 'Current Buyer',
       buyerAddress: user.address || 'Unknown Address',
       buyerPostcode: user.postcode || 'Unknown Postcode',
-      buyerCountry: country,
+      buyerCountry: user.country || 'Unknown Country',
       buyerEmail: user.email || 'buyer@example.com',
       sellerName: product.uploaderId || 'Unknown Seller',
       uploaderId: product.uploaderId || '',
       userId: user.uid,
       vatAmount,
       vatRate,
-      totalPrice, // DeliveryRate will be added by backend to first item
+      totalPrice // Delivery fee added server-side to one item
     };
   }
-
 }

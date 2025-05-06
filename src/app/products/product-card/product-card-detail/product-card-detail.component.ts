@@ -2,9 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Product, ProductSize } from '../../../models/product';
 import { ProductService } from '../../../services/product.service';
 import { AuthService } from '../../../services/auth.service';
-import { getVatRateByCountry } from '../../../models/vat-rates';
 import { User } from '../../../models/user';
-import {VatService} from '../../../services/vat-service.service';
+import { VatService } from '../../../services/vat-service.service';
 
 @Component({
   selector: 'app-product-card-detail',
@@ -12,12 +11,11 @@ import {VatService} from '../../../services/vat-service.service';
   styleUrls: ['./product-card-detail.component.sass'],
 })
 export class ProductCardDetailComponent implements OnInit {
-
   @Input() product!: Product;
   @Input() userSelectedQuantity: number = 1;
   @Input() averageRating: number = 0;
 
-  @Output() addToWishlistEvent: EventEmitter<Product> = new EventEmitter<Product>();
+  @Output() addToWishlistEvent = new EventEmitter<Product>();
   @Output() addToCartEvent = new EventEmitter<{
     product: Product;
     selectedSize: ProductSize | null;
@@ -43,36 +41,39 @@ export class ProductCardDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getCurrentUser().subscribe(user => {
-      if (user && user.country) {
-        this.userCountry = user.country;
-        this.vatRate = getVatRateByCountry(user.country) ?? 0;
-      }
-      this.vatReady = true; // ✅ Mark ready to display
-    });
     this.loadUserCountryAndVatRate();
 
-    this.vatService.isVatReady().subscribe(ready => {
-      if (ready) {
-        this.vatRate = this.vatService.getVatRate();
-        this.vatReady = true;
-      }
-    });
-
-    if (this.product && Array.isArray(this.product.product_image)) {
+    // Load product images
+    if (this.product?.product_image?.length) {
       this.productImages = this.product.product_image.slice(0, 6);
-      this.currentImage = this.productImages.length > 0 ? this.productImages[0] : '';
-    } else {
-      console.warn('Invalid or missing product images.');
+      this.currentImage = this.productImages[0];
     }
+
+    // Calculate initial average rating from embedded comments
     this.calculateAverageRating();
   }
 
   /**
-   * Load user country and determine VAT rate.
+   * Loads VAT rate from the VatService based on current user country
    */
+  loadUserCountryAndVatRate(): void {
+    this.authService.getCurrentUser().subscribe((user: User | null) => {
+      if (user?.country) {
+        this.userCountry = user.country;
+
+        // Wait for the service to finish loading VAT data
+        this.vatService.isVatReady().subscribe((ready) => {
+          if (ready) {
+            this.vatRate = this.vatService.getVatRate();
+            this.vatReady = true;
+          }
+        });
+      }
+    });
+  }
+
   /**
-   * Calculate and return a price including VAT.
+   * Returns price including VAT
    */
   getPriceWithVat(basePrice: number): number {
     const vatAmount = basePrice * (this.vatRate / 100);
@@ -80,85 +81,59 @@ export class ProductCardDetailComponent implements OnInit {
   }
 
   /**
-   * Retrieve the display unit for a product size.
+   * Returns a human-readable size unit string
    */
   getUnit(unitType: ProductSize['unitType'], size: number | string, label: string): string {
     return this.productService.getUnit(unitType, size, label);
   }
 
   /**
-   * Handle adding a product to the cart.
+   * Emits event to add selected product to cart
    */
   addToCart(selectedSize: ProductSize | null, color: string): void {
     if (!this.product || !selectedSize) return;
 
-    const quantity = this.userSelectedQuantity || 1;
     this.addToCartEvent.emit({
       product: this.product,
       selectedSize,
       color,
-      purchaseQuantity: quantity,
+      purchaseQuantity: this.userSelectedQuantity || 1,
     });
   }
 
   /**
-   * Handle wishlist event.
+   * Emits event to add product to wishlist
    */
   addToWishlist(product: Product): void {
     this.addToWishlistEvent.emit(product);
   }
 
   /**
-   * Handle compare event.
+   * Emits event to add product to compare list
    */
   addToCompare(product: Product): void {
     this.addToCompareEvent.emit(product);
   }
 
   /**
-   * Set the main image from thumbnail click.
+   * Updates the main product image
    */
   setMainImage(image: string): void {
     this.currentImage = image;
   }
 
   /**
-   * Show price range (VAT included).
+   * Returns price range (min-max) with VAT included
    */
-  getPriceRange(product: Product): string {
-    if (!product.sizes?.length) return 'No sizes available!';
-
-    const pricesWithVat = product.sizes.map(size => {
-      const price = product.onSale && size.salePrice !== null && size.salePrice !== undefined
-        ? size.salePrice
-        : size.price;
-      return this.getPriceWithVat(price);
-    });
-
-    const min = Math.min(...pricesWithVat);
-    const max = Math.max(...pricesWithVat);
-
-    return min === max ? `${min.toFixed(2)}$` : `${min.toFixed(2)}$ - ${max.toFixed(2)}$`;
-  }
-  loadUserCountryAndVatRate(): void {
-    this.authService.getCurrentUser().subscribe((user: User | null) => {
-      if (user?.country) {
-        this.userCountry = user.country;
-        this.vatRate = getVatRateByCountry(this.userCountry) || 0;
-      }
-      this.vatReady = true; // ✅ Trigger UI rendering only when ready
-    });
-  }
   getPriceRangeWithVat(product: Product): string {
     if (!product.sizes || product.sizes.length === 0) {
       return 'No sizes available!';
     }
 
     const pricesWithVat = product.sizes.map(size => {
-      const basePrice = product.onSale && size.salePrice !== null && size.salePrice !== undefined
+      const basePrice = product.onSale && size.salePrice != null
         ? size.salePrice
         : size.price;
-
       return this.getPriceWithVat(basePrice);
     });
 
@@ -170,10 +145,14 @@ export class ProductCardDetailComponent implements OnInit {
       ? `${min.toFixed(2)}$${label}`
       : `${min.toFixed(2)}$ - ${max.toFixed(2)}$${label}`;
   }
+
+  /**
+   * Calculates average rating from embedded comments
+   */
   calculateAverageRating(): void {
     const comments = this.product?.comments || [];
 
-    if (comments.length === 0) {
+    if (!comments.length) {
       this.averageRating = 0;
       return;
     }
@@ -181,6 +160,4 @@ export class ProductCardDetailComponent implements OnInit {
     const total = comments.reduce((sum, comment) => sum + comment.rating, 0);
     this.averageRating = total / comments.length;
   }
-
-
 }
