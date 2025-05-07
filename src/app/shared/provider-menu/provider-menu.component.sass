@@ -3,7 +3,7 @@
   grid-template-columns: 1fr
   gap: 0.5rem
   padding: 1rem
-  background: #fafafa
+  background: repeating-linear-gradient(45deg, #f1f1f1 50px, #f5f5f5 130px, #ddd 140px, #ddd 160px)
   border-bottom: 1px solid #ddd
 
   button
@@ -15,7 +15,8 @@
     padding: 0.75rem 1rem
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
     font-weight: 500
+    white-space: nowrap
 
-@media (min-width: 769px)
+@media (min-width: 700px)
   .admin-menu
-    grid-template-columns: repeat(6, 1fr)  // Two rows of 6 buttons
+    grid-template-columns: repeat(5, 1fr)

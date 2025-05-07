@@ -1,5 +1,5 @@
 $product-container-gap: 10px
-$mobile-breakpoint: 768px // Adjust breakpoint if needed
+$mobile-breakpoint: 768px
 
 .product-container
   display: grid
@@ -7,7 +7,6 @@ $mobile-breakpoint: 768px // Adjust breakpoint if needed
   gap: $product-container-gap
   padding: 0 10px
 
-/* Left Sidebar (Filters) */
 .sidebar
   grid-column: 1 / 2
 
@@ -16,27 +15,22 @@ $mobile-breakpoint: 768px // Adjust breakpoint if needed
   top: 10px
   align-self: start
 
-/* Center Content (Product Cards) */
 .main-content
   grid-column: 2 / 3
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
   gap: $product-container-gap
 
-/* Right Sidebar (Charts) */
 .sidebar-right
   grid-column: 3 / 4
   width: 100%
 
-/* Additional Sections */
 .additional-section
   margin-top: 20px
 
 .bottom-section
   margin-bottom: 20px
 
-
-/* spinner.component.sass */
 .spinner
   width: 40px
   height: 40px
@@ -51,8 +45,6 @@ $mobile-breakpoint: 768px // Adjust breakpoint if needed
   100%
     transform: rotate(360deg)
 
-
-/* ✅ Force Single-Column Layout on Small Screens */
 @media only screen and (max-width: $mobile-breakpoint)
   .product-container
     display: flex
@@ -67,10 +59,10 @@ $mobile-breakpoint: 768px // Adjust breakpoint if needed
     grid-row: auto
 
   .main-content
-    order: 2 // Ensure it appears below the filters
+    order: 2
 
   .sidebar
-    order: 1 // Filters appear first
+    order: 1
 
   .sidebar-right
-    order: 3 // Charts appear last
+    order: 3

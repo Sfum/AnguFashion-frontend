@@ -32,9 +32,9 @@
           <mat-tab label="Description">
             <div class="margin--md">
               <!-- Product name -->
-              <span class="font-primary margin__top--lg">{{ product.product_name }}</span>
+              <span class="font-primary margin__top--md">{{ product.product_name }}</span>
               <!-- Star rating display -->
-              <div class="container__stars margin__top--xxsm margin__bottom--xxsm" *ngIf="comments.length > 0">
+              <div class="container__stars margin__top--xsm margin__bottom--xxsm" *ngIf="comments.length > 0">
                 <div>
                   <!-- Display stars based on average rating -->
                   <mat-icon class="star" [ngClass]="{'filled': averageRating >= 1}">star</mat-icon>
@@ -45,13 +45,14 @@
                 </div>
                 <!-- Average rating display -->
               </div>
-              <div class="stars__average">{{ averageRating.toFixed(1) }}</div>
+
+              <div *ngIf="comments.length > 0" class="stars__average font-primary__label">{{ averageRating.toFixed(1) }}</div>
 
               <!-- Product title and description -->
               <div class="font-secondary opacity--lg poppins-semibold">{{ product.product_title }}...</div>
               <br>
               <div
-                class="font-secondary__small margin__bottom--sm poppins-extralight">{{ product.product_description }}</div>
+                class="font-secondary__small margin__bottom--sm">{{ product.product_description }}</div>
               <hr class="margin__bottom--sm">
               <!-- Dropdown for selecting product unit -->
               <mat-form-field appearance="outline">

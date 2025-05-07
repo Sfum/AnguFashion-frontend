@@ -15,6 +15,7 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
+  timestamp: number = new Date().getTime(); // Get current timestamp
 
   isLoading$ = this.productService.isLoading$; // Bind to service observable
   smallScreenColumns: string[] = ['product_name', 'sizesPrices', 'delete']; // Columns to show on small screens
@@ -37,7 +38,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   dataSource!: MatTableDataSource<Product>;
   products: Product[] = [];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   private refresh$ = new Subject<void>(); // Subject to trigger refreshes
   private unsubscribe$ = new Subject<void>(); // Subject for unsubscribing
   private productUpdatesSubscription: Subscription | undefined;
@@ -147,7 +150,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       );
     }
   }
-
+  // Get stock background color based on quantity
   getStockBackgroundColor(quantity: number): string {
     if (quantity === 0) {
       return 'red'; // Out of stock
@@ -157,9 +160,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
       return 'transparent'; // In stock
     }
   }
+
   // Get the relevant unit
   getUnit(unitType: 'size' | 'waist' | 'length' | 'fit' | 'kidsSize' | 'chest' | 'sleeve', size: number | string, sizeLabel: string): string {
     return this.productService.getUnit(unitType, size, sizeLabel);
+  }
+  updateTimestamp() {
+    this.timestamp = new Date().getTime(); // Update timestamp on demand (if needed)
   }
 
 }

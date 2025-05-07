@@ -68,7 +68,8 @@
         <mat-select formControlName="categoryId" class="margin__bottom--lg"
                     (selectionChange)="optionCategorySelected($event.value)">
           <!-- Loop through available categories and display them as options -->
-          <mat-option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.category_name }}</mat-option>
+          <mat-option *ngFor="let category of categories$ | async"
+                      [value]="category.id">{{ category.category_name }}</mat-option>
         </mat-select>
       </div>
     </div>
@@ -219,8 +220,7 @@
         </mat-error>
 
         <!-- Sale price input -->
-        <mat-label>Sale Price:</mat-label>
-        <div class="product-edit__toggle">
+        <div class="product-edit__toggle margin__top--xsm margin__bottom--xxsm">
           <div>
             <!-- Toggle for on sale status -->
             <div class="product-edit__toggle">
@@ -235,6 +235,7 @@
 
             <!-- Toggle for in bundle status -->
             <mat-label class="font-primary__label-small margin__right--xsm">In Bundle?:</mat-label>
+            <br>
             <mat-slide-toggle formControlName="in_bundle" class="margin__top--sm"></mat-slide-toggle>
           </div>
         </div>
@@ -253,7 +254,8 @@
             <mat-option value="weight">Weight</mat-option>
             <mat-option value="volume">Volume</mat-option>
           </mat-select>
-          <mat-error *ngIf="productForm.get('unitType')?.invalid && (productForm.get('unitType')?.dirty || productForm.get('unitType')?.touched)">
+          <mat-error
+            *ngIf="productForm.get('unitType')?.invalid && (productForm.get('unitType')?.dirty || productForm.get('unitType')?.touched)">
             <mat-error *ngIf="productForm.get('unitType')?.errors?.['required']">Unit Type is required.</mat-error>
           </mat-error>
         </mat-form-field>

@@ -11,9 +11,10 @@ import { SnackbarService } from '../../services/snackbar.service';
   styleUrls: ['./on-sale-category.component.sass'],
 })
 export class OnSaleCategoryComponent implements OnInit, OnDestroy {
-  categoryOnSaleForm: FormGroup; // Form group to handle the category on sale form
-  categories$: Observable<Category[]>; // Observable to hold the list of categories
-  private subscriptions: Subscription = new Subscription(); // Subscription to manage multiple subscriptions
+
+  categoryOnSaleForm: FormGroup;
+  categories$: Observable<Category[]>;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder, // FormBuilder for creating reactive forms
@@ -81,8 +82,8 @@ export class OnSaleCategoryComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Cleanup subscriptions to prevent memory leaks
   ngOnDestroy(): void {
-    // Cleanup subscriptions to prevent memory leaks
     this.subscriptions.unsubscribe();
   }
 }

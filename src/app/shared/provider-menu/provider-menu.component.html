@@ -1,17 +1,19 @@
 <nav class="admin-menu">
+
+  <button mat-raised-button class="font-primary" [routerLink]="[products.length ? '/add-product' : '/add-product-landing']">
+    <mat-icon>add_circle</mat-icon>
+    {{ products.length ? 'Add Product' : 'Start Here' }}
+  </button>
+
   <button mat-raised-button class="font-primary" [routerLink]="[products.length ? '/manage-products' : '/add-product-landing']">
     <mat-icon>settings</mat-icon>
     Products
   </button>
 
-  <button mat-raised-button class="font-primary" [routerLink]="[products.length ? '/add-product' : '/add-product-landing']">
-    <mat-icon>add_circle</mat-icon>
-    {{ products.length ? 'Add Product' : 'Start Products' }}
-  </button>
 
   <button mat-raised-button class="font-primary" [routerLink]="['/admin-report']">
     <mat-icon>bar_chart</mat-icon>
-    Sales Reports
+    Reports
   </button>
 
   <button mat-raised-button class="font-primary" [routerLink]="['/tickets']">
@@ -36,7 +38,7 @@
 
   <button mat-raised-button class="font-primary" [routerLink]="['/vat-summary']">
     <mat-icon>receipt_long</mat-icon>
-    VAT Summary
+    VAT
   </button>
 
   <button mat-raised-button class="font-primary" [routerLink]="['/vat-rate']">
@@ -45,7 +47,7 @@
   </button>
 
   <button mat-raised-button class="font-primary" [routerLink]="['/delivery']">
-    <mat-icon>van</mat-icon>
+    <mat-icon>local_shipping</mat-icon>
     Delivery
   </button>
 </nav>
