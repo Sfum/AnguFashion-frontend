@@ -42,7 +42,6 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Fetch current user details
     this.authService.getCurrentUser().subscribe(user => {
       if (user) {
         this.userCountry = user.country || '';
@@ -50,8 +49,10 @@ export class ShoppingCartComponent implements OnInit {
         this.userPostcode = user.postcode || '';
         this.userEmail = user.email || '';
 
+        // Fetch VAT rate based on the user country
+        this.updateVatRate();
         // Fetch delivery info after setting userCountry
-        this.fetchDeliveryRates();
+        this.updateDeliveryRates();
       }
 
       // Wait for VAT data to be ready
@@ -63,22 +64,36 @@ export class ShoppingCartComponent implements OnInit {
       });
     });
 
-    // Load country list for dropdown
+    // Load countries for the dropdown
+    this.loadCountries();
+  }
+
+  loadCountries(): void {
     this.http.get<string[]>('/assets/countries.json').subscribe({
       next: (data) => this.countries = data,
       error: (err) => console.error('Failed to load countries:', err),
     });
   }
 
-  /**
-   * Fetch delivery rates based on selected user country
-   */
-  fetchDeliveryRates(): void {
+  updateVatRate(): void {
+    // Update VAT rate based on the country
+    this.vatService.getAll().subscribe({
+      next: (rates) => {
+        const matched = rates.find(r => r.country.toLowerCase() === this.userCountry.toLowerCase());
+        this.vatRate = matched ? matched.rate : 0;
+        this.calculateTotals();  // Recalculate totals whenever VAT is updated
+      },
+      error: (err) => {
+        console.error('Failed to fetch VAT rates:', err);
+        this.vatRate = 0;  // Default to 0 if no rate found
+      }
+    });
+  }
+
+  updateDeliveryRates(): void {
     this.deliveryRateService.getAll().subscribe({
       next: (rates) => {
-        const matched = rates.find(r =>
-          r.country.toLowerCase() === this.userCountry.toLowerCase()
-        );
+        const matched = rates.find(r => r.country.toLowerCase() === this.userCountry.toLowerCase());
         this.deliveryFee = matched ? matched.rate : 0;
         this.deliveryMode = matched?.delivery_mode || '';
       },
@@ -130,9 +145,6 @@ export class ShoppingCartComponent implements OnInit {
       this.subtotal += basePrice * quantity;
       this.vatTotal += vatAmount * quantity;
     }
-
-    // Fetch delivery rate dynamically
-    this.fetchDeliveryRates();
   }
 
   /**
@@ -198,16 +210,10 @@ export class ShoppingCartComponent implements OnInit {
     return this.subtotal + this.vatTotal;
   }
 
-  /**
-   * Toggle address editing mode
-   */
   toggleAddressEdit(): void {
     this.editingAddress = !this.editingAddress;
   }
 
-  /**
-   * Save the updated address
-   */
   saveAddress(): void {
     this.authService.getCurrentUser().subscribe(user => {
       if (!user) return;
@@ -222,6 +228,9 @@ export class ShoppingCartComponent implements OnInit {
         next: () => {
           this.editingAddress = false;
           console.log('Address updated');
+          // Recalculate VAT and delivery rates after address change
+          this.updateVatRate();
+          this.updateDeliveryRates();
         },
         error: (err) => {
           console.error('Error updating address:', err);

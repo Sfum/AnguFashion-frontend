@@ -3,6 +3,7 @@ import { VatRate } from '../models/vat-rates';
 import { VatService } from '../services/vat-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { SnackbarService } from '../services/snackbar.service';  // Inject SnackbarService
 
 @Component({
   selector: 'app-vat-rate',
@@ -18,7 +19,8 @@ export class VatRateComponent implements OnInit {
   constructor(
     private service: VatService,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBarService: SnackbarService  // Inject SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +52,26 @@ export class VatRateComponent implements OnInit {
 
     const formValue = this.vatForm.value;
 
+    // Check if the country already exists, but only if we're not editing (i.e., creating a new entry)
+    if (!this.editingId) {
+      const isDuplicate = this.vatRates.some(rate => rate.country.toLowerCase() === formValue.country.toLowerCase());
+      if (isDuplicate) {
+        this.snackBarService.showSnackbar('This country already exists.');
+        return;
+      }
+    }
+
     if (this.editingId) {
-      this.service.update(this.editingId, formValue).subscribe(() => {
-        this.editingId = null;
-        this.vatForm.reset();
-        this.loadRates();
+      // Ask for confirmation before updating
+      this.snackBarService.showActionSnackbar('Are you sure you want to update this entry?', 'Yes', 'No')
+        .afterDismissed().subscribe(result => {
+        if (result.dismissedByAction) {
+          this.service.update(this.editingId, formValue).subscribe(() => {
+            this.editingId = null;
+            this.vatForm.reset();
+            this.loadRates();
+          });
+        }
       });
     } else {
       this.service.create(formValue).subscribe(() => {
@@ -73,7 +90,15 @@ export class VatRateComponent implements OnInit {
   }
 
   delete(id: string): void {
-    this.service.delete(id).subscribe(() => this.loadRates());
+    // Ask for confirmation before deleting
+    this.snackBarService.showActionSnackbar('Are you sure you want to delete this entry?', 'Yes', 'No')
+      .afterDismissed().subscribe(result => {
+      if (result.dismissedByAction) {
+        this.service.delete(id).subscribe(() => {
+          this.loadRates();
+        });
+      }
+    });
   }
 
   cancelEdit(): void {
