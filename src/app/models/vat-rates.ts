@@ -1,7 +1,5 @@
-// vat-rates.ts
 export interface VatRate {
   id?: string; // Optional ID for Firestore document
-  continent: string;
   country: string;
   rate: number;
 }

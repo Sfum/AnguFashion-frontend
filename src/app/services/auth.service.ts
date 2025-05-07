@@ -366,6 +366,14 @@ export class AuthService {
         return null;
       });
   }
+  updateUserAddress(userId: string, address: { address: string, postcode: string, country: string }): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/${userId}/update-address`, address).pipe(
+      catchError(error => {
+        console.error('Failed to update user address:', error);
+        return throwError(() => new Error('Failed to update address.'));
+      })
+    );
+  }
 
 
 }

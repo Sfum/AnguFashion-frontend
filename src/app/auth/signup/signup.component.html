@@ -65,15 +65,19 @@
         </mat-error>
       </div>
 
-      <!-- Country input field -->
+      <!-- Country dropdown -->
       <div class="margin__bottom--xsm">
         <mat-label class="font-secondary__small">Country:</mat-label>
-        <input matInput type="text" formControlName="country">
-        <!-- Error messages for country validation -->
-        <mat-error *ngIf="signupForm.get('country')?.invalid && (signupForm.get('country')?.dirty || signupForm.get('country')?.touched)">
-          <mat-error *ngIf="signupForm.get('country')?.errors?.['required']">Country is required.</mat-error>
+        <mat-select formControlName="country">
+          <mat-option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="signupForm.get('country')?.touched && signupForm.get('country')?.hasError('required')">
+          Country is required.
         </mat-error>
       </div>
+
 
       <!-- Checkbox for determining if the user is a content provider -->
       <div class="margin__top--md margin__bottom--md">

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DeliveryRate } from '../models/delivery-rates';
-import {  DeliveryRateService} from '../services/delivery-rate.service';
+import { DeliveryRateService } from '../services/delivery-rate.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-delivery-rate',
@@ -12,10 +13,12 @@ export class DeliveryRateComponent implements OnInit {
   deliveryRates: DeliveryRate[] = [];
   deliveryForm!: FormGroup;
   editingId: string | null = null;
+  countries: string[] = []; // Array to hold countries
 
   constructor(
     private service: DeliveryRateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -26,10 +29,21 @@ export class DeliveryRateComponent implements OnInit {
     });
 
     this.loadRates();
+    this.loadCountries(); // Load countries for the dropdown
+  }
+
+  loadCountries(): void {
+    // Load countries from a local JSON file (or API if needed)
+    this.http.get<string[]>('/assets/countries.json').subscribe({
+      next: (data) => this.countries = data,
+      error: (err) => console.error('Failed to load countries:', err),
+    });
   }
 
   loadRates(): void {
-    this.service.getAll().subscribe((rates) => (this.deliveryRates = rates));
+    this.service.getAll().subscribe((rates) => {
+      this.deliveryRates = rates;
+    });
   }
 
   submit(): void {

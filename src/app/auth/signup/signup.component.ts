@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-signup',
@@ -10,11 +11,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
+  countries: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private http: HttpClient
   ) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -32,6 +35,11 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     // Watch changes to content provider checkbox
+    this.http.get<string[]>('/assets/countries.json').subscribe({
+      next: (data) => this.countries = data,
+      error: (err) => console.error('Failed to load countries:', err),
+    });
+
     this.signupForm.get('isContentProvider')?.valueChanges.subscribe(isContentProvider => {
       if (isContentProvider) {
         this.signupForm.get('brand_name')?.setValidators([Validators.required]);

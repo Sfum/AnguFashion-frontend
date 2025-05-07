@@ -6,6 +6,7 @@ import { WishlistService } from '../services/wishlist.service';
 import { AuthService } from '../services/auth.service';
 import { VatService } from '../services/vat-service.service';
 import { DeliveryRateService } from '../services/delivery-rate.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -14,10 +15,11 @@ import { DeliveryRateService } from '../services/delivery-rate.service';
 })
 export class ShoppingCartComponent implements OnInit {
   products: Product[] = [];
+  deliveryFee: number = 0;
+  deliveryMode: string = '';
 
   subtotal = 0;
   vatTotal = 0;
-  deliveryFee = 0;
 
   userCountry = '';
   vatRate = 0;
@@ -26,22 +28,30 @@ export class ShoppingCartComponent implements OnInit {
   userPostcode = '';
   userEmail = '';
 
+  editingAddress = false;
+  countries: string[] = [];
+
   constructor(
     private cartService: CartService,
     private wishlistService: WishlistService,
     private router: Router,
     private authService: AuthService,
     private vatService: VatService,
-    private deliveryRateService: DeliveryRateService
+    private deliveryRateService: DeliveryRateService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
+    // Fetch current user details
     this.authService.getCurrentUser().subscribe(user => {
       if (user) {
         this.userCountry = user.country || '';
         this.userAddress = user.address || '';
         this.userPostcode = user.postcode || '';
         this.userEmail = user.email || '';
+
+        // Fetch delivery info after setting userCountry
+        this.fetchDeliveryRates();
       }
 
       // Wait for VAT data to be ready
@@ -51,6 +61,32 @@ export class ShoppingCartComponent implements OnInit {
           this.loadCart();
         }
       });
+    });
+
+    // Load country list for dropdown
+    this.http.get<string[]>('/assets/countries.json').subscribe({
+      next: (data) => this.countries = data,
+      error: (err) => console.error('Failed to load countries:', err),
+    });
+  }
+
+  /**
+   * Fetch delivery rates based on selected user country
+   */
+  fetchDeliveryRates(): void {
+    this.deliveryRateService.getAll().subscribe({
+      next: (rates) => {
+        const matched = rates.find(r =>
+          r.country.toLowerCase() === this.userCountry.toLowerCase()
+        );
+        this.deliveryFee = matched ? matched.rate : 0;
+        this.deliveryMode = matched?.delivery_mode || '';
+      },
+      error: (err) => {
+        console.error('Failed to fetch delivery rates:', err);
+        this.deliveryFee = 0;
+        this.deliveryMode = '';
+      }
     });
   }
 
@@ -96,16 +132,7 @@ export class ShoppingCartComponent implements OnInit {
     }
 
     // Fetch delivery rate dynamically
-    this.deliveryRateService.getAll().subscribe({
-      next: (rates) => {
-        const match = rates.find(rate => rate.country.toLowerCase() === this.userCountry.toLowerCase());
-        this.deliveryFee = match ? match.rate : 0;
-      },
-      error: (err) => {
-        console.error('Failed to fetch delivery rates:', err);
-        this.deliveryFee = 0;
-      }
-    });
+    this.fetchDeliveryRates();
   }
 
   /**
@@ -169,5 +196,37 @@ export class ShoppingCartComponent implements OnInit {
 
   get total(): number {
     return this.subtotal + this.vatTotal;
+  }
+
+  /**
+   * Toggle address editing mode
+   */
+  toggleAddressEdit(): void {
+    this.editingAddress = !this.editingAddress;
+  }
+
+  /**
+   * Save the updated address
+   */
+  saveAddress(): void {
+    this.authService.getCurrentUser().subscribe(user => {
+      if (!user) return;
+
+      const updated = {
+        address: this.userAddress,
+        postcode: this.userPostcode,
+        country: this.userCountry
+      };
+
+      this.authService.updateUserAddress(user.uid, updated).subscribe({
+        next: () => {
+          this.editingAddress = false;
+          console.log('Address updated');
+        },
+        error: (err) => {
+          console.error('Error updating address:', err);
+        }
+      });
+    });
   }
 }

@@ -10,25 +10,47 @@
       {{ userAddress }}<br />
       {{ userPostcode }}<br />
       {{ userCountry }}
+      <br>
+
+      <!-- Edit Button -->
+      <button mat-raised-button (click)="toggleAddressEdit()" class="btn btn--small margin__top--xsm">
+        {{ editingAddress ? 'Cancel' : 'Edit Address' }}
+      </button>
+
+      <!-- Edit Form -->
+      <div *ngIf="editingAddress" class="margin__top--sm">
+        <input matInput [(ngModel)]="userAddress" placeholder="Address" class="form__input" />
+        <input matInput [(ngModel)]="userPostcode" placeholder="Postcode" class="form__input margin__bottom--xxsm" />
+
+        <!-- Country dropdown -->
+        <mat-form-field class="form__input margin__bottom--xxsm">
+          <mat-label>Country</mat-label>
+          <mat-select [(ngModel)]="userCountry" placeholder="Select your country">
+            <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button (click)="saveAddress()" class="btn btn--primary margin__top--xsm">Save</button>
+      </div>
     </div>
 
     <!-- Subtotal -->
-    <div class="margin__left--md margin__top--sm font-label">
-      Subtotal: {{ subtotal | currency }}
+    <div class="margin__left--md margin__top--sm margin__bottom--xxsm">
+      <strong>Subtotal</strong>: {{ subtotal | currency }}
     </div>
 
     <!-- VAT -->
-    <div class="margin__left--md font-label" *ngIf="vatTotal > 0">
-      VAT <span *ngIf="userCountry">({{ userCountry }})</span>: {{ vatTotal | currency }}
+    <div class="margin__left--md margin__bottom--xxsm" *ngIf="vatTotal > 0">
+      <strong>VAT</strong><span *ngIf="userCountry"> ({{ userCountry }})</span>: {{ vatTotal | currency }}
     </div>
 
     <!-- Delivery Fee -->
-    <div class="margin__left--md font-label">
-      Delivery Fee: {{ deliveryFee | currency }}
+    <div class="margin__left--md">
+      <strong>Delivery</strong> <div *ngIf="deliveryMode">({{ deliveryMode }})</div>: {{ deliveryFee | currency }}
     </div>
 
     <!-- Total -->
-    <div class="margin__left--md font-label margin__top--xsm">
+    <div class="font-primary margin__left--md font-label margin__top--xsm">
       <strong>Total: {{ grandTotal | currency }}</strong>
     </div>
   </div>
@@ -45,6 +67,5 @@
       (quantityChangeEvent)="onQuantityChange($event)">
     </app-shopping-cart-detail>
     <div class="margin__bottom--md"><app-payment></app-payment></div>
-
   </div>
 </div>
