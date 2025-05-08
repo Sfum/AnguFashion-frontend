@@ -6,7 +6,7 @@
 
     <!-- Country Dropdown -->
     <mat-form-field>
-      <mat-label>Country</mat-label>
+      <mat-label class="font-small">Country</mat-label>
       <mat-select formControlName="country" required>
         <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
       </mat-select>
@@ -16,7 +16,7 @@
     <input class="margin__bottom--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
 
     <!-- Submit button -->
-    <button mat-raised-button type="submit">
+    <button mat-raised-button type="submit" class="font-small">
       {{ editingId ? 'Update' : 'Create' }}
     </button>
 
@@ -27,19 +27,19 @@
   <hr />
 
   <!-- Vat Rate Table -->
-  <table mat-table [dataSource]="vatRates" class="mat-elevation-z2">
+  <table mat-table [dataSource]="vatRates" class="mat-elevation-z2 margin__bottom--md">
     <ng-container matColumnDef="country">
-      <th mat-header-cell *matHeaderCellDef>Country</th>
-      <td mat-cell *matCellDef="let rate">{{ rate.country }}</td>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Country</th>
+      <td mat-cell *matCellDef="let rate" class="font-small">{{ rate.country }}</td>
     </ng-container>
 
     <ng-container matColumnDef="rate">
-      <th mat-header-cell *matHeaderCellDef>Rate</th>
-      <td mat-cell *matCellDef="let rate">{{ rate.rate }}%</td>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Rate</th>
+      <td mat-cell *matCellDef="let rate" class="font-small">{{ rate.rate }}%</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Actions</th>
       <td mat-cell *matCellDef="let rate">
         <button mat-icon-button (click)="edit(rate)">
           <mat-icon>edit</mat-icon>

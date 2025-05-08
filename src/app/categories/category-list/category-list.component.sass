@@ -3,7 +3,15 @@
 .mat-table
   width: 100%
 
-.cell_hover:hover
-  background-color: hsl(87, 60%, 45%)
-  color: white
+.cell_hover
+  &:hover
+    background-color: hsl(87, 60%, 45%)
+    color: white
 
+.delete-icon
+  cursor: pointer
+  color: red
+  transition: color 0.3s
+
+  &:hover
+    color: darkred

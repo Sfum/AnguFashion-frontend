@@ -1,36 +1,34 @@
-<div>
-  <mat-card class="margin--md padding--lg">
-    <div class="font-primary margin__bottom--sm">Set Brand On Sale</div>
+<div class="margin--sm padding--md">
+  <div class="font-primary margin__bottom--sm">Set Brand On Sale</div>
 
-    <!-- Form for setting a brand on sale, bound to `brandOnSaleForm` form group -->
-    <form [formGroup]="brandOnSaleForm" (ngSubmit)="setBrandOnSale()">
+  <!-- Form for setting a brand on sale, bound to `brandOnSaleForm` form group -->
+  <form [formGroup]="brandOnSaleForm" (ngSubmit)="setBrandOnSale()">
 
-      <!-- Form field for selecting a brand -->
-      <mat-form-field>
-        <mat-label class="font-secondary__small">Select Brand</mat-label>
-        <!-- Dropdown select for choosing a brand -->
-        <mat-select formControlName="brandId">
-          <!-- Option elements for each brand in the brands$ observable -->
-          <mat-option *ngFor="let brand of brands$ | async" [value]="brand.id">
-            {{ brand.brand_name }} <!-- Display the brand name -->
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- Form field for selecting a brand -->
+    <mat-form-field>
+      <mat-label class="font-secondary__small">Select Brand</mat-label>
+      <!-- Dropdown select for choosing a brand -->
+      <mat-select formControlName="brandId">
+        <!-- Option elements for each brand in the brands$ observable -->
+        <mat-option *ngFor="let brand of brands$ | async" [value]="brand.id">
+          {{ brand.brand_name }} <!-- Display the brand name -->
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- Form field for entering a discount percentage -->
-      <mat-form-field>
-        <mat-label class="font-secondary__small">Discount Percentage</mat-label>
-        <!-- Input field for discount percentage, allowing only numbers from 0 to 100 -->
-        <input matInput type="number" formControlName="discountPercentage" min="0" max="100">
-      </mat-form-field>
-      <div class="button__group">
-        <!-- Submit button to apply the discount and set the brand on sale -->
-        <button mat-raised-button type="submit"><label>Set On Sale</label></button>
+    <!-- Form field for entering a discount percentage -->
+    <mat-form-field>
+      <mat-label class="font-secondary__small">Discount Percentage</mat-label>
+      <!-- Input field for discount percentage, allowing only numbers from 0 to 100 -->
+      <input matInput type="number" formControlName="discountPercentage" min="0" max="100">
+    </mat-form-field>
+    <div class="button__group">
+      <!-- Submit button to apply the discount and set the brand on sale -->
+      <button mat-raised-button type="submit"><label>Set On Sale</label></button>
 
-        <!-- Button to navigate back to the manage products page -->
-        <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'><label>Back</label>
-        </button>
-      </div>
-    </form>
-  </mat-card>
+      <!-- Button to navigate back to the manage products page -->
+      <button mat-raised-button class="margin__left--xxsm" [routerLink]='["/manage-products"]'><label>Back</label>
+      </button>
+    </div>
+  </form>
 </div>

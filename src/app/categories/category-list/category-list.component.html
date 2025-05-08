@@ -1,42 +1,46 @@
 <section class="container__medium mat-elevation-z2">
-  <button mat-raised-button class="margin__top--lg margin__left--sm" [routerLink]="['/add-category']">
+  <button mat-raised-button class="margin__top--lg margin__left--md margin__bottom--sm" [routerLink]="['/add-brand']">
     <label>Create Category</label>
   </button>
 
-  <!-- Table displaying categories -->
-  <table mat-table [dataSource]="dataSource" class="mat-table">
-    <!-- Column for category names -->
-    <ng-container matColumnDef="category_name">
-      <!-- Header cell for category name column -->
-      <th mat-header-cell *matHeaderCellDef class="font-small"> Category Name </th>
-      <!-- Data cell for category name, with a clickable link to edit the category -->
-      <td mat-cell class="cell_hover" *matCellDef="let category" [routerLink]="['/', 'category-edit', category._id]">
-        {{ category.category_name }} <!-- Display category name -->
-      </td>
-    </ng-container>
+  <div class="margin--md">
+    <!-- Table displaying the list of categories -->
+    <table mat-table [dataSource]="dataSource" class="mat-table">
+      <!-- Category Name Column -->
+      <ng-container matColumnDef="category_name">
+        <th mat-header-cell *matHeaderCellDef class="font-small">Category Name</th>
+        <td mat-cell class="cell_hover font-small" *matCellDef="let category" [routerLink]="['/', 'category-edit', category._id]">
+          {{ category.category_name }}
+        </td>
+      </ng-container>
 
-    <!-- Column for category descriptions -->
-    <ng-container matColumnDef="category_description">
-      <th mat-header-cell *matHeaderCellDef class="font-small"> Category Description </th>
-      <td mat-cell class="cell_hover" *matCellDef="let category" [routerLink]="['/', 'category-edit', category._id]">
-        {{ category.category_description | slice: 0:70 }}...read more <!-- Display a truncated description -->
-      </td>
-    </ng-container>
+      <!-- Category Description Column -->
+      <ng-container matColumnDef="category_description">
+        <th mat-header-cell *matHeaderCellDef class="font-small">Category Description</th>
+        <td mat-cell class="cell_hover font-small" *matCellDef="let category" [routerLink]="['/', 'category-edit', category._id]">
+          {{ category.category_description | slice: 0:70 }}...read more
+        </td>
+      </ng-container>
 
-    <!-- Column for delete actions -->
-    <ng-container matColumnDef="delete">
-      <mat-header-cell *matHeaderCellDef class="font-small">Delete</mat-header-cell>
-      <mat-cell *matCellDef="let category">
-        <mat-icon (click)="deleteCategory(category._id)">delete</mat-icon> <!-- Icon to delete the category -->
-      </mat-cell>
-    </ng-container>
+      <!-- Delete Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="font-small">Delete</th>
+        <td mat-cell *matCellDef="let category">
+          <!-- Delete Icon inside the cell -->
+          <mat-icon class="delete-icon" (click)="deleteCategory(category._id)">delete</mat-icon>
+        </td>
+      </ng-container>
 
-    <!-- Table rows for headers and data -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <!-- Table Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-  <!-- Pagination controls for the table -->
+  </div>
+
+
+
+  <!-- Pagination Controls -->
   <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
   <app-on-sale-category></app-on-sale-category>
   <hr>

@@ -1,9 +1,9 @@
 <!-- Show spinner while roles and user data are loading -->
 <div *ngIf="isLoading" class="spinner-container">
-  <app-spinner></app-spinner>
+  <app-spinner></app-spinner> <!-- This will show the loading spinner -->
 </div>
 
-<!-- Main content only shown once loading is complete -->
+<!-- Main content -->
 <ng-container *ngIf="!isLoading">
   <ng-container *ngIf="user$ | async as user; else notAuthenticated">
 
@@ -68,6 +68,7 @@
     </section>
   </ng-template>
 
+  <!-- Footer Section -->
   <footer class="bottom-section">
     <app-users-also-bought></app-users-also-bought>
   </footer>

@@ -13,19 +13,20 @@
       <div class="left-column">
         <!-- Seller Info -->
         <div class="invoice-section margin__bottom--sm">
-          <div class="font-secondary__small">Seller Information</div>
+          <div class="font-secondary__small margin__bottom--xxsm">Seller Information</div>
           <div *ngIf="admin">
             <strong class="font-primary">{{ admin.displayName }}</strong>
-            <div class="font-primary">{{ admin.address }}</div>
-            <div class="font-primary">{{ admin.postcode }}</div>
-            <div class="font-primary">{{ admin.country }}</div>
+            <div class="font-secondary__small">{{ admin.address }}</div>
+            <div class="font-secondary__small">{{ admin.postcode }}</div>
+            <div class="font-secondary__small">{{ admin.country }}</div>
           </div>
         </div>
 
         <!-- Buyer Info -->
-        <div class="invoice-section margin__top--lg">
-          <div class="font-secondary__small">Buyer Information</div>
+        <div class="invoice-section">
+          <div class="font-secondary__small margin__bottom--xxsm">Buyer Information</div>
           <p><strong class="font-primary">{{ buyer.displayName }}</strong></p>
+          <div class="font-small margin__bottom--xxsm">Delivery to:</div>
           <div class="font-secondary__small">{{ buyer.address }}</div>
           <div class="font-secondary__small">{{ buyer.postcode }}</div>
           <div class="font-secondary__small">{{ buyer.country }}</div>

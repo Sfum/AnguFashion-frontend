@@ -26,10 +26,7 @@
   </div>
 
   <mat-card-content>
-    <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="30"></mat-progress-spinner>
-    <mat-error *ngIf="error">{{ error }}</mat-error>
-
-    <table mat-table [dataSource]="filteredVatSummaries" class="mat-elevation-z2" *ngIf="filteredVatSummaries.length > 0">
+    <table mat-table [dataSource]="filteredVatSummaries" class="mat-elevation-z2 margin__bottom--md" *ngIf="filteredVatSummaries.length > 0">
       <!-- Country Column -->
       <ng-container matColumnDef="country">
         <th mat-header-cell *matHeaderCellDef class="font-small"> Country </th>

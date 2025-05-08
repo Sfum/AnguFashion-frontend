@@ -30,29 +30,29 @@
   <hr />
 
   <!-- Delivery Rate Table -->
-  <table mat-table [dataSource]="deliveryRates" class="mat-elevation-z2">
+  <table mat-table [dataSource]="deliveryRates" class="mat-elevation-z2 margin__bottom--md">
     <ng-container matColumnDef="country">
-      <th mat-header-cell *matHeaderCellDef>Country</th>
-      <td mat-cell *matCellDef="let rate">{{ rate.country }}</td>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Country</th>
+      <td mat-cell *matCellDef="let rate" class="font-small">{{ rate.country }}</td>
     </ng-container>
 
     <ng-container matColumnDef="delivery_mode">
-      <th mat-header-cell *matHeaderCellDef>Mode</th>
-      <td mat-cell *matCellDef="let rate">{{ rate.delivery_mode }}</td>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Mode</th>
+      <td mat-cell *matCellDef="let rate" class="font-small">{{ rate.delivery_mode }}</td>
     </ng-container>
 
     <ng-container matColumnDef="rate">
-      <th mat-header-cell *matHeaderCellDef>Rate</th>
-      <td mat-cell *matCellDef="let rate">{{ rate.rate | currency }}</td>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Rate</th>
+      <td mat-cell *matCellDef="let rate" class="font-small">{{ rate.rate | currency }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <th mat-header-cell *matHeaderCellDef class="font-small">Actions</th>
       <td mat-cell *matCellDef="let rate">
         <button mat-icon-button (click)="edit(rate)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="delete(rate.id!)">
+        <button mat-icon-button (click)="delete(rate.id!)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

@@ -101,7 +101,7 @@
     </div>
 
     <!-- Size section -->
-    <div class="container__main margin__bottom--md">
+    <div class="container__main margin__bottom--sm">
       <div class="container__main-left">
         <mat-label class="font-primary__label-small">Unit</mat-label>
       </div>
@@ -224,8 +224,8 @@
           <div>
             <!-- Toggle for on sale status -->
             <div class="product-edit__toggle">
-              <mat-label class="font-primary__label-small">On Sale:</mat-label>
-              <mat-slide-toggle
+              <mat-label class="font-primary__label-small margin__bottom--xxsm">On Sale:</mat-label>
+              <mat-slide-toggle class="margin__bottom--sm"
                 formControlName="onSale"
                 (change)="updateSalePrices()"
               ></mat-slide-toggle>
@@ -234,9 +234,9 @@
           <div>
 
             <!-- Toggle for in bundle status -->
-            <mat-label class="font-primary__label-small margin__right--xsm">In Bundle?:</mat-label>
+            <mat-label class="font-primary__label-small">In Bundle?:</mat-label>
             <br>
-            <mat-slide-toggle formControlName="in_bundle" class="margin__top--sm"></mat-slide-toggle>
+            <mat-slide-toggle formControlName="in_bundle" class="margin__top--xxsm"></mat-slide-toggle>
           </div>
         </div>
       </div>
