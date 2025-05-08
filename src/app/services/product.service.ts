@@ -12,7 +12,7 @@ import {
   shareReplay,
   throwError, takeUntil,
 } from 'rxjs';
-import {Product, ProductComment} from '../models/product';
+import {Product, ProductComment, ProductSize} from '../models/product';
 import {CategoryService} from './category.service';
 import {BrandService} from './brand.service';
 import {Category} from '../models/category';
@@ -695,5 +695,17 @@ export class ProductService {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+  // Update a specific size of a product
+  updateProductSize(productId: string, sizeId: string, updatedSize: ProductSize): Observable<void> {
+    return this.httpClient.put<void>(`${this.productsURL}/${productId}/sizes/${sizeId}`, updatedSize).pipe(
+      tap(() => {
+        console.log(`Size ${sizeId} updated for product ${productId}.`);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error updating size:', error);
+        return throwError(() => new Error('Failed to update size'));
+      })
+    );
   }
 }

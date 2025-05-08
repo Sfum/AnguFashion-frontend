@@ -10,7 +10,7 @@ import { SnackbarService } from '../../services/snackbar.service';
   templateUrl: './on-sale-category.component.html',
   styleUrls: ['./on-sale-category.component.sass'],
 })
-export class OnSaleCategoryComponent implements OnInit, OnDestroy {
+export class OnSaleCategoryComponent implements OnDestroy {
 
   categoryOnSaleForm: FormGroup;
   categories$: Observable<Category[]>;
@@ -34,27 +34,18 @@ export class OnSaleCategoryComponent implements OnInit, OnDestroy {
     this.categories$ = this.productService.categories$;
   }
 
-  ngOnInit(): void {
-    // OnInit lifecycle hook (currently not used, but can be implemented if needed)
-  }
-
   // Method to apply a discount to products of a selected category
   setCategoryOnSale(): void {
-    // Check if the form is valid
     if (this.categoryOnSaleForm.invalid) {
-      // Show an error message if the form is invalid
       this.snackbarService.showSnackbar('Please fill in all required fields.');
       return;
     }
 
-    // Extract form values
     const { categoryId, discountPercentage } = this.categoryOnSaleForm.value;
 
-    // Subscribe to the product service to get products by category
     this.subscriptions.add(
       this.productService.getProductsByCategory(categoryId).subscribe((products) => {
         products.forEach((product) => {
-          // Calculate the sale price based on discount percentage
           const salePrice = product.price * (1 - discountPercentage / 100);
           const updatedProduct = {
             ...product,
@@ -63,24 +54,43 @@ export class OnSaleCategoryComponent implements OnInit, OnDestroy {
             onSale: true,
           };
 
-          // Update each product with new sale information
-          this.productService
-            // @ts-ignore
-            .updateProduct(product.id, updatedProduct)
-            .subscribe({
+          // Update the product with the new sale price
+          this.productService.updateProduct(product.id.toString(), updatedProduct).subscribe({
+            next: () => {
+              console.log(`Product ${product.id} updated successfully.`);
+            },
+            error: (error) => {
+              console.error(`Error updating product ${product.id}: `, error);
+            },
+          });
+
+          // Update each size with the new sale price
+          product.sizes.forEach((size) => {
+            const updatedSize = {
+              ...size,
+              salePrice: size.price * (1 - discountPercentage / 100)
+            };
+
+            // Pass 3 arguments to updateProductSize: productId, sizeId, updatedSize
+            this.productService.updateProductSize(
+              product.id.toString(),  // productId as string
+              size.id.toString(),      // sizeId as string
+              updatedSize              // updated size object
+            ).subscribe({
               next: () => {
-                // Log success message
-                console.log(`Product ${product.id} updated successfully.`);
+                console.log(`Size ${size.id} updated for product ${product.id}.`);
               },
-              error: (error) => {
-                // Log error message
-                console.error(`Error updating product ${product.id}: `, error);
+              error: (err) => {
+                console.error(`Error updating size ${size.id}:`, err);
               },
             });
+          });
         });
       }),
     );
   }
+
+
 
   // Cleanup subscriptions to prevent memory leaks
   ngOnDestroy(): void {
