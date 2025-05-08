@@ -7,9 +7,9 @@ import { ProductService } from '../../../services/product.service';
   styleUrls: ['./sizes-filter.component.sass'],
 })
 export class SizesFilterComponent implements OnInit {
+
   availableSizes: string[] = [];
   selectedSizes: string[] = [];
-  useLb: boolean = false; // Toggle state for weight units
 
   constructor(private productService: ProductService) {}
 

@@ -8,6 +8,7 @@ import { ProductService } from '../../../services/product.service';
   styleUrls: ['./price-filter.component.sass'],
 })
 export class PriceFilterComponent {
+
   // FormGroup to manage the price form controls
   priceForm: FormGroup;
 

@@ -1,21 +1,27 @@
 <div class="size-filter">
+
+  <!-- Header for the size filter section -->
   <div class="font-primary margin__top--md margin__bottom--sm">
     Filter by Size
   </div>
 
+  <!-- Check if there are available sizes; if so, display size buttons -->
   <div *ngIf="availableSizes.length > 0; else noSizes" class="size-buttons">
+
+    <!-- Loop through the available sizes and create a button for each size -->
     <button mat-fab
             *ngFor="let size of availableSizes"
             [ngClass]="{ selected: isSelected(size) }"
-            (click)="onSizeClick(size)"
+    (click)="onSizeClick(size)"
     >
-      <p>
-        {{ size || 0 }}
-      </p>
-
+    <!-- Display the size, or 0 if the size is undefined or null -->
+    <p>
+      {{ size || 0 }}
+    </p>
     </button>
   </div>
 
+  <!-- Template to display when no sizes are available for filtering -->
   <ng-template #noSizes>
     <p>No sizes available for filtering.</p>
   </ng-template>

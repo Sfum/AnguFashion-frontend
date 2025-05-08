@@ -5,7 +5,7 @@
     </div>
 
     <!-- Country Dropdown -->
-    <mat-form-field>
+    <mat-form-field class="margin__right--xsm">
       <mat-label>Country</mat-label>
       <mat-select formControlName="country" required>
         <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
@@ -13,10 +13,10 @@
     </mat-form-field>
 
     <!-- Delivery Mode input -->
-    <input class="margin__bottom--xxsm" matInput placeholder="Delivery Mode" formControlName="delivery_mode" required />
+    <input class="margin__bottom--xxsm margin__right--xsm" matInput placeholder="Delivery Mode" formControlName="delivery_mode" required />
 
     <!-- Rate input -->
-    <input class="margin__bottom--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
+    <input class="margin__bottom--xsm margin__right--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
 
     <!-- Submit button -->
     <button mat-raised-button type="submit">
@@ -26,8 +26,6 @@
     <!-- Cancel button (only visible if editing) -->
     <button *ngIf="editingId" mat-button type="button" (click)="cancelEdit()">Cancel</button>
   </form>
-
-  <hr />
 
   <!-- Delivery Rate Table -->
   <table mat-table [dataSource]="deliveryRates" class="mat-elevation-z2 margin__bottom--md">

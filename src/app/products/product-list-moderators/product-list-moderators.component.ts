@@ -32,42 +32,45 @@ export class ProductListModeratorsComponent implements OnInit {
     private snackbarService: SnackbarService,
   ) {}
 
+  // Initialization lifecycle hook to set up the component to fetch products by the logged-in user
   ngOnInit(): void {
+    // Subscribe to the user observable to get the current logged-in user
     this.authService.user$.subscribe((user) => {
       if (user) {
+        // Check if the logged-in user is a moderator
         this.authService.isModerator().subscribe((isModerator) => {
           if (isModerator) {
+            // Fetch the products uploaded by the logged-in user if they are a moderator
             this.productService
               .getProductsByUploader(user.uid)
               .subscribe((products) => {
-                this.products = products;
-                this.dataSource = new MatTableDataSource<Product>(
-                  this.products,
-                );
-                this.dataSource.paginator = this.paginator;
+                this.products = products;  // Store fetched products in the products array
+                this.dataSource = new MatTableDataSource<Product>(this.products);  // Set the data source for the table
+                this.dataSource.paginator = this.paginator;  // Attach the paginator to the data source
               });
           }
         });
       }
     });
   }
-
+  // Method to delete a product by its ID
   deleteProduct(id: string): void {
-    // Confirm deletion with user
+    // Ask the user to confirm the deletion of the product
     if (confirm('Are you sure you want to delete this product?')) {
-      // Use subscribe instead of then() as deleteProduct returns an Observable
+      // Call deleteProduct from ProductService to delete the product
       this.productService.deleteProduct(id).subscribe(
         () => {
-          // Show success notification
+          // On successful deletion, show a success notification
           this.snackbarService.showSnackbar('Product deleted successfully');
-          // Refresh product list after deletion
+
+          // Refresh the product list after deletion
           this.productService.getProducts().subscribe((products) => {
-            this.products = products;
-            this.dataSource.data = this.products; // Update data source
+            this.products = products;  // Update the product list
+            this.dataSource.data = this.products;  // Refresh the table's data source with the updated product list
           });
         },
         (error) => {
-          // Show error notification in case of failure
+          // Show an error notification if the deletion fails
           console.error('Error deleting product: ', error);
           this.snackbarService.showSnackbar('Failed to delete product');
         },

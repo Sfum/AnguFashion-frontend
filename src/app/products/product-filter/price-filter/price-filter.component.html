@@ -31,10 +31,8 @@
       <!-- Validation message for the minimum value (in this case, ensuring price is not negative) -->
       <small *ngIf="priceForm.get('maxPrice')?.errors?.['min']">Max Price cannot be negative</small>
     </div>
-
   </div>
 
   <!-- Submit button, disabled if the form is invalid -->
   <button mat-raised-button class="screen__sm--hidden margin__bottom--sm" type="submit" [disabled]="priceForm.invalid">Filter</button>
-
 </form>

@@ -10,9 +10,9 @@
   <div class="product-card margin__left--md">
 
     <!-- Loop through the products related to the category and display their image -->
-    <img class="image margin__top--xxsm"
+    <img class="image margin__top--xxsm margin__right--xxsm"
          [routerLink]="'/products/' + product.id"
-         [src]="product.product_image"
+         [src]="product.product_image[0]"
          *ngFor="let product of getCategoryProducts() | slice: 0:4"
          alt="Product Image" width="80px" height="80px">
   </div>

@@ -1,10 +1,3 @@
-<!-- Loop through the products array and render an app-product-card-detail component for each product -->
-<!-- Bind the current product in the loop to the product input property of the component -->
-<!-- Listen for the addToWishlistEvent emitted from app-product-card-detail -->
-<!-- When the event is triggered, call the onAddToWishlist method and pass the product as $event -->
-<!-- Listen for the addToCartEvent emitted from app-product-card-detail -->
-<!-- When the event is triggered, call the onAddToCart method and pass the product as $event -->
-
 <app-product-card-detail *ngFor="let product of products"
                          [product]="product"
                          (addToWishlistEvent)="onAddToWishlist($event)">

@@ -5,7 +5,7 @@
     </div>
 
     <!-- Country Dropdown -->
-    <mat-form-field>
+    <mat-form-field class="margin__right--xsm">
       <mat-label class="font-small">Country</mat-label>
       <mat-select formControlName="country" required>
         <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <!-- Rate input -->
-    <input class="margin__bottom--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
+    <input class="margin__bottom--xsm margin__right--xsm" matInput type="number" placeholder="Rate" formControlName="rate" required />
 
     <!-- Submit button -->
     <button mat-raised-button type="submit" class="font-small">
@@ -23,8 +23,6 @@
     <!-- Cancel button (only visible if editing) -->
     <button *ngIf="editingId" mat-button type="button" (click)="cancelEdit()">Cancel</button>
   </form>
-
-  <hr />
 
   <!-- Vat Rate Table -->
   <table mat-table [dataSource]="vatRates" class="mat-elevation-z2 margin__bottom--md">

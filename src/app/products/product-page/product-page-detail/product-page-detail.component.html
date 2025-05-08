@@ -23,7 +23,6 @@
         </div>
       </div>
 
-
       <!-- Right side: Product details and actions -->
       <div class="product-card__right margin__left--md">
         <!-- Tab group for switching between Description, Reviews, and Ask a Question -->
@@ -43,10 +42,11 @@
                   <mat-icon class="star" [ngClass]="{'filled': averageRating >= 4}">star</mat-icon>
                   <mat-icon class="star" [ngClass]="{'filled': averageRating >= 5}">star</mat-icon>
                 </div>
-                <!-- Average rating display -->
               </div>
 
-              <div *ngIf="comments.length > 0" class="stars__average font-primary__label">{{ averageRating.toFixed(1) }}</div>
+              <!-- Average rating display -->
+              <div *ngIf="comments.length > 0"
+                   class="stars__average font-primary__label">{{ averageRating.toFixed(1) }}</div>
 
               <!-- Product title and description -->
               <div class="font-secondary opacity--lg poppins-semibold">{{ product.product_title }}...</div>
@@ -64,16 +64,12 @@
                         {{ size.salePrice | currency: 'USD':'symbol':'1.2-2' }} Sale!
                         <span *ngIf="size.salePrice < size.price" class="discounted"></span>
                       </ng-container>
-
                       <ng-template #originalPrice class="font-primary">
                         {{ size.price | currency: 'USD':'symbol':'1.2-2' }}
                       </ng-template>
                     </p>
-
-
                     <span *ngIf="size.quantity === 0" class="out-of-stock"> (Out of Stock!)</span>
                   </mat-option>
-
                 </mat-select>
               </mat-form-field>
 
@@ -94,7 +90,6 @@
                   <mat-icon (click)="addToWishlist(product)">favorite</mat-icon>
                   <label (click)="addToWishlist(product)">Wishlist</label>
                 </button>
-
               </div>
 
               <div class="font-small margin__top--md">
@@ -166,7 +161,8 @@
                       </div>
 
                       <!-- Comment date and text -->
-                      <div class="page__date font-secondary__small">Reviewed on {{formatDate(comment.date_created) }}</div>
+                      <div class="page__date font-secondary__small">Reviewed
+                        on {{formatDate(comment.date_created) }}</div>
                       <p class="font-secondary__small margin__top--xxsm">{{ comment.comment }}</p>
                     </div>
                     <!-- Paginator for comments -->
@@ -209,7 +205,7 @@
               class="related-product-link"
             >
               <img
-                [src]="relatedProduct.product_image"
+                [src]="relatedProduct.product_image[0]"
                 alt="Product Image"
                 width="160"
                 class="related-product-image margin__right--xsm"
@@ -235,7 +231,7 @@
               class="related-product-link"
             >
               <img
-                [src]="relatedProduct.product_image"
+                [src]="relatedProduct.product_image[0]"
                 alt="Product Image"
                 width="150"
                 class="related-product-image margin__right--xsm"

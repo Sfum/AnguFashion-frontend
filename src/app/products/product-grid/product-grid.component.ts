@@ -8,7 +8,6 @@ import {Product, ProductSize} from '../../models/product';
 })
 export class ProductGridComponent {
   selectedSize: ProductSize | null = null; // Selected size
-  selectedColor: string | null = null;     // Selected color
 
   @Input() product!: Product;
   @Input() products: Product[] = [];

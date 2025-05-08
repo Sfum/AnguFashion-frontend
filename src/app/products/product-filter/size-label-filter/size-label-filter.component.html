@@ -1,5 +1,5 @@
-<!-- Container for size label filtering -->
 <div class="size-filter" *ngIf="(products$ | async)">
+
   <!-- Display buttons if there are available size labels, otherwise show a fallback message -->
   <div *ngIf="fetchAvailableSizeLabels.length > 0; else noSizeLabels" class="size-buttons">
     <!-- Iterate over each size label and render a button -->
