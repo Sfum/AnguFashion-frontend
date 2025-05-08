@@ -5,7 +5,7 @@
     <div class="cart__product-image">
       <a [routerLink]="['/products', product.id]">
         <img class="margin__top--md margin__left--md"
-             [src]="product.product_image"
+             [src]="product.product_image[0]"
              height="150"
              width="150"
              alt="Product Image"/>
@@ -14,41 +14,34 @@
     <div class="cart__info margin__top--md margin__bottom--md margin__right--md">
       <div class="margin__left--md margin__bottom--md">
         <div class="font-primary margin__bottom--xsm">
-          <a [routerLink]="['/products', product.id]" class="product-link">
-            {{ product.product_name | slice: 0:50 }}...
-          </a>
+          <div [routerLink]="['/products', product.id]" class="product-link font-primary">
+            {{ product.product_name | slice: 0:80 }}...
+          </div>
         </div>
 
         <!-- Display selected unit and price -->
         <div *ngIf="product.selectedSize" class="font-secondary margin__top--sm">
-          <div class="size-info">
-            <p>{{ getUnit(product.selectedSize.unitType, product.selectedSize.size, product.selectedSize.sizeLabel) }}</p>
+          <div class="size-info size_tab">
+            <div class="font-small">{{ getUnit(product.selectedSize.unitType, product.selectedSize.size, product.selectedSize.sizeLabel) }}</div>
           </div>
 
-          <span class="font-primary__label">
-            ${{ product.selectedSize.price }}
+          <!-- Only display the normal price if the product is not on sale -->
+          <div class="font-primary__label" *ngIf="!product.selectedSize.salePrice || !product.onSale">
+            <div class="margin__top--md">
+              Price: ${{ product.selectedSize.price }} <div class="font-small">excl. VAT</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Display sale price if on sale -->
+        <div *ngIf="product.selectedSize.salePrice && product.onSale" class="margin__top--sm margin__bottom--xxsm font-primary__title">
+          <div class="font-primary__title sale_red">On Sale! Now only {{ product.selectedSize.salePrice | currency }} <div class="font-small">excl. VAT</div> </div>
+          <!-- Optionally, display the original price crossed out -->
+          <span *ngIf="product.selectedSize.price !== product.selectedSize.salePrice" class="original-price">
+           <div class="font-small">Was  {{ product.selectedSize.price | currency }} <div class="font-small">excl. VAT!</div></div>
           </span>
+          <div>{{ product.discountPercentage }}% Off</div>
         </div>
-
-        <div *ngIf="product.selectedSize.salePrice && product.onSale" class="font-secondary margin__top--sm margin__bottom--xxsm">
-          <span *ngIf="product.onSale">Our Price: {{ product.selectedSize?.salePrice | currency }}</span>
-          <span *ngIf="!product.onSale">{{ product.selectedSize?.price | currency }}</span>
-          <div class="discount-banner">{{ product.discountPercentage }}% Off</div>
-        </div>
-
-<!--        &lt;!&ndash; VAT and Total Price Display &ndash;&gt;-->
-<!--        <div *ngIf="product.selectedSize?.vatAmount !== undefined">-->
-<!--          <div class="font-secondary__small margin__bottom&#45;&#45;xxsm">-->
-<!--            VAT <span *ngIf="userCountry">({{ userCountry }})</span>:-->
-<!--            {{ product.selectedSize.vatAmount | currency }}-->
-<!--          </div>-->
-<!--          <div class="font-secondary">-->
-<!--            Total price: {{-->
-<!--            ((product.onSale ? product.selectedSize.salePrice : product.selectedSize.price) + product.selectedSize.vatAmount)-->
-<!--            * product.quantity | currency-->
-<!--            }}-->
-<!--          </div>-->
-<!--        </div>-->
       </div>
 
       <!-- Quantity selection dropdown -->
@@ -62,7 +55,9 @@
           </mat-select>
         </mat-form-field>
         <br>
-        Only <span>{{ product.selectedSize?.quantity }}</span> left in stock
+        <div class="font-small">
+          Only <span>{{ product.selectedSize?.quantity }}</span> left in stock
+        </div>
 
         <div *ngIf="product.selectedSize && product.quantity > product.selectedSize.quantity" class="error-message">
           Not enough stock available.

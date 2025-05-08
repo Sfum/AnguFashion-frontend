@@ -5,22 +5,22 @@
     </div>
 
     <!-- Delivery Address Section -->
-    <div class="margin__left--md margin__bottom--md font-label">
-      <strong>Delivery Address:</strong><br />
-      {{ userAddress }}<br />
-      {{ userPostcode }}<br />
-      {{ userCountry }}
+    <div class="margin__left--md margin__bottom--xsm font-label">
+      <strong class="font-primary__title margin__bottom--xxsm">Delivery Address:</strong><br/>
+      <div class="font-small">{{ userAddress }}<br/></div>
+      <div class="font-small">{{ userPostcode }}<br/></div>
+      <div class="font-small">{{ userCountry }}</div>
       <br>
 
       <!-- Edit Button -->
-      <button mat-raised-button (click)="toggleAddressEdit()" class="btn btn--small margin__top--xsm">
+      <button mat-raised-button (click)="toggleAddressEdit()" class="margin__top--xxsm">
         {{ editingAddress ? 'Cancel' : 'Edit Address' }}
       </button>
 
       <!-- Edit Form -->
       <div *ngIf="editingAddress" class="margin__top--sm">
-        <input matInput [(ngModel)]="userAddress" placeholder="Address" class="form__input" />
-        <input matInput [(ngModel)]="userPostcode" placeholder="Postcode" class="form__input margin__bottom--xxsm" />
+        <input matInput [(ngModel)]="userAddress" placeholder="Address" class="form__input"/>
+        <input matInput [(ngModel)]="userPostcode" placeholder="Postcode" class="form__input margin__bottom--xxsm"/>
 
         <!-- Country dropdown -->
         <mat-form-field class="form__input margin__bottom--xxsm">
@@ -35,37 +35,47 @@
     </div>
 
     <!-- Subtotal -->
-    <div class="margin__left--md margin__top--sm margin__bottom--xxsm">
-      <strong>Subtotal</strong>: {{ subtotal | currency }}
+    <div class="checkout_list margin__left--md margin__top--sm margin__bottom--xxsm">
+      <div class="font-primary__title">Subtotal:
+        <div class="font-small"> {{ subtotal | currency }}</div>
+      </div>
     </div>
 
     <!-- VAT -->
-    <div class="margin__left--md margin__bottom--xxsm" *ngIf="vatTotal > 0">
-      <strong>VAT</strong><span *ngIf="userCountry"> ({{ userCountry }})</span>: {{ vatTotal | currency }}
+    <div class="checkout_list margin__left--md margin__bottom--xxsm" *ngIf="vatTotal > 0">
+      <div class="font-primary__title">VAT:
+        <div class="font-small" *ngIf="userCountry"> ({{ userCountry }}): {{ vatTotal | currency }}</div>
+      </div>
     </div>
 
     <!-- Delivery Fee -->
-    <div class="margin__left--md">
-      <strong>Delivery</strong> <div *ngIf="deliveryMode">({{ deliveryMode }})</div>: {{ deliveryFee | currency }}
+    <div class="checkout_list margin__left--md">
+      <div class="font-primary__title">Delivery:
+        <div *ngIf="deliveryMode">({{ deliveryMode }}): {{ deliveryFee | currency }}
+        </div>
+      </div>
     </div>
 
     <!-- Total -->
-    <div class="font-primary margin__left--md font-label margin__top--xsm">
-      <strong>Total: {{ grandTotal | currency }}</strong>
+    <div class="card_total checkout_list margin__left--md">
+      <div class="checkout_list margin__top--xsm">
+        <strong class="font-primary__title">Total: {{ grandTotal | currency }}</strong>
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- Cart Details and Payment -->
+    <div class="shopping__cart--grid margin__top--md">
+      <app-shopping-cart-detail
+        *ngIf="products"
+        [products]="products"
+        (removeFromCartEvent)="removeFromCart($event)"
+        (addToWishListEvent)="addToWishlist($event)"
+        (quantityChangeEvent)="onQuantityChange($event)">
+      </app-shopping-cart-detail>
+      <div class="margin__bottom--md">
+        <app-payment></app-payment>
+      </div>
     </div>
   </div>
-
-  <hr />
-
-  <!-- Cart Details and Payment -->
-  <div class="shopping__cart--grid margin__top--md">
-    <app-shopping-cart-detail
-      *ngIf="products"
-      [products]="products"
-      (removeFromCartEvent)="removeFromCart($event)"
-      (addToWishListEvent)="addToWishlist($event)"
-      (quantityChangeEvent)="onQuantityChange($event)">
-    </app-shopping-cart-detail>
-    <div class="margin__bottom--md"><app-payment></app-payment></div>
-  </div>
-</div>

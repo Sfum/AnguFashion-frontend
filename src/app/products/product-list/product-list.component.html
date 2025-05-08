@@ -37,7 +37,8 @@
         <div class="sizes-container">
           <!-- Loop through sizes -->
           <div *ngFor="let size of product.sizes" class="size-info">
-            <p>{{ getUnit(size.unitType, size.size, size.sizeLabel) }}</div>
+            <div class="font-small">{{ getUnit(size.unitType, size.size, size.sizeLabel) }}</div>
+        </div>
         </div>
       </mat-cell>
     </ng-container>
