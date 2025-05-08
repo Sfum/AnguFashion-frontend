@@ -154,7 +154,6 @@ import {AuthInterceptor} from './services/auth.interceptor.service';
 import {VatSummaryComponent} from './vat-summary/vat-summary.component';
 import {DeliveryRateComponent} from './delivery-rate/delivery-rate.component';
 import {VatRateComponent} from './vat-rate/vat-rate.component';
-import {ProviderDataComponent} from './provider-data/provider-data.component';
 import {ProviderMenuComponent} from './shared/provider-menu/provider-menu.component';
 
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -238,7 +237,6 @@ import { MatButtonModule } from '@angular/material/button';
     VatSummaryComponent,
     DeliveryRateComponent,
     VatRateComponent,
-    ProviderDataComponent,
     ProviderMenuComponent
   ],
   imports: [

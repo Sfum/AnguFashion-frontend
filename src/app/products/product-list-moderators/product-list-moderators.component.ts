@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
-import {SnackbarService} from '../../services/snackbar.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-product-list-moderators',
@@ -15,7 +15,6 @@ export class ProductListModeratorsComponent implements OnInit {
   displayedColumns: string[] = [
     'product_image',
     'product_name',
-    'onSale',
     'price',
     'quantityStock',
     'discountPercentage',
@@ -45,14 +44,27 @@ export class ProductListModeratorsComponent implements OnInit {
               .getProductsByUploader(user.uid)
               .subscribe((products) => {
                 this.products = products;  // Store fetched products in the products array
-                this.dataSource = new MatTableDataSource<Product>(this.products);  // Set the data source for the table
-                this.dataSource.paginator = this.paginator;  // Attach the paginator to the data source
+
+                // Set the data source for the table
+                this.dataSource = new MatTableDataSource<Product>(this.products);
+
+                // Attach the paginator to the data source
+                this.dataSource.paginator = this.paginator;
+
+                // Ensure selectedSize is correctly assigned
+                this.products.forEach(product => {
+                  // Check if sizes array is not empty, and assign the first size as selected
+                  if (product.sizes && product.sizes.length > 0) {
+                    product.selectedSize = product.sizes[0];  // You can adjust this to your specific logic
+                  }
+                });
               });
           }
         });
       }
     });
   }
+
   // Method to delete a product by its ID
   deleteProduct(id: string): void {
     // Ask the user to confirm the deletion of the product

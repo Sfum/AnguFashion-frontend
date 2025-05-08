@@ -26,7 +26,6 @@
     <ng-template #notAdmin>
       <div *ngIf="isModerator; else notModerator">
         <section class="moderator-section">
-          <h2 class="section-title">Product Management</h2>
           <app-product-list-moderators></app-product-list-moderators>
           <app-moderator-report></app-moderator-report>
           <app-product-card></app-product-card>

@@ -1,98 +1,63 @@
+<div class="container__medium">
+  <div class="font-primary__name margin__top--lg margin__bottom--md container__center-auto">Product Management</div>
+</div>
+
+<div class="container__medium">
 <button mat-raised-button routerLink="/add-product" class="margin__bottom--sm">Add Product</button>
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+    <ng-container matColumnDef="product_image" class="column column-lg">
+      <mat-header-cell *matHeaderCellDef class="font-small"> Image</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <img [src]="product.product_image" alt="Product Image" style="max-width: 60px; max-height: 60px;">
+      </mat-cell>
+    </ng-container>
 
-<mat-table [dataSource]="dataSource" class="mat-elevation-z2">
-  <ng-container matColumnDef="product_image" class="column column-lg">
-    <mat-header-cell *matHeaderCellDef> Image</mat-header-cell>
+    <ng-container matColumnDef="product_name" class="column column-sm">
+      <mat-header-cell *matHeaderCellDef class="font-small"> Product Name</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <div class="font-primary box-width">{{ product.product_name }}</div>
+      </mat-cell>
+    </ng-container>
 
-    <!-- Data cell for displaying the product image -->
-    <mat-cell *matCellDef="let product">
-      <!-- Displaying product image with a maximum width and height -->
-      <img [src]="product.product_image" alt="Product Image" style="max-width: 60px; max-height: 60px;">
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="price" class="column column-sm">
+      <mat-header-cell *matHeaderCellDef class="font-small">Price</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <div class="font-small" *ngIf="product.selectedSize">
+          <!-- Display regular price from the selected size -->
+          ${{ product.selectedSize.price | number:'1.2-2' }}
 
-  <!-- Product Name Column -->
-  <ng-container matColumnDef="product_name" class="column column-sm">
-    <!-- Header cell for the product name column -->
-    <mat-header-cell *matHeaderCellDef> Product Name</mat-header-cell>
-    <!-- Data cell for displaying the product name -->
-    <mat-cell *matCellDef="let product">
-      <div class="cell--main">
-        <!-- Displaying the product name with secondary font styling -->
-        <div class="font-secondary box-width">{{ product.product_name }}</div>
-        <!-- Displaying the brand ID in a smaller font -->
-        <div class="font-small">{{ product.brandId }}</div>
-      </div>
-    </mat-cell>
-  </ng-container>
+          <!-- If product is on sale, display sale price from the selected size -->
+          <ng-container *ngIf="product.onSale">
+            <div class="sale-price font-small">${{ product.selectedSize.salePrice | number:'1.2-2' }}</div>
+          </ng-container>
+        </div>
+      </mat-cell>
+    </ng-container>
 
-  <!-- On Sale Column -->
-  <ng-container matColumnDef="onSale" class="column column-lg">
-    <!-- Header cell for the on sale column -->
-    <mat-header-cell *matHeaderCellDef> On Sale</mat-header-cell>
-    <!-- Data cell for displaying whether the product is on sale -->
-    <mat-cell *matCellDef="let product"> {{ product.onSale ? 'Yes' : 'No' }} </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="quantityStock" class="column column-sm">
+      <mat-header-cell *matHeaderCellDef class="font-small">Stock</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <div class="font-small box-width">{{ product.quantityStock }}</div>
+      </mat-cell>
+    </ng-container>
 
-  <!-- Price Column -->
-  <ng-container matColumnDef="price" class="column column-sm">
-    <!-- Header cell for the price column -->
-    <mat-header-cell *matHeaderCellDef> Price</mat-header-cell>
-    <!-- Data cell for displaying the product price -->
-    <mat-cell *matCellDef="let product">
-      <ng-container *ngIf="!product.onSale">
-        <!-- Display regular price if not on sale -->
-        ${{ product.price | number:'1.2-2' }}
-      </ng-container>
-      <ng-container *ngIf="product.onSale">
-        <!-- Display sale price if the product is on sale -->
-        <span class="sale-price">${{ product.salePrice | number:'1.2-2' }}</span>
-      </ng-container>
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="discountPercentage" class="column column-lg">
+      <mat-header-cell *matHeaderCellDef class="font-small">Discount</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <div class="font-small" *ngIf="product.onSale">{{ product.discountPercentage }}%</div>
+      </mat-cell>
+    </ng-container>
 
-  <!-- Quantity Column -->
-  <ng-container matColumnDef="quantityStock" class="column column-sm">
-    <!-- Header cell for the stock quantity column -->
-    <mat-header-cell *matHeaderCellDef>Stock</mat-header-cell>
-    <!-- Data cell for displaying the quantity of stock available -->
-    <mat-cell *matCellDef="let product">
-      <div class="cell--main">
-        <!-- Display the quantity stock with secondary font styling -->
-        <div class="font-secondary box-width">{{ product.quantityStock }}</div>
-      </div>
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="delete" class="column column-md">
+      <mat-header-cell *matHeaderCellDef class="font-small">Delete</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <mat-icon (click)="deleteProduct(product.id)" matTooltip="Delete">delete</mat-icon>
+      </mat-cell>
+    </ng-container>
 
-  <!-- Discount Percentage Column -->
-  <ng-container matColumnDef="discountPercentage" class="column column-lg">
-    <!-- Header cell for the discount percentage column -->
-    <mat-header-cell *matHeaderCellDef> Discount Percentage</mat-header-cell>
-    <!-- Data cell for displaying the discount percentage, if the product is on sale -->
-    <mat-cell *matCellDef="let product">
-      <div *ngIf="product.onSale"> {{ product.discountPercentage }}%</div>
-    </mat-cell>
-  </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" matTooltip="Click for details" [routerLink]="['/edit', row.id]"></mat-row>
+  </mat-table>
 
-  <!-- Delete Column -->
-  <ng-container matColumnDef="delete" class="column column-md">
-    <!-- Header cell for the delete column -->
-    <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
-    <!-- Data cell with a delete button for each product -->
-    <mat-cell *matCellDef="let product">
-      <!-- Delete button with a tooltip and click handler -->
-      <mat-icon (click)="deleteProduct(product.id)" matTooltip="Delete">delete</mat-icon>
-    </mat-cell>
-  </ng-container>
-
-  <!-- Header and Row Definitions -->
-  <!-- Define table header row using displayedColumns array -->
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <!-- Define table rows with a hover effect and clickable to navigate to edit page -->
-  <mat-row *matRowDef="let row; columns: displayedColumns;" class="cell_hover"
-           matTooltip="Click for details"
-           [routerLink]="['/edit', row.id]"></mat-row>
-</mat-table>
-
-<!-- Material paginator component for pagination controls -->
-<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons=""></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons=""></mat-paginator>
+</div>

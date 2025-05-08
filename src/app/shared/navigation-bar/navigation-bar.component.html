@@ -37,15 +37,15 @@
         >
         <mat-menu #menu="matMenu">
           <button mat-menu-item [routerLink]="['/profile']">
-            <mat-icon class="opacity--md">person</mat-icon>
+            <mat-icon class="opacity--md nav__icon">person</mat-icon>
             <label>Profile</label>
           </button>
           <button mat-menu-item [routerLink]="['/orders']">
-            <mat-icon class="opacity--md">cloud_download</mat-icon>
+            <mat-icon class="opacity--md nav__icon">cloud_download</mat-icon>
             <label>Orders</label>
           </button>
           <button mat-menu-item>
-            <mat-icon class="opacity--md">logout</mat-icon>
+            <mat-icon class="opacity--md nav__icon">logout</mat-icon>
             <app-logout></app-logout>
           </button>
         </mat-menu>
