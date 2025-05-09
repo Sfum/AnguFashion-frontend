@@ -218,13 +218,12 @@ export class ProductService {
     );
   }
 
-  // Update an existing product by its ID with new product data
   updateProduct(id: string, product: Product): Observable<void> {
     return this.httpClient.put<void>(`${this.productsURL}/${id}`, product).pipe(
       tap(() => {
         console.log('Product updated successfully!');
         this.snackbarService.showSnackbar('Product updated successfully!');
-        this.router.navigate(['/manage-products']);
+        window.location.reload();  // This will reload the page and trigger a fresh data fetch
       }),
       catchError((error: HttpErrorResponse) => this.handleError(error, 'Failed to update product')),
     );
