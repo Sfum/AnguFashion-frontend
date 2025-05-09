@@ -28,7 +28,6 @@
         <section class="moderator-section">
           <app-product-list-moderators></app-product-list-moderators>
           <app-moderator-report></app-moderator-report>
-          <app-product-card></app-product-card>
         </section>
       </div>
     </ng-template>
@@ -68,7 +67,7 @@
   </ng-template>
 
   <!-- Footer Section -->
-  <footer class="bottom-section">
-    <app-users-also-bought></app-users-also-bought>
+  <footer *ngIf="user$ | async as user; else notAuthenticated" class="bottom-section">
+    <app-users-also-bought *ngIf="!user?.uid"></app-users-also-bought>
   </footer>
 </ng-container>

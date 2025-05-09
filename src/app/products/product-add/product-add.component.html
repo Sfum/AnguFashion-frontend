@@ -200,25 +200,6 @@
       </div>
     </div>
 
-    <!-- Section for selecting product unitType -->
-    <div class="container__main margin__top--lg">
-      <div class="container__main-left">
-        <mat-label class="font-primary__label-small">Unit Type:</mat-label>
-      </div>
-      <div class="container__main-right">
-        <!-- Dropdown for unitType selection, bound to 'unitType' form control -->
-        <mat-form-field>
-          <mat-select id="unitType" formControlName="unitType" class="margin__bottom--xsm" required>
-            <mat-option value="weight">Weight</mat-option>
-            <mat-option value="volume">Volume</mat-option>
-          </mat-select>
-          <mat-error *ngIf="productForm.get('unitType')?.invalid && (productForm.get('unitType')?.dirty || productForm.get('unitType')?.touched)">
-            <mat-error *ngIf="productForm.get('unitType')?.errors?.['required']">Unit Type is required.</mat-error>
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
     <!-- Submit and Back buttons -->
     <div class="margin__top--xsm">
       <button mat-raised-button type="submit" [disabled]="productForm.invalid">Add Product</button>

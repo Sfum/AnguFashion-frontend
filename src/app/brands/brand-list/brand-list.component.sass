@@ -1,6 +1,14 @@
 @import url('../../../../src/styles.sass')
 
-.cell_hover:hover
-  background-color: hsl(355, 70%, 55%)
-  color: white
+.cell_hover
+  &:hover
+    background-color: hsl(355, 70%, 45%)
+    color: white
 
+.delete-icon
+  cursor: pointer
+  color: red
+  transition: color 0.3s
+
+  &:hover
+    color: darkred

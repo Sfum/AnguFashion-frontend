@@ -9,7 +9,7 @@
       <a [routerLink]="['/products', product.id]">
         <img
           class="margin__top--md margin__left--md"
-          [src]="product?.product_image || 'placeholder.jpg'"
+          [src]="product?.product_image[0] || 'placeholder.jpg'"
           height="150"
           width="150"
           alt="Product Image"

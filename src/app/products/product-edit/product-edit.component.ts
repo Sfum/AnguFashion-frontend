@@ -38,9 +38,10 @@ export class ProductEditComponent implements OnInit {
       price: [''],
       quantityStock: [''],
       sizes: this.fb.array([
-        this.updateSize() // Add this method to create a size form group
-      ]),      colors: this.fb.array([]), // FormArray for colors
-      discountPercentage: [{ value: '', disabled: true }],
+        this.updateSize()
+      ]),
+      colors: this.fb.array([]),
+      discountPercentage: [{value: '', disabled: true}],
       salePrice: [''],
       onSale: [''],
       in_bundle: [''],
@@ -50,17 +51,21 @@ export class ProductEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get the product ID from the route parameters
     this.productId = this.route.snapshot.paramMap.get('id') || '';
+
+    // Subscribe to changes in 'onSale' and update sale prices accordingly
     this.productForm.get('onSale')?.valueChanges.subscribe(() => {
       this.updateSalePrices();
     });
 
-
+    // Subscribe to changes in 'discountPercentage' and update sale prices accordingly
     this.productForm.get('discountPercentage')?.valueChanges.subscribe(() => {
       this.updateSalePrices();
     });
-    this.loadProduct();
 
+    // Load the product details on initialization
+    this.loadProduct();
 
     // Monitor changes to the 'onSale' field to enable/disable related fields
     this.productForm.get('onSale')?.valueChanges.subscribe((onSale) => {
@@ -76,31 +81,35 @@ export class ProductEditComponent implements OnInit {
     });
   }
 
+// Getter for 'sizes' FormArray to simplify access to the sizes array
   get sizes(): FormArray {
     return this.productForm.get('sizes') as FormArray;
   }
 
+// Getter for 'colors' FormArray to simplify access to the colors array
   get colors(): FormArray {
     return this.productForm.get('colors') as FormArray;
   }
 
+// Getter for 'sizeLabel' FormArray to simplify access to the size labels array
   get sizeLabel(): FormArray {
     return this.productForm.get('sizeLabel') as FormArray;
   }
 
+// Adds a new size group to the 'sizes' FormArray
   addSize(): void {
     const sizeGroup = this.fb.group({
       size: [0, [Validators.required, Validators.min(0)]],
       quantity: [0, [Validators.required, Validators.min(0)]],
       price: [0, [Validators.required, Validators.min(0)]],
-      salePrice: [0, [Validators.min(0)]], // Sale price calculated dynamically
+      salePrice: [0, [Validators.min(0)]],
       unitType: ['size', Validators.required],
       sizeLabel: [''],
     });
     this.sizes.push(sizeGroup);
   }
 
-  // Helper method to create size form group with salePrice
+// Helper method to create a new size form group with salePrice
   updateSize(): FormGroup {
     return this.fb.group({
       size: [''],
@@ -112,49 +121,56 @@ export class ProductEditComponent implements OnInit {
     });
   }
 
+// Updates sale prices based on the 'onSale' and 'discountPercentage' form values
   updateSalePrices(): void {
     const onSale = this.productForm.get('onSale')?.value;
     const discountPercentage = this.productForm.get('discountPercentage')?.value;
 
     if (onSale && discountPercentage > 0) {
+      // Apply the discount to each size's price if 'onSale' is true
       this.sizes.controls.forEach((control) => {
         const price = control.get('price')?.value;
         const salePrice = price * (1 - discountPercentage / 100);
-        control.get('salePrice')?.setValue(+salePrice.toFixed(2), { emitEvent: false });
+        control.get('salePrice')?.setValue(+salePrice.toFixed(2), {emitEvent: false});
       });
     } else {
+      // Reset sale prices to regular prices if 'onSale' is false
       this.sizes.controls.forEach((control) => {
         const price = control.get('price')?.value;
-        control.get('salePrice')?.setValue(price, { emitEvent: false });
+        control.get('salePrice')?.setValue(price, {emitEvent: false});
       });
     }
   }
 
+// Removes a size from the 'sizes' FormArray
   removeSize(index: number): void {
     this.sizes.removeAt(index);
   }
 
-  // Sanitize the sizes array to ensure consistency
+// Sanitize the sizes array to ensure consistency in data
   private sanitizeSizes(sizes: any[]): any[] {
     return sizes.map((size) => ({
-      id: size?.id || null, // Ensure ID is preserved
-      size: Number(size?.size) || 0, // Convert size to a number
-      quantity: Number(size?.quantity) || 0, // Convert quantity to a number
-      price: parseFloat(size?.price || '0'), // Ensure price is a float
-      salePrice: parseFloat(size?.salePrice || '0'), // Include sale price if applicable
-      unitType: size?.unitType || 'size', // Default to weight if not provided
-      sizeLabel: size?.sizeLabel || '', // Default to empty string if not provided
+      id: size?.id || null,
+      size: Number(size?.size) || 0,
+      quantity: Number(size?.quantity) || 0,
+      price: parseFloat(size?.price || '0'),
+      salePrice: parseFloat(size?.salePrice || '0'),
+      unitType: size?.unitType || 'size',
+      sizeLabel: size?.sizeLabel || '',
     }));
   }
 
+// Adds a new color to the 'colors' FormArray
   addColor(): void {
     this.colors.push(this.fb.control(''));
   }
 
+// Removes a color from the 'colors' FormArray
   removeColor(index: number): void {
     this.colors.removeAt(index);
   }
 
+// Loads the product details based on the productId and patches them into the form
   loadProduct(): void {
     this.productService.getProduct(this.productId).subscribe(
       (product) => {
@@ -199,6 +215,7 @@ export class ProductEditComponent implements OnInit {
     );
   }
 
+// Handles image upload and updates the form with the image URL after upload
   uploadImage(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -211,7 +228,7 @@ export class ProductEditComponent implements OnInit {
           fileRef.getDownloadURL().subscribe(
             (url) => {
               this.uploadedImages.push(url);
-              this.productForm.patchValue({ product_image: this.uploadedImages });
+              this.productForm.patchValue({product_image: this.uploadedImages});
             },
             (error) => console.error('Error getting download URL:', error),
           );
@@ -220,14 +237,15 @@ export class ProductEditComponent implements OnInit {
     }
   }
 
+// Deletes an image from the uploaded images array and updates the form
   deleteImage(index: number) {
     if (index > -1 && index < this.uploadedImages.length) {
       this.uploadedImages.splice(index, 1);
-      this.productForm.patchValue({ product_image: this.uploadedImages });
+      this.productForm.patchValue({product_image: this.uploadedImages});
     }
   }
 
-  // Submit the form and update the product
+// Handles form submission to update the product
   onSubmit(): void {
     if (this.productForm.invalid) {
       this.snackbarService.showSnackbar('Please fill out all required fields.');
@@ -273,7 +291,7 @@ export class ProductEditComponent implements OnInit {
     );
   }
 
-  // Method to handle category selection
+// Handles category selection when a user selects a category
   optionCategorySelected(selectedCategoryId: number) {
     return this.productService.optionCategorySelected(selectedCategoryId);
   }

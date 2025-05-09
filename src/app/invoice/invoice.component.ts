@@ -77,6 +77,18 @@ export class InvoiceComponent implements OnInit {
   }
 
   /**
+   * Generate the invoice number by combining sale ID and formatted date
+   */
+  generateInvoiceNumber(): string {
+    if (this.sales.length > 0) {
+      const saleId = this.sales[0].id;
+      const formattedDate = this.formatDate(this.invoiceDate);
+      return `${saleId}${formattedDate}`;
+    }
+    return 'N/A';
+  }
+
+  /**
    * Fetch the VAT rate dynamically from the backend by country
    */
   fetchVatRate(country: string): void {
@@ -109,10 +121,6 @@ export class InvoiceComponent implements OnInit {
     const price = sale.totalPrice || 0;
     const delivery = sale.deliveryRate || 0;
     return +(price - delivery).toFixed(2);
-  }
-
-  getSubtotalAdjusted(): number {
-    return this.sales.reduce((acc, sale) => acc + this.getAdjustedTotal(sale), 0);
   }
 
   printInvoice(): void {

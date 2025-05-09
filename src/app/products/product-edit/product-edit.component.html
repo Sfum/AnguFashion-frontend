@@ -68,7 +68,7 @@
         <mat-select formControlName="categoryId" class="margin__bottom--lg"
                     (selectionChange)="optionCategorySelected($event.value)">
           <!-- Loop through available categories and display them as options -->
-          <mat-option *ngFor="let category of categories$ | async"
+          <mat-option class="font-small" *ngFor="let category of categories$ | async"
                       [value]="category.id">{{ category.category_name }}</mat-option>
         </mat-select>
       </div>
@@ -78,17 +78,16 @@
     <div class="container__main">
       <div class="container__main-left">
         <!-- Label for image section -->
-        <mat-label class="font-primary__label-small">Images</mat-label>
+        <mat-label class="font-secondary__small">Product Image:</mat-label>
       </div>
       <div class="container__main-right">
         <!-- Image input field -->
         <div class="product__image margin__bottom--sm">
-          <mat-label for="productImage">Product Image:</mat-label>
           <input type="file" id="productImage" (change)="uploadImage($event)"> <!-- File input for image upload -->
 
           <!-- Display all uploaded images -->
           <div class="image-preview-container" *ngIf="uploadedImages.length > 0">
-            <div *ngFor="let imageUrl of uploadedImages; let i = index" class="image-preview">
+            <div *ngFor="let imageUrl of uploadedImages; let i = index" class="image-preview ">
               <img [src]="imageUrl" alt="Product Image" class="uploaded-image">
               <!-- Delete button on top-right of image -->
               <button mat-icon-button (click)="deleteImage(i)" class="product-add__image--delete">
@@ -171,7 +170,7 @@
                 class="add-size-button"
                 (click)="addSize()"
               >
-                Add Size
+              <label>Add Size</label>
               </button>
             </div>
           </div>
@@ -239,26 +238,6 @@
             <mat-slide-toggle formControlName="in_bundle" class="margin__top--xxsm"></mat-slide-toggle>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Section for selecting product unitType -->
-    <div class="container__main margin__top--lg">
-      <div class="container__main-left">
-        <mat-label class="font-primary__label-small">Unit Type:</mat-label>
-      </div>
-      <div class="container__main-right">
-        <!-- Dropdown for unitType selection, bound to 'unitType' form control -->
-        <mat-form-field>
-          <mat-select id="unitType" formControlName="unitType" class="margin__bottom--xsm" required>
-            <mat-option value="weight">Weight</mat-option>
-            <mat-option value="volume">Volume</mat-option>
-          </mat-select>
-          <mat-error
-            *ngIf="productForm.get('unitType')?.invalid && (productForm.get('unitType')?.dirty || productForm.get('unitType')?.touched)">
-            <mat-error *ngIf="productForm.get('unitType')?.errors?.['required']">Unit Type is required.</mat-error>
-          </mat-error>
-        </mat-form-field>
       </div>
     </div>
 

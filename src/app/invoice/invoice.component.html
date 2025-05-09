@@ -33,11 +33,13 @@
         </div>
       </div>
 
-      <!-- Right Column: Invoice Date -->
+      <!-- Right Column: Invoice Date & Number -->
       <div class="right-column">
         <div class="invoice-section">
-          <div class="font-secondary__small margin__bottom--xsm margin__top">Invoice Date</div>
-          <div>{{ formatDate(invoiceDate) }}</div>
+          <div class="font-secondary__small margin__bottom--xxsm margin__top">Invoice Date</div>
+          <div class="font-small">{{ formatDate(invoiceDate) }}</div>
+          <div class="font-secondary__small margin__bottom--xxsm margin__top--sm">Number</div>
+          <div class="font-small">{{ generateInvoiceNumber() }}</div> <!-- Invoice number displayed here -->
         </div>
       </div>
     </div>

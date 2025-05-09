@@ -3,33 +3,53 @@
 .container__main
   display: grid
   grid-template-columns: 0.2fr 0.8fr
+
   &-left
     grid-column: 1/2
     height: 100%
     margin-right: 20px
+
   &-right
     grid-column: 2/3
     height: 100%
 
 .image-preview-container
   display: grid
-  grid-template-columns: repeat(3, 1fr)
-  gap: 10px
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))  // Adjusts based on available space, keeps a minimum of 240px per image
+  gap: 10px  // Spacing between images
   margin-top: 10px
+  position: relative
+  justify-items: start  // Ensures images align to the left
+  align-items: start  // Aligns images to the top of the container
+  width: 100% // Ensure the container fills the width of its parent
+  overflow: hidden // Prevents any overflow
 
 .image-preview
   position: relative
   display: inline-block
+  width: 240px // Fix the width for each image container
+  height: 240px // Fix the height for each image container
+  overflow: hidden // Ensures the icon doesn't overflow the image container
 
 .uploaded-image
-  width: 240px
-  height: 240px
-  object-fit: cover
+  width: 100%  // Ensures the image fills the container
+  height: 100%  // Ensures the image fills the container
+  object-fit: cover // Makes sure the image covers the whole container, without distortion
 
 .selected
   border: 2px solid #007BFF
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5)
 
+.product-add__image--delete
+  position: absolute
+  top: 10px
+  right: 10px
+  color: hsl(355, 70%, 45%) // Icon color
+  background-color: transparent
+  border-radius: 50%
+  z-index: 1 // Ensures the icon is always on top of the image
+  padding: 8px // Adds space around the icon for better clickability
+  cursor: pointer // Indicates that the icon is clickable
 
 button.mat-icon-button
   position: absolute
@@ -37,12 +57,7 @@ button.mat-icon-button
   right: 5px
   background: rgba(255, 255, 255, 0.8)
   border-radius: 50%
-
-.product-add__image--delete
-  display: flex
-  position: absolute
-  top: 10px
-  right: 30px
+  z-index: 1
 
 .stock-quantity__badge
   background-color: hsl(55, 60%, 10%)
@@ -50,7 +65,7 @@ button.mat-icon-button
   padding: 20px
 
 .product-edit__toggle
-  display:  flex
+  display: flex
   flex-direction: column
 
 .sizes-container
@@ -82,9 +97,10 @@ button.mat-icon-button
   top: 8px
   right: 8px
   background-color: rgba(255, 0, 0, 0.1)
-  color: #ff0000
+  color: hsl(355, 70%, 45%)
   border-radius: 50%
   box-shadow: none
+
   &:hover
     background-color: rgba(255, 0, 0, 0.2)
 
@@ -92,3 +108,10 @@ button.mat-icon-button
   grid-column: 1 / -1
   justify-self: center
   margin-top: 16px
+
+button[mat-raised-button]
+  width: 160px
+
+mat-icon
+  color: hsl(355, 70%, 45%)
+  background-color: transparent
